@@ -1,6 +1,6 @@
 "use strict";
 
-export default function VisualizerCore(mediaSource, fftSize = 1024) {
+function VisualizerCore(mediaSource, fftSize = 1024) {
     this._stream = mediaSource;
     this._analyzing = false;
     this._updateListeners = [];
@@ -46,7 +46,6 @@ export default function VisualizerCore(mediaSource, fftSize = 1024) {
         this._analyzing = false;
     };
     this.addUpdateListener = function (listener) {
-        console.log("added listener.");
         this._updateListeners.push(listener);
     };
     this.getNumberOfBins = function () {

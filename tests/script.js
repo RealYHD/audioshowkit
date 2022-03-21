@@ -1,8 +1,5 @@
 "use strict";
 
-import bindHorizontalBar from "../src/patterns/HorizontalBar.js";
-import VisualizerCore from "../src/VisualizerCore.js";
-
 // We will see if the visualizers core and event systems are working correctly.
 let startBtn = document.getElementById("startbtn");
 startBtn.addEventListener("click", async (ev) => {
@@ -13,7 +10,6 @@ startBtn.addEventListener("click", async (ev) => {
         coreAndEventCanvas.width = 640;
         coreAndEventCanvas.height = 200;
 
-        console.log("starting playthrough.");
         mediaStream.play();
         visCore.analyze();
 

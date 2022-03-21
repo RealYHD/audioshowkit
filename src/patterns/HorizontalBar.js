@@ -1,6 +1,6 @@
 "use strict";
 
-export default function bindHorizontalBar(canvasElement, visualizerCore) {
+function bindHorizontalBar(canvasElement, visualizerCore) {
     let _width = canvasElement.width;
     let _height = canvasElement.height;
     let _canvasCtx = canvasElement.getContext("2d");
@@ -9,7 +9,6 @@ export default function bindHorizontalBar(canvasElement, visualizerCore) {
         _canvasCtx.clearRect(0, 0, _width, _height); // clear canvas.
         let barWidth = Math.floor(_width / bins.length) - 1; // -1 for 1 pixel gap between bars.
         let barIndex = 0;
-        console.log("updating visuals.." + barWidth);
         bins.forEach(bin => {
             let normalBin = bin / 255.0;
             _canvasCtx.fillStyle = "rgb(" + 0 + "," + bin + "," + bin + ")";
