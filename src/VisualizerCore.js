@@ -27,19 +27,19 @@ export default function VisualizerCore(mediaSource, fftSize = 1024) {
         requestAnimationFrame(this.update);
     };
 
-    let _self = this;
+    let vcore = this; // since calling from requestAnimationFrame means "this" is no longer set to produced object.
     this.update = function (timestamp) {
-        if (!_self._analyzing) return;
+        if (!vcore._analyzing) return;
 
-        requestAnimationFrame(_self.update);
-        if (!_self.lastUpdate) {
-            _self.lastUpdate = timestamp;
+        requestAnimationFrame(vcore.update);
+        if (!vcore.lastUpdate) {
+            vcore.lastUpdate = timestamp;
         }
-        let delta = timestamp - _self.lastUpdate;
-        _self._analyzer.getByteFrequencyData(_self._buffer);
+        let delta = timestamp - vcore.lastUpdate;
+        vcore._analyzer.getByteFrequencyData(vcore._buffer);
 
-        _self._updateListeners.forEach(listener => {
-            listener(delta, _self._buffer);
+        vcore._updateListeners.forEach(listener => {
+            listener(delta, vcore._buffer);
         });
     };
     this.stop = function () {
