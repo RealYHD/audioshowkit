@@ -117,6 +117,17 @@ export default class SongPlayer {
     }
 
     /**
+     * Toggles whether or not the current song is playing.
+     */
+    togglePlay() {
+        if (this._playing) {
+            this.pauseCurrent();
+        } else {
+            this.playCurrent();
+        }
+    }
+
+    /**
      * 
      * @param {number} volume a number between 0 to 1 inclusive representing the volume of the player.
      * @returns {boolean} true if and only if the volume was successfully set.
@@ -153,32 +164,45 @@ export default class SongPlayer {
         return this.getCurrentSong().getAudio().duration;
     }
 
-    generatePlayElement(size = 64) {
+    /**
+     * 
+     * @returns {HTMLElement} the play button element that can be added to a DOM.
+     */
+    generatePlayElement() {
         const playButton = document.createElement("button");
         playButton.classList.add("player-ctrl");
-        playButton.classList.add("play");
-        playButton.style.width = size + "px";
-        playButton.style.height = size + "px";
-        playButton.style.borderLeftWidth = size + "px";
-        playButton.style.borderTopWidth = Math.floor(size / 2) + "px";
-        playButton.style.borderBottomWidth = Math.ceil(size / 2) + "px";
-        // TODO: Finish this play button with event listeners.
+        playButton.classList.add("play-btn");
+        if (!this._playing) playButton.classList.add("paused");
+
+        playButton.addEventListener("click", (e) => {
+            this.togglePlay();
+            if (this._playing) {
+                e.currentTarget.classList.remove("paused");
+            } else {
+                e.currentTarget.classList.add("paused");
+            }
+        });
+        return playButton;
     }
 
     generateNextElement() {
-        // TODO: generate a next button in html.
+        const nextButton = document.createElement("button");
+        nextButton.classList.add("player-ctrl");
+        nextButton.classList.add("next");
+        nextButton.addEventListener("click", () => {
+            this.next();
+        });
+        return nextButton;
     }
 
     generatePreviousElement() {
-        // TODO: generate a previous button in html.
-    }
-
-    generateSeeker() {
-        // TODO: generate a seeker in html.
-    }
-
-    generateVolumeSlider() {
-        // TODO: generate a volume slider in html.
+        const previousButton = document.createElement("button");
+        previousButton.classList.add("player-ctrl");
+        previousButton.classList.add("previous");
+        previousButton.addEventListener("click", () => {
+            this.previous();
+        });
+        return previousButton;
     }
 
     getCurrentSong() {
