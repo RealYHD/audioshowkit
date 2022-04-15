@@ -48,14 +48,13 @@ export default class SongPlaylist {
         if (index >= this._list.length) {
             return null;
         }
-        let removed = this._list.splice(index, 1);
+        let removed = this._list.splice(index, 1)[0];
         if (removed.length > 0) {
             return removed[0];
         }
     }
 
     findSongIndex(name) {
-        // TODO: Could probably be optimized.
         return this._list.findIndex((item) => item.getDisplayName() == name);
     }
 

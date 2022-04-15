@@ -1,3 +1,4 @@
+import Visualizer from "../Visualizer";
 import SongPlaylist from "./SongPlaylist";
 
 /**
@@ -17,8 +18,9 @@ export default class PlayListSong {
         this._displayName = name;
         this._author = author;
         this._url = url;
-        this._audio = null;
         this._playlist = playlist;
+        this._audio = null;
+        this._visualizer = null;
 
         /**
          * Whether or not this song is ready to be played.
@@ -40,7 +42,6 @@ export default class PlayListSong {
         if (this._audio) {
             if (this.ready) {
                 if (onReady) onReady(this._audio);
-                return this._audio;
             }
             return this._audio;
         }
@@ -91,7 +92,7 @@ export default class PlayListSong {
      * 
      * @returns {boolean} true if and only if there is audio data that is either already loaded or is being loaded.
      */
-    audioInstantiated() {
+    isAudioInstantiated() {
         return this._audio ? true : false;
     }
 
@@ -108,7 +109,7 @@ export default class PlayListSong {
      * Pauses the audio playback, unless the audio data has yet to be instantiated.
      */
     pause() {
-        if (!this.audioInstantiated()) return;
+        if (!this.isAudioInstantiated()) return;
         this.getAudio((audio) => {
             audio.pause();
         });
@@ -157,9 +158,37 @@ export default class PlayListSong {
      * Unloads the audio data.
      */
     unloadAudio() {
-        if (!this.audioInstantiated()) return;
+        if (!this.isAudioInstantiated()) return;
         this._audio.pause();
+        this.unloadVisualizer();
         this._audio = null;
         this.ready = false;
+    }
+
+    /**
+     * 
+     * @param {number} [fftSize=1024] the size of the FFT window.
+     * @returns {Visualizer} returns the visualizer.
+     */
+    getVisualizer(fftSize = 1024) {
+        if (this._visualizer && this._visualizer.getFftSize() === fftSize) return this._visualizer;
+        this._visualizer = new Visualizer(this.getAudio(), fftSize);
+        return this._visualizer;
+    }
+
+    /**
+     * 
+     * @returns {boolean} returns true if and only if the visualizer is instantiated.
+     */
+    isVisualizerInstantiated() {
+        return this._visualizer ? true : false;
+    }
+
+    /**
+     * Unloads the visualizer.
+     */
+    unloadVisualizer() {
+        this._visualizer.stop();
+        this._visualizer = null;
     }
 }
