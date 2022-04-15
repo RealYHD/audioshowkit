@@ -13,6 +13,14 @@ export default class SongPlayer {
         this._playlist = playlist;
         this._current = 0;
         this._volume = 1;
+        this._playing = true;
+
+        this._playlistChangeListeners = [];
+        this._currentSongChangeListeners = [];
+        this._volumeChangeListeners = [];
+        this._playingChangeListener = [];
+
+        this._allAudioEventListeners = {};
     }
 
     /**
@@ -21,8 +29,12 @@ export default class SongPlayer {
      */
     setPlaylist(playlist) {
         this._playlist.unloadAllAudio();
+        const old = this._playlist;
         this._playlist = playlist;
         this._current = 0;
+        this._playlistChangeListeners.forEach(playlistChangeListener => {
+            playlistChangeListener(old, this.getPlaylist());
+        });
     }
 
     /**
@@ -38,10 +50,7 @@ export default class SongPlayer {
      * @returns {boolean} true if and only if successful in going to the next song.
      */
     next() {
-        if (this._current >= this._playlist.total() - 1) return false;
-        this.getCurrentSong().unloadAudio();
-        this._current += 1;
-        return true;
+        return this.changeCurrentSongIndex(this.getCurrentSongIndex() + 1);
     }
 
     /**
@@ -50,10 +59,7 @@ export default class SongPlayer {
      * @returns {boolean} true if and only if successful in going to the previous song.
      */
     previous() {
-        if (this._current <= 0) return false;
-        this.getCurrentSong().unloadAudio();
-        this._current -= 1;
-        return true;
+        return this.changeCurrentSongIndex(this.getCurrentSongIndex() - 1);
     }
 
     /**
@@ -61,12 +67,39 @@ export default class SongPlayer {
      * @param {number} index the index of the song to jump to.
      * @returns {boolean} true if and only if successful jumping to the given index.
      */
-    changeCurrent(index) {
+    changeCurrentSongIndex(index) {
         if (index >= this._playlist.total()) return false;
         if (index <= 0) return false;
+        Object.keys(this._allAudioEventListeners).forEach(key => {
+            const listeners = this._allAudioEventListeners[key];
+            listeners.forEach(listener => {
+                this.getCurrentSong().getAudio().removeEventListener(key, listener);
+            });
+        });
         this.getCurrentSong().unloadAudio();
+        const old = this.getCurrentSong();
         this._current = index;
+        this._currentSongChangeListeners.forEach(currentChangeListener => {
+            currentChangeListener(old, this.getCurrentSong());
+        });
+        Object.keys(this._allAudioEventListeners).forEach(key => {
+            const listeners = this._allAudioEventListeners[key];
+            listeners.forEach(listener => {
+                this.getCurrentSong().getAudio().addEventListener(key, listener);
+            });
+        });
+        if (this._playing) {
+            this.playCurrent();
+        }
         return true;
+    }
+
+    /**
+     * 
+     * @returns {number} the current song's index in the playlist.
+     */
+    getCurrentSongIndex() {
+        return this._current;
     }
 
     playCurrent() {
@@ -75,10 +108,12 @@ export default class SongPlayer {
             audio.volume = this._volume;
             audio.play();
         });
+        this._playing = true;
     }
 
     pauseCurrent() {
         this.getCurrentSong().getAudio().pause();
+        this._playing = true;
     }
 
     /**
@@ -118,8 +153,16 @@ export default class SongPlayer {
         return this.getCurrentSong().getAudio().duration;
     }
 
-    generatePlayElement() {
-        // TODO: Generates a play button in html.
+    generatePlayElement(size = 64) {
+        const playButton = document.createElement("button");
+        playButton.classList.add("player-ctrl");
+        playButton.classList.add("play");
+        playButton.style.width = size + "px";
+        playButton.style.height = size + "px";
+        playButton.style.borderLeftWidth = size + "px";
+        playButton.style.borderTopWidth = Math.floor(size / 2) + "px";
+        playButton.style.borderBottomWidth = Math.ceil(size / 2) + "px";
+        // TODO: Finish this play button with event listeners.
     }
 
     generateNextElement() {
@@ -140,5 +183,143 @@ export default class SongPlayer {
 
     getCurrentSong() {
         return this._playlist.songAtIndex(this._current);
+    }
+
+    /**
+     * @callback changeListener
+     * @param {any} old the previous value.
+     * @param {any} current the the current (new) value.
+     */
+
+    /**
+     * 
+     * @param {changeListener} listener the listener to receive the updates.
+     * @returns {boolean} true if and only if successfully added the listener.
+     */
+    addCurrentSongChangeListener(listener) {
+        if (this._currentSongChangeListeners.includes(listener)) return false;
+        this._currentChangeListener.push(listener);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {changeListener} listener the song change listener to remove.
+     * @returns {boolean} true if and only if the song change listener given was successfully removed.
+     */
+    removeCurrentSongChangeListener(listener) {
+        const removeIndex = this._currentSongChangeListeners.indexOf(listener);
+        if (removeIndex < 0) return false;
+
+        this._currentSongChangeListeners.splice(removeIndex, 1);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {changeListener} listener the playlist change listener to add to the callback list.
+     * @returns {boolean} true if and only if the given listener was successfully registered.
+     */
+    addPlaylistChangeListener(listener) {
+        if (this._playlistChangeListeners.includes(listener)) return false;
+        this._playlistChangeListeners.push(listener);
+        return true;
+
+    }
+
+    /**
+     * 
+     * @param {changeListener} listener the playlist change listener to remove.
+     * @returns {boolean} true if and only if a listener was successfully removed from the callback list.
+     */
+    removePlaylistChangeListener(listener) {
+        const removeIndex = this._playlistChangeListeners.indexOf(listener);
+        if (removeIndex < 0) return false;
+
+        this.playlistChangeListener.splice(removeIndex, 1);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {changeListener} listener the listener that is called when the player's volume is changed.
+     * @returns {boolean} true if and only if the listener was successfully added.
+     */
+    addVolumeChangeListener(listener) {
+        if (this._volumeChangeListeners.includes(listener)) return false;
+        this._volumeChangeListeners.push(listener);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {changeListener} listener the volume change listener to remove.
+     * @returns {boolean} true if and only if a listener was successfully removed from the callback list.
+     */
+    removeVolumeChangeListener(listener) {
+        const removeIndex = this._volumeChangeListeners.indexOf(listener);
+        if (removeIndex < 0) return false;
+
+        this._volumeChangeListeners.splice(removeIndex, 1);
+        return true;
+    }
+
+
+    /**
+     * 
+     * @param {changeListener} listener the listener that is called when the player's volume is changed.
+     * @returns {boolean} true if and only if the listener was successfully added.
+     */
+    addPlayChangeListener(listener) {
+        if (this._playingChangeListener.includes(listener)) return false;
+        this._playingChangeListener.push(listener);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {changeListener} listener the play change listener to remove.
+     * @returns {boolean} true if and only if a listener was successfully removed from the callback list.
+     */
+    removePlayChangeListener(listener) {
+        const removeIndex = this._playingChangeListener.indexOf(listener);
+        if (removeIndex < 0) return false;
+
+        this._playingChangeListener.splice(removeIndex, 1);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {string} type the type of the listener on the {@link HTMLAudioElement}.
+     * @param {EventListener|EventListenerObject} eventListener the event listener.
+     * @returns {boolean} true if and only if successfully registered event listener.
+     */
+    addEventListenerToCurrentAudio(type, eventListener) {
+        let typeListeners = this._allAudioEventListeners[type];
+        if (!typeListeners) {
+            typeListeners = [];
+            this._allAudioEventListeners[type] = typeListeners;
+        }
+        if (typeListeners.includes(eventListener)) return false;
+        typeListeners.push(eventListener);
+        this.getCurrentSong().getAudio().addEventListener(type, eventListener);
+        return true;
+    }
+
+    /**
+     * 
+     * @param {string} type the type of the listener on the {@link HTMLAudioElement}.  
+     * @param {EventListener|EventListenerObject} eventListener the event listener. 
+     * @returns {boolean} true if and only if the event listener was successfully added.
+     */
+    removeEventListenerFromCurrentAudio(type, eventListener) {
+        let typeListeners = this._allAudioEventListeners[type];
+        if (!typeListeners) return false;
+        const removeIndex = typeListeners.indexOf(eventListener);
+        if (removeIndex < 0) return false;
+        typeListeners.splice(removeIndex, 1);
+        this.getCurrentSong().getAudio().removeEventListener(type, eventListener);
+        return true;
     }
 }
