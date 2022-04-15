@@ -1,12 +1,12 @@
-import merge from "webpack-merge"
-import webpackCommon from "./webpack.common"
+import merge from "webpack-merge";
+import webpackCommon from "./webpack.common";
 
-prodConfig = {
+const prodConfig = {
     mode: "production",
     output: {
         filename: "[name].js",
         path: "./public"
     }
-}
+};
 
 export default merge(webpackCommon, prodConfig);
