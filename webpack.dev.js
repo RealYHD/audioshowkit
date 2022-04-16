@@ -5,7 +5,7 @@ import webpackCommon from "./webpack.common.js";
 
 const devConfig = {
     mode: "development",
-    devtools: "inline-source-map",
+    devtool: "inline-source-map",
     devServer: {
         static: path.resolve("./dist"),
         open: true
