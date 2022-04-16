@@ -1,5 +1,6 @@
 /**
- * A visualizer for an audio stream.
+ * Instantiates a visualizer with a given FFT window size and media source.
+ * Provides a simplified access point to the frequency bins in the form of a visualization update listener.
  */
 export default class Visualizer {
 

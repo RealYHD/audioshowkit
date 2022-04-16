@@ -2,7 +2,7 @@ import "../styles/songplayer.css";
 import SongPlaylist from "./SongPlaylist.js";
 
 /**
- * A player to play songs.
+ * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of song audio data and attempts to reduce memory usage when possible.
  */
 export default class SongPlayer {
 
@@ -149,23 +149,40 @@ export default class SongPlayer {
         return this._volume;
     }
 
+    /**
+     * Attempts to seek to the given position.
+     * 
+     * @param {number} position the position to seek to.
+     * @returns {boolean} true if and only if the position to seek to is within the duration of the track. This also means that if the track has not finished loading the duration data, than this will always return false.
+     */
     seek(position) {
-        if (position > this.getCurrentSong().getAudio().duration || position < 0) return;
+        if (position > this.getCurrentSong().getAudio().duration || position < 0) return false;
         this.getCurrentSong().getAudio(audio => {
-            // TODO: May need to perform synchronization check to see if this is still the song to be played.
             audio.currentTime = position;
         });
+        return true;
     }
 
+    /**
+     * 
+     * @returns {number} how many seconds into the audio track has been played in seconds.
+     */
     getCurrentPosition() {
         return this.getCurrentSong().getAudio().currentTime;
     }
 
+    /**
+     * 
+     * @returns {number} the total length of the song, or NaN if this information has not loaded yet.
+     */
     getCurrentDuration() {
         return this.getCurrentSong().getAudio().duration;
     }
 
     /**
+     * Convenience method for creating a play button complete with CSS for transitioning to a paused button.
+     * 
+     * Automatically hooked up to the player's state change updates and play and pause functions.
      * 
      * @returns {HTMLElement} the play button element that can be added to a DOM.
      */
@@ -175,12 +192,15 @@ export default class SongPlayer {
         playButton.classList.add("play-btn");
         if (!this._playing) playButton.classList.add("paused");
 
-        playButton.addEventListener("click", (e) => {
+        playButton.addEventListener("click", () => {
             this.togglePlay();
-            if (this._playing) {
-                e.currentTarget.classList.remove("paused");
+        });
+
+        this.addPlayChangeListener((old, current) => {
+            if (current) {
+                playButton.classList.remove("paused");
             } else {
-                e.currentTarget.classList.add("paused");
+                playButton.classList.add("paused");
             }
         });
         return playButton;

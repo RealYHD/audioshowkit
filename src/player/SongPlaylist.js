@@ -1,7 +1,7 @@
 import PlaylistSong from "./PlaylistSong.js";
 
 /**
- * A playlist that holds a multitude of songs.
+ * A playlist that holds a multitude of songs in the form of {@see PlaylistSong}.
  */
 export default class SongPlaylist {
 
@@ -36,14 +36,23 @@ export default class SongPlaylist {
         return this.list[index];
     }
 
-    songsWithName(name) {
-        return this._list.filter((item) => item.getDisplayName() == name);
-    }
-
+    /**
+     * Automatically creates and adds a {@see PlaylistSong} to this playlist.
+     * 
+     * @param {string} url where the audio data can be found.
+     * @param {string} name the name of the song.
+     * @param {string} author the author(s) of the song.
+     */
     add(url, name, author) {
-        this._list.push(new PlaylistSong(url, name, author, this, this._list.length));
+        this._list.push(new PlaylistSong(url, name, author, this));
     }
 
+    /**
+     * Removes a {@see playlistSong} from this playlist.
+     * 
+     * @param {number} index the index of the song to be removed.
+     * @returns {PlaylistSong} the song that was removed, or null if the index of was invalid.
+     */
     remove(index) {
         if (index >= this._list.length) {
             return null;
@@ -54,6 +63,12 @@ export default class SongPlaylist {
         }
     }
 
+    /**
+     * Attempts to find a {@link PlaylistSong} given a name.
+     * 
+     * @param {string} name the name of the song to be found.
+     * @returns {number} the index of the song found, or -1 if it was not found.
+     */
     findSongIndex(name) {
         return this._list.findIndex((item) => item.getDisplayName() == name);
     }

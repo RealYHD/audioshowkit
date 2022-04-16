@@ -1,5 +1,12 @@
 import Visualizer from "./Visualizer.js";
 
+
+/**
+ * A visualizer update manager offers an extra layer of abstraction on top of the {@link Visualizer}'s update listener.
+ * 
+ * Specifically, the update manager handles updates directly from the {@link Visualizer} and checks for changes in the individual bins. These changes are then broadcasted to the individual bin listeners.
+ * If a bin has not changed, then it will not receive an update call. This means that there may be savings in function calls if this is used over the {@link Visualizer} directly.
+ */
 export default class VisualizerUpdateManager {
     /**
      * 

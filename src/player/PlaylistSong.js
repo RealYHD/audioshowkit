@@ -3,6 +3,8 @@ import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A song with metadata that can be used as part of a {@link SongPlaylist}.
+ * 
+ * Typically should not be manually instantiated. Instead, create the song via {@link SongPlaylist}.
  */
 export default class PlayListSong {
 
@@ -98,6 +100,8 @@ export default class PlayListSong {
 
     /**
      * Begins audio playback as soon as possible.
+     * 
+     * This function uses the {@link PlaylistSong#getAudio} function and specifically, the {@link AudioEventCallback}.
      */
     play() {
         this.getAudio((audio) => {
@@ -156,6 +160,9 @@ export default class PlayListSong {
 
     /**
      * Unloads the audio data.
+     * Makes sure the audio is paused.
+     * 
+     * Also calls {@link PlaylistSong#unloadVisualizer}.
      */
     unloadAudio() {
         if (!this.isAudioInstantiated()) return;
@@ -186,6 +193,7 @@ export default class PlayListSong {
 
     /**
      * Unloads the visualizer.
+     * Stops the visualizer.
      */
     unloadVisualizer() {
         this._visualizer.stop();

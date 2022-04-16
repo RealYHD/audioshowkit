@@ -13,6 +13,7 @@ import SongPlaylist from "./SongPlaylist.js";
 export default class VisualizedSongPlayer extends SongPlayer {
 
     /**
+     * Instantiates a song player with visualization features.
      * 
      * @param {SongPlaylist} playlist the playlist this player manages.
      * @param {number} [fftSize=1024] the size of the fft window for analysis.
@@ -24,6 +25,7 @@ export default class VisualizedSongPlayer extends SongPlayer {
     }
 
     /**
+     * Sets the the playlist.
      * 
      * @param {SongPlaylist} playlist the new playlist of songs that this player is in charge of.
      */
