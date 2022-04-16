@@ -1,3 +1,4 @@
+import "../styles/songplayer.css";
 import SongPlaylist from "./SongPlaylist";
 
 /**
