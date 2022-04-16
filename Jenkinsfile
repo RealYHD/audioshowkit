@@ -22,6 +22,11 @@ pipeline{
                 }
             }
         }
+        stage("archive product") {
+            steps {
+                archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
+            }
+        }
         stage("publish docs") {
             steps {
                 nodejs('NodeJS (17.4.0)') {
