@@ -1,5 +1,4 @@
 import "./styles/songplayer.css";
-// TODO: Finish playlist, and basic music playback functionality.
 // TODO: function to easily bind element styling to frequency bin.
 // TODO: adjust frequency bin interactively resulting in change in output.
 // TODO: Set up global scope audioshowkit object.

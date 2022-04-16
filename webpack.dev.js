@@ -1,12 +1,14 @@
-import merge from "webpack-merge";
-import webpackCommon from "./webpack.common";
+import { merge } from "webpack-merge";
+import path from "path";
+import webpackCommon from "./webpack.common.js";
+
 
 const devConfig = {
     mode: "development",
     devtools: "inline-source-map",
-
     devServer: {
-        static: "./dist"
+        static: path.resolve("./dist"),
+        open: true
     }
 };
 
