@@ -3,5 +3,6 @@
         "audioshowkit",
         "linebreak",
         "songplayer"
-    ]
+    ],
+    "javascript.preferences.importModuleSpecifierEnding": "js"
 }
