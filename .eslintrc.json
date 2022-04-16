@@ -5,7 +5,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:jsdoc/recommended"
+        "plugin:jsdoc/recommended",
+        "plugin:import/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -30,6 +31,10 @@
         "semi": [
             "error",
             "always"
+        ],
+        "import/extensions": [
+            "error",
+            "ignorePackages"
         ]
     }
 }

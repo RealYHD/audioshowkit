@@ -1,4 +1,4 @@
-import PlaylistSong from "./PlaylistSong";
+import PlaylistSong from "./PlaylistSong.js";
 
 /**
  * A playlist that holds a multitude of songs.

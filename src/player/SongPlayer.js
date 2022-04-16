@@ -1,5 +1,5 @@
 import "../styles/songplayer.css";
-import SongPlaylist from "./SongPlaylist";
+import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A player to play songs.

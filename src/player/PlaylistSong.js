@@ -1,5 +1,5 @@
-import Visualizer from "../Visualizer";
-import SongPlaylist from "./SongPlaylist";
+import Visualizer from "../visualization/Visualizer.js";
+import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A song with metadata that can be used as part of a {@link SongPlaylist}.
