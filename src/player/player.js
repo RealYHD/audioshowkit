@@ -1,6 +1,7 @@
 import SongPlayer from "./SongPlayer.js";
 import SongPlaylist from "./SongPlaylist.js";
 import VisualizedSongPlayer from "./VisualizedSongPlayer.js";
+import PlayListSong from "./PlaylistSong.js";
 
 /**
  * Instantiates a song player with a given playlist.
@@ -25,7 +26,7 @@ export function createSongPlaylist(name) {
 }
 
 /**
- * Creates a song player that manages the visualizers for individual songs, as well as the listeners for the visualizations.
+ * Instantiates a song player that manages the visualizers for individual songs, as well as the listeners for the visualizations.
  * 
  * @see VisualizedSongPlayer for more information about the returned object.
  * @param {SongPlaylist} playlist the playlist this visualized song player will play through.
@@ -34,4 +35,17 @@ export function createSongPlaylist(name) {
  */
 export function createVisualizedSongPlayer(playlist, fftSize = 1024) {
     return new VisualizedSongPlayer(playlist, fftSize);
+}
+
+/**
+ * Instantiates a playlist song.
+ * 
+ * @see PlaylistSong for more information about the returned object.
+ * @param {string} url The url at which the audio for the song can be retrieved.
+ * @param {string} name The name of the song.
+ * @param {string} author The name of the author(s).
+ * @returns {PlayListSong} The playlist song that is instantiated.
+ */
+export function createPlaylistSong(url, name, author) {
+    return new PlayListSong(url, name, author);
 }

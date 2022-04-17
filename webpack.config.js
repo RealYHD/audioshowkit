@@ -1,9 +1,9 @@
 import path from "path";
-import HtmlWebpackPlugin from "html-webpack-plugin";
 
 export default {
+    mode: "production",
     entry: {
-        audioshowkit: path.resolve("./src/audioshowkit.js"),
+        audioshowkit: path.resolve("./src/audioshowkitlib.js"),
     },
     module: {
         rules: [
@@ -21,19 +21,14 @@ export default {
                 test: /\.css$/i,
                 use: ["style-loader", "css-loader"],
             },
-            {
-                test: /\.html$/i,
-                loader: "html-loader",
-            },
         ]
     },
     output: {
         filename: "[name].js",
-        path: path.resolve("./dist")
+        path: path.resolve("./dist"),
+        library: ["[name]"]
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: path.resolve("./src/demo/index.html"),
-        })
+
     ]
 };
