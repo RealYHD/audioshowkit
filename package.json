@@ -1,13 +1,12 @@
 {
-  "name": "audioshowkit-server",
+  "name": "audioshowkit",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "watch": "webpack serve --config webpack.dev.js",
+    "build": "webpack --config webpack.config.js",
     "test": "mocha tests/** --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test_results.xml",
     "docs": "jsdoc src README.md -r -d docs -c jsdoc.config.json"
   },
