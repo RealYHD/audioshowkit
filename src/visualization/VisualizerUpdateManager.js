@@ -5,7 +5,7 @@ import Visualizer from "./Visualizer.js";
  * A visualizer update manager offers an extra layer of abstraction on top of the {@link Visualizer}'s update listener.
  * 
  * Specifically, the update manager handles updates directly from the {@link Visualizer} and checks for changes in the individual bins. These changes are then broadcasted to the individual bin listeners.
- * If a bin has not changed, then it will not receive an update call. This means that there may be savings in function calls if this is used over the {@link Visualizer} directly.
+ * In the rare event that a bin has not changed, then it will not receive an update call.
  */
 export default class VisualizerUpdateManager {
     /**
@@ -24,7 +24,7 @@ export default class VisualizerUpdateManager {
                 const lastBin = this._lastBins[binInd];
                 if (lastBin !== bins[binInd]) {
                     this._binnedListeners[binInd].forEach(listener => {
-                        listener(delta, bins[binInd] - lastBin);
+                        listener(delta, bins[binInd], bins[binInd] - lastBin);
                     });
                     this._lastBins[binInd] = bins[binInd];
                 }
@@ -35,8 +35,10 @@ export default class VisualizerUpdateManager {
     /**
      * @callback visualizerBinUpdateListener
      * @param {number} timeDelta elapsed time since last update.
+     * @param {number} amplitude The amplitude of the associated bin.
      * @param {number} ampDelta change in amplitude of the frequency bin.
      */
+
 
     /**
      * 
@@ -51,6 +53,22 @@ export default class VisualizerUpdateManager {
     }
 
     /**
+     * Similar to {@link VisualizerUpdateManager#AddVisualizerBinUpdateListener}, this method adds the same listener to a range of bins.
+     * 
+     * @param {number} min The lower bound of the bins to listen to (inclusive).
+     * @param {number} max The upper bound of the bins to listen to (inclusive).
+     * @param {visualizerBinUpdateListener} listener The listener to register to these bins. 
+     * @returns {boolean} True if and only if the listener was added at least once.
+     */
+    addVisualizerRangeUpdateListener(min, max, listener) {
+        let added = false;
+        for (let i = min; i <= max; i++) {
+            if (this.AddVisualizerBinUpdateListener(i, listener)) added = true;
+        }
+        return added;
+    }
+
+    /**
      * 
      * @param {number} freqBin the frequency bin the update listener to be removed from is in.
      * @param {visualizerBinUpdateListener} listener the listener that is to be removed.
@@ -61,6 +79,22 @@ export default class VisualizerUpdateManager {
         if (removeIndex < 0) return false;
         this._binnedListeners[freqBin].splice(removeIndex, 1);
         return true;
+    }
+
+    /**
+     * Similar to {@link removeVisualizerBinUpdateListener}, this method removes the given listener from a range of bins.
+     * 
+     * @param {number} min The lower bound of bins to remove the listener from (inclusive).
+     * @param {number} max The upper bound of bin to remove the listener from (inclusive.)
+     * @param {visualizerBinUpdateListener} listener The update listener to remove from the bins.
+     * @returns {boolean} True if and only if at least one listener was removed.
+     */
+    removeVisualizerRangeUpdateListener(min, max, listener) {
+        let removed = false;
+        for (let i = min; i <= max; i++) {
+            if (this.removeVisualizerBinUpdateListener(i, listener)) removed = true;
+        }
+        return removed;
     }
 
     /**
@@ -80,5 +114,14 @@ export default class VisualizerUpdateManager {
      */
     getBinnedListeners() {
         return this._binnedListeners;
+    }
+
+    /**
+     * Clears this manager of all listeners.
+     */
+    clearBinnedListeners() {
+        this._binnedListeners.forEach(bin => {
+            bin.length = 0;
+        });
     }
 }
