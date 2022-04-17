@@ -28,13 +28,23 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
             }
         }
+        stage("build showcase") {
+            steps {
+                dir('./showcase/') {
+                    nodejs('NodeJS (17.4.0)') {
+                        sh "npm i"
+                        sh "npm run build"
+                    }
+                }
+            }
+        }
         stage("publish docs") {
             steps {
                 nodejs('NodeJS (17.4.0)') {
                     sh "npm run docs"
                 }
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'docs', reportFiles: 'index.html', reportName: 'AudioShowKit JSDocs', reportTitles: ''])
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'dist', reportFiles: 'index.html', reportName: 'AudioShowKit Demo', reportTitles: ''])
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'showcase/dist', reportFiles: 'index.html', reportName: 'AudioShowKit Demo', reportTitles: ''])
             }
         }
     }

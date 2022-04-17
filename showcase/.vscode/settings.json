@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
-        "audioshowkit"
-    ]
+        "audioshowkit",
+        "audioshowkitshowcase"
+    ],
+    "html.format.wrapLineLength": 0
 }

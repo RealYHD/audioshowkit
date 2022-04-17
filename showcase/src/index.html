@@ -5,11 +5,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/prism.css" rel="stylesheet" />
+    <script src="./js/prism.js"></script>
+    <script src="../node_modules/audioshowkit/dist/audioshowkit.js" defer></script>
     <title>AudioShowKit Showcase</title>
 </head>
 
 <body>
-
+    <div>
+        <h1>Welcome to the AudioShowKit Showcase!</h1>
+        <div>
+            <h2>Song Player</h2>
+            <p>The song player acts as a easier way for developers to set up multiple audio sources to play while a user
+                is browsing through their site.</p>
+        </div>
+        <div>
+            <h2>Visualizer and Visualizer Update Manager</h2>
+            <p>The visualizer itself serves little purpose other than creating a central location for updating and obtaining amplitude over the frequency domain data. It comes with a simple update system in which can be used to listen to updates over the entire bin.</p>
+            <p>Instead, the visualizer update manager handles the detailed update sequences in terms of:</p>
+            <ul>
+                <li>
+                    Individual bins, where the parameters are the elapsed time since last update, the amplitude of the updating bin, and the delta of the amplitude from the last update.
+                </li>
+                <li>
+                    Ranges of bins, where the parameters are the elapsed time since last updating, and an array of the amplitudes.
+                </li>
+            </ul>
+        </div>
+        <div>
+            <h2>Mappings</h2>
+            <p>Mappings mainly provide functions for mapping commonly used CSS properties to a given range of frequency bins, or a single bin. The mappings portion of the library also contain helper functions for converting between CSS colors and interpolation functions.</p>
+        </div>
+    </div>
 </body>
 
 </html>

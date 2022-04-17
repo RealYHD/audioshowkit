@@ -1,9 +1,10 @@
-import path from "path";
-import HtmlWebpackPlugin from "html-webpack-plugin";
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
-export default {
+module.exports = {
     entry: {
-        audioshowkit: path.resolve("./src/audioshowkit.js"),
+        audioshowkitshowcase: path.resolve("./src/js/main.js"),
     },
     module: {
         rules: [
@@ -34,6 +35,11 @@ export default {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve("./src/index.html"),
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: "audio/*.mp3", to: "./" }
+            ]
         })
     ]
 };
