@@ -71,8 +71,10 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
             setter(minVal + range * interpolated);
         }
     };
-    visUpdateManager.addVisualizerRangedUpdateListener(rangedListener);
-    return rangedListener;
+    if (visUpdateManager.addVisualizerRangedUpdateListener(rangedListener)) {
+        return rangedListener;
+    }
+    return null; // Technically doesn't occur since the functions are anonymous?
 }
 
 /**
@@ -87,7 +89,7 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
  * @param {interpolator} conf.interpolator The interpolation function to use.
  * @param {VisualizerUpdateManager} conf.visUpdateManager The update manager to map to.
  * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
- * @returns {bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener} 
+ * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}} The bin listener that was added.
  */
 export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
     const listener = {
@@ -99,6 +101,9 @@ export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpola
             setter(minVal + range * interpolated);
         }
     };
-    visUpdateManager.AddVisualizerBinUpdateListener(listener);
-    return listener;
+    if (visUpdateManager.AddVisualizerBinUpdateListener(listener)) {
+        return listener;
+    }
+    return null; // Technically doesn't occur since the functions are anonymous?
 }
+
