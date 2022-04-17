@@ -1,6 +1,6 @@
-pipeline{
+pipeline {
     agent any
-    stages{
+    stages {
         stage("install") {
             steps {
                 nodejs('NodeJS (17.4.0)') {
@@ -20,6 +20,7 @@ pipeline{
                 nodejs('NodeJS (17.4.0)') {
                     sh "npm run test"
                 }
+                junit 'junit/*.xml'
             }
         }
         stage("archive product") {
