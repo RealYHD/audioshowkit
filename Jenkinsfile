@@ -33,7 +33,7 @@ pipeline{
                     sh "npm run docs"
                 }
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'docs', reportFiles: 'index.html', reportName: 'AudioShowKit JSDocs', reportTitles: ''])
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'dist', reportFiles: 'demo.html', reportName: 'AudioShowKit Demo', reportTitles: ''])
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'dist', reportFiles: 'index.html', reportName: 'AudioShowKit Demo', reportTitles: ''])
             }
         }
     }

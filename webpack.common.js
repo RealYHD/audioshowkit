@@ -34,7 +34,6 @@ export default {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve("./src/demo/index.html"),
-            filename: "demo.html"
         })
     ]
 };
