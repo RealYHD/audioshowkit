@@ -1,5 +1,15 @@
 import { parseColor, rgbaToHexRgba } from "./colors.js";
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
+
+// TODO: Should be able to remove this since already declared in easings.js, but don't know how to link.
+/**
+ * @callback interpolator
+ * @param {number} current the current value.
+ * @param {number} dest the destination value.
+ * @param {number} frameDelta the time elapsed since the last update.
+ * @returns {number} the new current value.
+ */
+
 /**
  * Maps the red component of the text color to a certain range of bins.
  * 
@@ -7,7 +17,7 @@ import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js
  * @param {number} color Where 0 for red, 1, for blue, 2 for green, and 3 for alpha.
  * @param {number} min The lower bound of the bins to be mapped.
  * @param {VisualizerUpdateManager} visUpdateManager The visualizer update manager associated with the audio playback you would like the mapping with.
- * @param {import("./easings.js").interpolator} interpolator The interpolation function to use.
+ * @param {interpolator} interpolator The interpolation function to use.
  * @param {number} [max=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
  * @param {boolean} [reversed=true] If true, then the quieter, the greater the red value.
  */
