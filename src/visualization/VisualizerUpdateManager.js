@@ -21,7 +21,7 @@ export default class VisualizerUpdateManager {
         this._lastBins = new Uint8Array(this._binnedListeners.length);
         this._visualizer = visualizer;
         this._visualizerListener = (delta, bins) => {
-            const sortedCopyOfRangedListeners = [... this._rangedListeners].sort((a, b) => a[0] - b[0]); // Priority queue could be better.
+            const sortedCopyOfRangedListeners = [... this._rangedListeners]; // We assume this is sorted properly. A priority queue could be better.
             for (let binInd = 0; binInd < this._lastBins.length; binInd++) {
                 const lastBin = this._lastBins[binInd];
                 if (lastBin !== bins[binInd]) {
@@ -29,10 +29,10 @@ export default class VisualizerUpdateManager {
                         listener(delta, bins[binInd], bins[binInd] - lastBin);
                     });
                     for (let rangedInd = 0; rangedInd < sortedCopyOfRangedListeners.length; rangedInd++) { // Could switch to a while loop.
-                        const [min, max, listener] = sortedCopyOfRangedListeners[rangedInd];
-                        if (min > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
-                        if (binInd <= max) {
-                            listener(delta, bins.slice(min, max));
+                        const { lower, upper, listener } = sortedCopyOfRangedListeners[rangedInd];
+                        if (lower > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
+                        if (binInd <= upper) {
+                            listener(delta, bins.slice(lower, upper));
                             sortedCopyOfRangedListeners.shift();
                             rangedInd--;
                         }
@@ -45,26 +45,28 @@ export default class VisualizerUpdateManager {
     }
 
     /**
-     * @callback visualizerBinUpdateListener
+     * @callback VisualizerUpdateManager.visualizerBinUpdateListener
      * @param {number} timeDelta elapsed time since last update.
      * @param {number} amplitude The amplitude of the associated bin.
      * @param {number} ampDelta change in amplitude of the frequency bin.
      */
 
     /**
-     * @callback visualizerRangeUpdateListener
+     * @callback VisualizerUpdateManager.visualizerRangedUpdateListener
      * @param {number} timeDelta elapsed time since last update.
      * @param {number} bins the bins of the range.
      */
 
 
     /**
+     * Adds a listener to a specific frequency bin.
      * 
-     * @param {number} freqBin the frequency bin this update listener should listen to.
-     * @param {visualizerBinUpdateListener} listener the listener itself that will be called upon the bin updating.
+     * @param {object} freqBinListener the listener for a specific frequency bin.
+     * @param {number} freqBinListener.freqBin the frequency bin this update listener should listen to.
+     * @param {VisualizerUpdateManager.visualizerBinUpdateListener} freqBinListener.listener the listener itself that will be called upon the bin updating.
      * @returns {boolean} true if and only if the updater was added successfully.
      */
-    AddVisualizerBinUpdateListener(freqBin, listener) {
+    AddVisualizerBinUpdateListener({ freqBin, listener }) {
         if (this._binnedListeners[freqBin].includes(listener)) return false;
         this._binnedListeners[freqBin].push(listener);
         return true;
@@ -73,25 +75,32 @@ export default class VisualizerUpdateManager {
     /**
      * Similar to {@link VisualizerUpdateManager#AddVisualizerBinUpdateListener}, this method adds a listener for to a range of bins.
      * 
-     * @param {number} min The lower bound of the bins to listen to (inclusive).
-     * @param {number} max The upper bound of the bins to listen to (inclusive).
-     * @param {visualizerRangeUpdateListener} listener The listener to register to the range. 
+     * @param {object} rangedUpdateListener The ranged update listener to add.
+     * @param {number} rangedUpdateListener.lower The lower bound of the bins to listen to (inclusive).
+     * @param {number} rangedUpdateListener.upper The upper bound of the bins to listen to (inclusive).
+     * @param {VisualizerUpdateManager.visualizerRangedUpdateListener} rangedUpdateListener.listener The listener to register to the range. 
      * @returns {boolean} True if and only if the ranged listener was added successfully.
      */
-    addVisualizerRangeUpdateListener(min, max, listener) {
-        const rangedListener = [min, max, listener];
+    addVisualizerRangedUpdateListener({ lower, upper, listener }) {
+        const rangedListener = {
+            lower: lower,
+            upper: upper,
+            listener: listener
+        };
         if (this._rangedListeners.includes(rangedListener)) return false;
         this._rangedListeners.push(rangedListener);
+        this._rangedListeners.sort((a, b) => a.lower - b.lower);
         return true;
     }
 
     /**
      * 
-     * @param {number} freqBin the frequency bin the update listener to be removed from is in.
-     * @param {visualizerBinUpdateListener} listener the listener that is to be removed.
+     * @param {object} binFreqListener The bin frequency listener to remove.
+     * @param {number} binFreqListener.freqBin the frequency bin the update listener to be removed from is in.
+     * @param {VisualizerUpdateManager.visualizerBinUpdateListener} binFreqListener.listener the listener that is to be removed.
      * @returns {boolean} true if and only if the listener was successfully removed.
      */
-    removeVisualizerBinUpdateListener(freqBin, listener) {
+    removeVisualizerBinUpdateListener({ freqBin, listener }) {
         const removeIndex = this._binnedListeners[freqBin].indexOf(listener);
         if (removeIndex < 0) return false;
         this._binnedListeners[freqBin].splice(removeIndex, 1);
@@ -101,13 +110,18 @@ export default class VisualizerUpdateManager {
     /**
      * Similar to {@link removeVisualizerBinUpdateListener}, this method removes the given listener from a range of bins.
      * 
-     * @param {number} min The lower bound of bins to remove the listener from (inclusive).
-     * @param {number} max The upper bound of bin to remove the listener from (inclusive.)
-     * @param {visualizerBinUpdateListener} listener The update listener to remove from the bins.
+     * @param {object} rangedListener The ranged listener to remove.
+     * @param {number} rangedListener.lower The lower bound of bins to remove the listener from (inclusive).
+     * @param {number} rangedListener.upper The upper bound of bin to remove the listener from (inclusive.)
+     * @param {VisualizerUpdateManager.visualizerRangedUpdateListener} rangedListener.listener The update listener to remove from the bins.
      * @returns {boolean} True if and only if the given listener was removed.
      */
-    removeVisualizerRangeUpdateListener(min, max, listener) {
-        const rangedListener = [min, max, listener];
+    removeVisualizerRangedUpdateListener({ lower, upper, listener }) {
+        const rangedListener = {
+            lower: lower,
+            upper: upper,
+            listener: listener
+        };
         const removeIndex = this._rangedListeners.indexOf(rangedListener);
         if (removeIndex < 0) return false;
         this._binnedListeners.splice(removeIndex, 1);
@@ -116,21 +130,25 @@ export default class VisualizerUpdateManager {
 
     /**
      * 
-     * @param {visualizerBinUpdateListener[][]} binnedListeners an array of the same length as the number of bins where each element is another array containing the listeners for that bin.
+     * @param {{binned: VisualizerUpdateManager.visualizerBinUpdateListener[][], ranged: {lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}[]}} listeners an object containing both the binned, and ranged listeners that this update manager should use.
      * @returns {boolean} true if and only if successfully loaded the new listeners.
      */
-    setBinnedListeners(binnedListeners) {
-        if (binnedListeners.length !== this._binnedListeners.length) return false;
-        this._binnedListeners = binnedListeners;
+    setBinnedListeners(listeners) {
+        if (listeners.binned.length !== this._binnedListeners.length) return false;
+        this._binnedListeners = listeners.binned;
+        this._rangedListeners = listeners.ranged.sort((a, b) => a.lower - b.lower);
         return true;
     }
 
     /**
      * 
-     * @returns {visualizerBinUpdateListener[][]} an array of the same length as the number of bins where each element is another array containing the listeners for that bin.
+     * @returns {{binned: VisualizerUpdateManager.visualizerBinUpdateListener[][], ranged: {lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}[]}} All the listeners, both for binned, and ranged listeners.
      */
-    getBinnedListeners() {
-        return this._binnedListeners;
+    getAllListeners() {
+        return {
+            binned: this._binnedListeners,
+            ranged: this._rangedListeners
+        };
     }
 
     /**
