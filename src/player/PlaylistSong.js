@@ -1,10 +1,8 @@
 import Visualizer from "../visualization/Visualizer.js";
-import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A song with metadata that can be used as part of a {@link SongPlaylist}.
  * 
- * Typically should not be manually instantiated. Instead, create the song via {@link SongPlaylist}.
  */
 export default class PlayListSong {
 
@@ -14,13 +12,11 @@ export default class PlayListSong {
      * @param {string} url the url to fetch the song from.
      * @param {string} name the name of the song.
      * @param {string} author the author of the song.
-     * @param {SongPlaylist} playlist the {@link SongPlaylist} this song is part of.
      */
-    constructor(url, name, author, playlist) {
+    constructor(url, name, author) {
         this._displayName = name;
         this._author = author;
         this._url = url;
-        this._playlist = playlist;
         this._audio = null;
         this._visualizer = null;
 
@@ -80,14 +76,6 @@ export default class PlayListSong {
      */
     getUrl = function () {
         return this._url;
-    };
-
-    /**
-     * 
-     * @returns {SongPlaylist} the playlist this song is part of.
-     */
-    getPlaylist = function () {
-        return this._playlist;
     };
 
     /**
