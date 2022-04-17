@@ -494,3 +494,6 @@ dist
 
 # Don't include HTML documentation.
 docs
+
+# Don't include junit coverage report.
+junit

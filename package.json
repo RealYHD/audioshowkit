@@ -8,7 +8,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack serve --config webpack.dev.js",
-    "test": "echo \"No test specified yet...\" && exit 0",
+    "test": "mocha tests/** --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test_results.xml",
     "docs": "jsdoc src -r -d docs -c jsdoc.config.json"
   },
   "author": "",
@@ -16,8 +16,9 @@
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
-    "@ckeditor/jsdoc-plugins": "^30.1.3",
+    "@ckeditor/jsdoc-plugins": "^20.0.0",
     "babel-loader": "^8.2.4",
+    "chai": "^4.3.6",
     "css-loader": "^6.7.1",
     "eslint": "^8.13.0",
     "eslint-plugin-import": "^2.26.0",
@@ -25,6 +26,8 @@
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
     "jsdoc": "^3.6.10",
+    "mocha": "^9.2.2",
+    "mocha-junit-reporter": "^2.0.2",
     "style-loader": "^3.3.1",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
