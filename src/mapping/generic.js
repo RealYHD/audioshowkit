@@ -4,28 +4,6 @@
 
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 
-// TODO: Figure out how to not need this defined multiple times.
-/**
- * @callback interpolator
- * @param {number} current the current value.
- * @param {number} dest the destination value.
- * @param {number} frameDelta the time elapsed since the last update.
- * @returns {number} the new current value.
- */
-
-/**
- * @callback VisualizerUpdateManager.visualizerRangedUpdateListener
- * @param {number} timeDelta elapsed time since last update.
- * @param {number} bins the bins of the range.
- */
-
-/**
- * @callback VisualizerUpdateManager.visualizerBinUpdateListener
- * @param {number} timeDelta elapsed time since last update.
- * @param {number} amplitude The amplitude of the associated bin.
- * @param {number} ampDelta change in amplitude of the frequency bin.
- */
-
 /**
  * 
  * @callback numericalGetter
@@ -106,4 +84,3 @@ export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpola
     }
     return null; // Technically doesn't occur since the functions are anonymous?
 }
-

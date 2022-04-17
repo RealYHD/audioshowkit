@@ -2,27 +2,6 @@ import { parseColor, rgbaToHexRgba } from "./colors.js";
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 import { mapBinNumerical, mapRangedAvgNumerical } from "./generic.js";
 
-// TODO: Future: Should be able to remove this since already declared in easings.js, but don't know how to link.
-/**
- * @callback interpolator
- * @param {number} current the current value.
- * @param {number} dest the destination value.
- * @param {number} frameDelta the time elapsed since the last update.
- * @returns {number} the new current value.
- */
-
-/**
- * @callback VisualizerUpdateManager.visualizerRangedUpdateListener
- * @param {number} timeDelta elapsed time since last update.
- * @param {number} bins the bins of the range.
- */
-
-/**
- * @callback VisualizerUpdateManager.visualizerBinUpdateListener
- * @param {number} timeDelta elapsed time since last update.
- * @param {number} amplitude The amplitude of the associated bin.
- * @param {number} ampDelta change in amplitude of the frequency bin.
- */
 
 /**
  * Maps the red component of the text color to a certain range of bins.
@@ -47,30 +26,23 @@ export function mapRgba({ element, color, lowerBin, visUpdateManager, interpolat
         changed[color] = value;
         element.style.color = rgbaToHexRgba(changed);
     };
-    if (!upperBin) {
-        return mapBinNumerical({
-            minVal: 0,
-            maxVal: 255,
-            bin: lowerBin,
-            getter: getter,
-            setter: setter,
-            interpolator: interpolator,
-            visUpdateManager: visUpdateManager,
-            reversed: reversed
-        });
-    }
-    // TODO: Future: Could use the same object and modify
-    return mapRangedAvgNumerical({
+    const conf = {
         minVal: 0,
         maxVal: 255,
-        lowerBin: lowerBin,
-        upperBin: upperBin,
+        bin: lowerBin,
         getter: getter,
         setter: setter,
         interpolator: interpolator,
         visUpdateManager: visUpdateManager,
         reversed: reversed
-    });
+    };
+    if (upperBin) {
+        conf.bin = undefined;
+        conf.lowerBin = lowerBin;
+        conf.upperBin = upperBin;
+        return mapRangedAvgNumerical(conf);
+    }
+    return mapBinNumerical(conf);
 }
 
 /**
@@ -85,38 +57,28 @@ export function mapRgba({ element, color, lowerBin, visUpdateManager, interpolat
  * @param {interpolator} fontSizeMapConfiguration.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [fontSizeMapConfiguration.upperBin=undefined] The upper bin, or undefined, which results in mapping to a single bin.
  * @param {boolean} [fontSizeMapConfiguration.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The ranged listener that was added.
+ * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 export function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
-    const getter = () => {
-        return parseInt(element.style.fontSize);
-    };
-    const setter = (value) => {
-        element.style.fontSize = value + unit;
-    };
-    if (!upperBin) {
-        return mapBinNumerical({
-            minVal: growLower,
-            maxVal: growUpper,
-            bin: lowerBin,
-            getter: getter,
-            setter: setter,
-            interpolator: interpolator,
-            visUpdateManager: visUpdateManager,
-            reversed: reversed
-        });
-    }
-    return mapRangedAvgNumerical({
+    const getter = () => parseInt(element.style.fontSize);
+    const setter = (value) => element.style.fontSize = value + unit;
+    const conf = {
         minVal: growLower,
         maxVal: growUpper,
-        lowerBin: lowerBin,
-        upperBin: upperBin,
+        bin: lowerBin,
         getter: getter,
         setter: setter,
         interpolator: interpolator,
         visUpdateManager: visUpdateManager,
         reversed: reversed
-    });
+    };
+    if (upperBin) {
+        conf.bin = undefined;
+        conf.lowerBin = lowerBin;
+        conf.upperBin = upperBin;
+        return mapRangedAvgNumerical(conf);
+    }
+    return mapBinNumerical(conf);
 }
 
 // TODO: Future: map hue
