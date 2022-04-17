@@ -105,7 +105,6 @@ export default class SongPlayer {
 
     playCurrent() {
         this.getCurrentSong().getAudio((audio) => {
-            // TODO: May need to perform synchronization check to see if this is still the song to be played.
             audio.volume = this._volume;
             audio.play();
         });
@@ -232,8 +231,8 @@ export default class SongPlayer {
 
     /**
      * @callback changeListener
-     * @param {any} old the previous value.
-     * @param {any} current the the current (new) value.
+     * @param {*} old the previous value.
+     * @param {*} current the the current (new) value.
      */
 
     /**

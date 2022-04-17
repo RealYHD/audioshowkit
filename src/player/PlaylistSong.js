@@ -51,7 +51,7 @@ export default class PlayListSong {
 
         this._audio.addEventListener("canplaythrough", () => {
             this.ready = true;
-            if (onReady) {
+            if (onReady && this.isAudioInstantiated()) {
                 onReady(this._audio);
             }
         });
