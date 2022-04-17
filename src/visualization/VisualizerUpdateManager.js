@@ -129,8 +129,12 @@ export default class VisualizerUpdateManager {
     }
 
     /**
-     * 
-     * @param {{binned: VisualizerUpdateManager.visualizerBinUpdateListener[][], ranged: {lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}[]}} listeners an object containing both the binned, and ranged listeners that this update manager should use.
+     * @param {object} listeners The listeners that this visualizer update manager should be set to use.
+     * @param {VisualizerUpdateManager.visualizerBinUpdateListener[][]} listeners.binned The bin listeners.
+     * @param {object[]} listeners.ranged The array of ranged listeners.
+     * @param {number} listeners.ranged[].lower The lower bound of the listener.
+     * @param {number} listeners.ranged[].upper The upper bound of the listener.
+     * @param {VisualizerUpdateManager.visualizerRangedUpdateListener} listeners.ranged[].listener The listener for the previously mentioned ranges.
      * @returns {boolean} true if and only if successfully loaded the new listeners.
      */
     setBinnedListeners(listeners) {
@@ -142,7 +146,7 @@ export default class VisualizerUpdateManager {
 
     /**
      * 
-     * @returns {{binned: VisualizerUpdateManager.visualizerBinUpdateListener[][], ranged: {lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}[]}} All the listeners, both for binned, and ranged listeners.
+     * @returns {object} All the listeners, both for binned, and ranged listeners. See {@link VisualizerUpdateManager#setBinnedListeners} to see the structure of the returned object.
      */
     getAllListeners() {
         return {
