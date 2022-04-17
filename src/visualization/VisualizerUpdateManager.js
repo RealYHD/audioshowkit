@@ -14,22 +14,34 @@ export default class VisualizerUpdateManager {
      */
     constructor(visualizer) {
         this._binnedListeners = [];
+        this._rangedListeners = [];
         for (let i = 0; i < visualizer.getNumberOfBins(); i++) {
             this._binnedListeners.push([]);
         }
         this._lastBins = new Uint8Array(this._binnedListeners.length);
-
-        visualizer.addUpdateListener((delta, bins) => {
+        this._visualizer = visualizer;
+        this._visualizerListener = (delta, bins) => {
+            const sortedCopyOfRangedListeners = [... this._rangedListeners].sort((a, b) => a[0] - b[0]); // Priority queue could be better.
             for (let binInd = 0; binInd < this._lastBins.length; binInd++) {
                 const lastBin = this._lastBins[binInd];
                 if (lastBin !== bins[binInd]) {
                     this._binnedListeners[binInd].forEach(listener => {
                         listener(delta, bins[binInd], bins[binInd] - lastBin);
                     });
+                    for (let rangedInd = 0; rangedInd < sortedCopyOfRangedListeners.length; rangedInd++) { // Could switch to a while loop.
+                        const [min, max, listener] = sortedCopyOfRangedListeners[rangedInd];
+                        if (min > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
+                        if (binInd <= max) {
+                            listener(delta, bins.slice(min, max));
+                            sortedCopyOfRangedListeners.shift();
+                            rangedInd--;
+                        }
+                    }
                     this._lastBins[binInd] = bins[binInd];
                 }
             }
-        });
+        };
+        visualizer.addUpdateListener(this._visualizerListener);
     }
 
     /**
@@ -39,12 +51,18 @@ export default class VisualizerUpdateManager {
      * @param {number} ampDelta change in amplitude of the frequency bin.
      */
 
+    /**
+     * @callback visualizerRangeUpdateListener
+     * @param {number} timeDelta elapsed time since last update.
+     * @param {number} bins the bins of the range.
+     */
+
 
     /**
      * 
      * @param {number} freqBin the frequency bin this update listener should listen to.
      * @param {visualizerBinUpdateListener} listener the listener itself that will be called upon the bin updating.
-     * @returns {boolean} true if and only if the updater was added successfully, otherwise, false.
+     * @returns {boolean} true if and only if the updater was added successfully.
      */
     AddVisualizerBinUpdateListener(freqBin, listener) {
         if (this._binnedListeners[freqBin].includes(listener)) return false;
@@ -53,19 +71,18 @@ export default class VisualizerUpdateManager {
     }
 
     /**
-     * Similar to {@link VisualizerUpdateManager#AddVisualizerBinUpdateListener}, this method adds the same listener to a range of bins.
+     * Similar to {@link VisualizerUpdateManager#AddVisualizerBinUpdateListener}, this method adds a listener for to a range of bins.
      * 
      * @param {number} min The lower bound of the bins to listen to (inclusive).
      * @param {number} max The upper bound of the bins to listen to (inclusive).
-     * @param {visualizerBinUpdateListener} listener The listener to register to these bins. 
-     * @returns {boolean} True if and only if the listener was added at least once.
+     * @param {visualizerRangeUpdateListener} listener The listener to register to the range. 
+     * @returns {boolean} True if and only if the ranged listener was added successfully.
      */
     addVisualizerRangeUpdateListener(min, max, listener) {
-        let added = false;
-        for (let i = min; i <= max; i++) {
-            if (this.AddVisualizerBinUpdateListener(i, listener)) added = true;
-        }
-        return added;
+        const rangedListener = [min, max, listener];
+        if (this._rangedListeners.includes(rangedListener)) return false;
+        this._rangedListeners.push(rangedListener);
+        return true;
     }
 
     /**
@@ -87,14 +104,14 @@ export default class VisualizerUpdateManager {
      * @param {number} min The lower bound of bins to remove the listener from (inclusive).
      * @param {number} max The upper bound of bin to remove the listener from (inclusive.)
      * @param {visualizerBinUpdateListener} listener The update listener to remove from the bins.
-     * @returns {boolean} True if and only if at least one listener was removed.
+     * @returns {boolean} True if and only if the given listener was removed.
      */
     removeVisualizerRangeUpdateListener(min, max, listener) {
-        let removed = false;
-        for (let i = min; i <= max; i++) {
-            if (this.removeVisualizerBinUpdateListener(i, listener)) removed = true;
-        }
-        return removed;
+        const rangedListener = [min, max, listener];
+        const removeIndex = this._rangedListeners.indexOf(rangedListener);
+        if (removeIndex < 0) return false;
+        this._binnedListeners.splice(removeIndex, 1);
+        return true;
     }
 
     /**
@@ -123,5 +140,12 @@ export default class VisualizerUpdateManager {
         this._binnedListeners.forEach(bin => {
             bin.length = 0;
         });
+    }
+
+    /**
+     * Unbinds this update manager from the initial visualizer. Effectively meaning this manager will no longer be used.
+     */
+    unbindVisualizer() {
+        this._visualizer.removeUpdateListener(this._visualizerListener);
     }
 }

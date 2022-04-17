@@ -14,20 +14,22 @@ import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js
  * Maps the red component of the text color to a certain range of bins.
  * 
  * @param {HTMLElement} element The element whose text's red value should be mapped.
- * @param {number} color Where 0 for red, 1, for blue, 2 for green, and 3 for alpha.
- * @param {number} min The lower bound of the bins to be mapped.
+ * @param {number} color Where r for red, g, for green, b for blue, and a for alpha.
+ * @param {number} lowerBin The lower bound of the bins to be mapped.
  * @param {VisualizerUpdateManager} visUpdateManager The visualizer update manager associated with the audio playback you would like the mapping with.
  * @param {interpolator} interpolator The interpolation function to use.
- * @param {number} [max=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
+ * @param {number} [upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
  * @param {boolean} [reversed=true] If true, then the quieter, the greater the red value.
  */
-export function mapColor(element, color, min, visUpdateManager, interpolator, max = undefined, reversed = false) {
-    if (!max) max = min;
-    visUpdateManager.addVisualizerRangeUpdateListener(min, max, (timeDelta, amp) => {
+export function mapColor(element, color, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false) {
+    const rgbaStr = "rgba";
+    color = rgbaStr.indexOf(color);
+    if (color < 0) throw new Error("Invalid color parameter provided.");
+    if (!upperBin) upperBin = lowerBin;
+    visUpdateManager.addVisualizerRangeUpdateListener(lowerBin, upperBin, (timeDelta, amp) => {
         const rgba = parseColor(element.style.color);
         rgba[color] = interpolator(rgba[color], amp, timeDelta);
         if (reversed) rgba[color] = 255 - rgba[color];
         element.style.color = rgbaToHexRgba(rgba);
     });
 }
-
