@@ -37,19 +37,20 @@ export default class PlayListSong {
      */
     fetchAudio(onReady) {
         if (this.#audio) {
-            if (this.ready) {
+            if (this.#ready) {
                 if (onReady) onReady(this.#audio);
             }
             return this.#audio;
         }
-        this.#audio = new Audio(this._url);
-
-        this.#audio.addEventListener("canplaythrough", () => {
-            this.ready = true;
+        this.#audio = new Audio(this.#url);
+        console.log("Audio is not ready. Loading.");
+        const listener = () => {
+            this.#ready = true;
             if (onReady && this.isAudioInstantiated()) {
                 onReady(this.#audio);
             }
-        });
+        };
+        this.#audio.addEventListener("canplaythrough", listener, { once: true });
         return this.#audio;
     }
 
@@ -58,7 +59,7 @@ export default class PlayListSong {
      * The name of the song to be displayed.
      */
     get displayName() {
-        return this._displayName;
+        return this.#displayName;
     }
 
     /**
@@ -66,7 +67,7 @@ export default class PlayListSong {
      * The author of the song.
      */
     get author() {
-        return this._getAuthor;
+        return this.#author;
     }
 
     /**
@@ -74,7 +75,7 @@ export default class PlayListSong {
      * The url at which the file for this song can be found.
      */
     get url() {
-        return this._url;
+        return this.#url;
     }
 
     /**
@@ -156,7 +157,7 @@ export default class PlayListSong {
         this.#audio.pause();
         this.unloadVisualizer();
         this.#audio = null;
-        this.ready = false;
+        this.#ready = false;
     }
 
     /**
@@ -165,9 +166,9 @@ export default class PlayListSong {
      * @returns {Visualizer} returns the visualizer.
      */
     getVisualizer(fftSize = 1024) {
-        if (this._visualizer && this._visualizer.getFftSize() === fftSize) return this._visualizer;
-        this._visualizer = new Visualizer(this.fetchAudio(), fftSize);
-        return this._visualizer;
+        if (this.#visualizer && this.#visualizer.getFftSize() === fftSize) return this.#visualizer;
+        this.#visualizer = new Visualizer(this.fetchAudio(), fftSize);
+        return this.#visualizer;
     }
 
     /**
@@ -175,7 +176,7 @@ export default class PlayListSong {
      * @returns {boolean} returns true if and only if the visualizer is instantiated.
      */
     isVisualizerInstantiated() {
-        return this._visualizer ? true : false;
+        return this.#visualizer ? true : false;
     }
 
     /**
@@ -183,7 +184,7 @@ export default class PlayListSong {
      * Stops the visualizer.
      */
     unloadVisualizer() {
-        this._visualizer.stop();
-        this._visualizer = null;
+        this.#visualizer.stop();
+        this.#visualizer = null;
     }
 }

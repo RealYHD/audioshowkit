@@ -10,7 +10,7 @@
     border-width: 30px 0px 30px 50px;
 }
 
-.player.play-btn.paused {
+.player.play-btn.pause {
     border-style: double;
     border-width: 0px 0px 0px 60px;
 }

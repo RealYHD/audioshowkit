@@ -33,7 +33,7 @@ export default class SongPlaylist {
         if (index >= this.#list.length) {
             return null;
         }
-        return this.list[index];
+        return this.#list[index];
     }
 
     /**

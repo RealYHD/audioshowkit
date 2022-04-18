@@ -8,10 +8,11 @@
   "scripts": {
     "build:prod": "webpack --config webpack.prod.cjs",
     "build:dev": "webpack --config webpack.dev.cjs",
-    "build": "webpack --config webpack.dev.cjs",
+    "build": "npm run build:dev",
     "test:junit": "mocha tests/** --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test_results.xml",
     "test:console": "mocha tests/**",
-    "test": "mocha tests/**",
+    "test": "npm run test:console",
+    "watch": "webpack --watch --config webpack.dev.cjs",
     "docs": "esdoc"
   },
   "author": "",
