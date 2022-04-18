@@ -11,7 +11,7 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @param {number} value The new numerical value to update to.
  */
 
-// FIXME: Warnings about interpolator not being defined are broken. Docs generate fine.
+// PEND: Warnings about interpolator not being defined are broken. Docs generate fine.
 
 /**
  * Maps the average of a range of bins to numerical value defined by a getter and a setter.

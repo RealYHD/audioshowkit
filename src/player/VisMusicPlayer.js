@@ -14,7 +14,6 @@ import MusicPlaylist from "./MusicPlaylist.js";
 export default class VisMusicPlayer extends MusicPlayer {
     #fftSize = 1024;
     #visUpdateRouter;
-    #visUpdateRouterListeners = null;
 
     /**
      * Instantiates a music player with visualization features.
@@ -30,8 +29,10 @@ export default class VisMusicPlayer extends MusicPlayer {
     }
 
     #onMusicChange = () => {
-        this.#visUpdateRouterListeners = this.#visUpdateRouter.retrieveListeners();
-        this.#visUpdateRouter?.unbindVisualizer();
+        const visUpdateRouterListeners = this.#visUpdateRouter.retrieveListeners();
+        this.#visUpdateRouter.unbindVisualizer();
+        this.#visUpdateRouter = new VisUpdateRouter(this.currentMusicVisualizer);
+        this.#visUpdateRouter.loadListeners(visUpdateRouterListeners);
     };
 
     /**
@@ -40,10 +41,10 @@ export default class VisMusicPlayer extends MusicPlayer {
     set playlist(playlist) {
         if (!this.playlist) {
             super.playlist = playlist;
-            return; // HACK: If it's the first time, then wait until super() is done.
+            return; // If it's the first time, then wait until super() is done.
         }
         this.playlist?.removePositionChangeListener(this.#onMusicChange);
-        this.playlist.addPositionChangeListener(this.#onMusicChange);
+        playlist.addPositionChangeListener(this.#onMusicChange);
         super.playlist = playlist;
     }
 
@@ -52,12 +53,8 @@ export default class VisMusicPlayer extends MusicPlayer {
     }
 
     playCurrent() {
-        console.log("attempted play from vis");
         super.playCurrent();
-        const visualizer = this.playlist.currentMusic.fetchVisualizer();
-        this.#visUpdateRouter.visualizer = visualizer;
-        visualizer.analyze();
-        if (this.#visUpdateRouterListeners) this.#visUpdateRouter.loadListeners(this.#visUpdateRouterListeners);
+        this.currentMusicVisualizer.analyze();
     }
 
 

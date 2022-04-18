@@ -1,5 +1,7 @@
 /**@module */
 
+import Visualizer from "./Visualizer.js";
+
 /**
  * @callback visualizerBinUpdateListener
  * @param {number} timeDelta elapsed time since last update.
@@ -29,17 +31,18 @@ export default class VisUpdateRouter {
 
     /**
      * 
-     * @param {number} fftSize the fft window size of the visualizer this manager obtains data from.
+     * @param {Visualizer} visualizer the fft window size of the visualizer this manager obtains data from.
      */
-    constructor(fftSize) {
+    constructor(visualizer) {
         this.#binnedListeners = [];
         this.#rangedListeners = [];
-        const bins = fftSize / 2; // TODO: Clean this up.
+        const bins = visualizer.numberOfBins; // TODO: Clean this up.
         for (let i = 0; i < bins; i++) {
             this.#binnedListeners.push([]);
         }
         this.#lastBins = new Uint8Array(this.#binnedListeners.length);
-
+        this.#visualizer = visualizer;
+        this.#visualizer.addUpdateListener(this.#visualizerListener);
     }
 
     #visualizerListener = (delta, bins) => {
@@ -63,16 +66,6 @@ export default class VisUpdateRouter {
             }
         }
     };
-
-    /**
-     * Sets the current visualizer.
-     */
-    set visualizer(visualizer) {
-        console.log("vis update router visualizer set.");
-        if (this.#visualizer) this.unbindVisualizer();
-        this.#visualizer = visualizer;
-        visualizer.addUpdateListener(this.#visualizerListener);
-    }
 
 
     /**

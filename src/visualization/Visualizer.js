@@ -1,5 +1,3 @@
-/**@module */
-
 /**
  * @callback visualizerUpdateListener
  * @param {number} delta elapsed time since last update.
@@ -10,39 +8,42 @@
  * Provides a simplified access point to the frequency bins in the form of a visualization update listener.
  */
 export default class Visualizer {
+    #source;
     #stream;
     #analyzing = false;
     #updateListeners = [];
     #audioCtx;
-    #source;
     #analyzer;
     #buffer;
     #lastUpdate;
+    #fftSize;
 
     /**
      * 
-     * @param {MediaSource|HTMLMediaElement} mediaSource a media source to analyze.
+     * @param {MediaSource|HTMLMediaElement} stream a media source to analyze.
      * @param {number} [fftSize = 1024] the size of the fft window.
      */
-    constructor(mediaSource, fftSize = 1024) {
-        this.#stream = mediaSource;
+    constructor(stream, fftSize = 1024) {
+        this.#fftSize = fftSize;
+        this.#stream = stream;
         this.#analyzing = false;
         this.#updateListeners = [];
+        this.#lastUpdate = null;
+    }
+
+    #initialize() {
         this.#audioCtx = new window.AudioContext();
-        if (mediaSource instanceof HTMLMediaElement) {
+        if (this.#stream instanceof HTMLMediaElement) {
             this.#source = this.#audioCtx.createMediaElementSource(this.#stream);
         } else {
             this.#source = this.#audioCtx.createMediaStreamSource(this.#stream);
         }
         this.#analyzer = this.#audioCtx.createAnalyser();
-        this.#analyzer.fftSize = fftSize;
+        this.#analyzer.fftSize = this.fftSize;
         this.#buffer = new Uint8Array(this.#analyzer.frequencyBinCount);
         this.#source.connect(this.#analyzer);
         this.#analyzer.connect(this.#audioCtx.destination);
-
-        this.#lastUpdate = null;
     }
-
 
     /**
      * Begins analyzing and sending out update pings.
@@ -51,6 +52,7 @@ export default class Visualizer {
         if (this.#analyzing) {
             return;
         }
+        if (!this.#audioCtx) this.#initialize();
         this.#analyzing = true;
         let self = this; // since calling from requestAnimationFrame means "this" is no longer set to produced object.
         const update = (timestamp) => {
@@ -115,6 +117,6 @@ export default class Visualizer {
      * @returns {number} The fft window size.
      */
     get fftSize() {
-        return this.#analyzer.fftSize;
+        return this.#fftSize;
     }
 }
