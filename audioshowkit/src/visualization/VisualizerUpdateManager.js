@@ -51,14 +51,14 @@ export default class VisualizerUpdateManager {
     }
 
     /**
-     * @typedef {Function} visualizerBinUpdateListener
+     * @callback visualizerBinUpdateListener
      * @param {number} timeDelta elapsed time since last update.
      * @param {number} amplitude The amplitude of the associated bin.
      * @param {number} ampDelta change in amplitude of the frequency bin.
      */
 
     /**
-     * @typedef {Function} visualizerRangedUpdateListener
+     * @callback visualizerRangedUpdateListener
      * @param {number} timeDelta elapsed time since last update.
      * @param {number} bins the bins of the range.
      */

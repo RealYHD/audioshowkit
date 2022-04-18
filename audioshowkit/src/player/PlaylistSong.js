@@ -26,7 +26,7 @@ export default class PlayListSong {
     }
 
     /**
-     * @typedef {Function} AudioEventCallback
+     * @callback AudioEventCallback
      * @param {HTMLAudioElement} audio
      */
 

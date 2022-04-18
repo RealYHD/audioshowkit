@@ -241,7 +241,7 @@ export default class SongPlayer {
     }
 
     /**
-     * @typedef {Function} changeListener
+     * @callback changeListener
      * @param {*} old the previous value.
      * @param {*} current the the current (new) value.
      */
