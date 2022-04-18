@@ -3,29 +3,35 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                nodejs('NodeJS (17.4.0)') {
-                    sh "npm install"
+                dir('audioshowkit') {
+                    nodejs('NodeJS (17.4.0)') {
+                        sh "npm install"
+                    }
                 }
             }
         }
         stage("build") {
             steps {
-                nodejs('NodeJS (17.4.0)') {
-                    sh "npm run build:dev"
+                dir('audioshowkit') {
+                    nodejs('NodeJS (17.4.0)') {
+                        sh "npm run build:dev"
+                    }
                 }
             }
         }
         stage("test") {
             steps {
-                nodejs('NodeJS (17.4.0)') {
-                    sh "npm run test"
+                dir('audioshowkit') {
+                    nodejs('NodeJS (17.4.0)') {
+                        sh "npm run test"
+                    }
+                    junit 'junit/*.xml'
                 }
-                junit 'junit/*.xml'
             }
         }
         stage("archive product") {
             steps {
-                archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
+                archiveArtifacts artifacts: 'audioshowkit/dist/audioshowkit.js', followSymlinks: false
             }
         }
         stage("publish") {
@@ -34,7 +40,7 @@ pipeline {
                     stages {
                         stage("install showcase") {
                             steps {
-                                dir('./showcase/') {
+                                dir('showcase') {
                                     nodejs('NodeJS (17.4.0)') {
                                         sh "npm i"
                                     }
@@ -43,7 +49,7 @@ pipeline {
                         }
                         stage("build showcase") {
                             steps {
-                                dir('./showcase/') {
+                                dir('showcase') {
                                     nodejs('NodeJS (17.4.0)') {
                                         sh "npm run build"
                                     }
@@ -59,8 +65,10 @@ pipeline {
                 }
                 stage("generate docs") {
                     steps {
-                        nodejs('NodeJS (17.4.0)') {
-                            sh "npm run docs"
+                        dir('audioshowkit') {
+                            nodejs('NodeJS (17.4.0)') {
+                                sh "npm run docs"
+                            }
                         }
                         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'docs', reportFiles: 'index.html', reportName: 'AudioShowKit JSDocs', reportTitles: ''])
                     }

@@ -23,6 +23,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "audioshowkit": "file:.."
+    "audioshowkit": "file:../audioshowkit"
   }
 }
