@@ -7,3 +7,5 @@ playlist.add("/audio/XXI.mp3", "XXI", "QR");
 const player = ask.player.createSongPlayer(playlist);
 const playerElem = document.getElementById("player-showcase");
 playerElem.appendChild(player.generatePlayElement());
+playerElem.appendChild(player.generateNextElement());
+playerElem.appendChild(player.generatePreviousElement());

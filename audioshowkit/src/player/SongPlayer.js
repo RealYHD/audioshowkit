@@ -1,4 +1,4 @@
-import "../styles/songplayer.css";
+import "../styles/songPlayer.css";
 import PlayListSong from "./PlaylistSong.js";
 import SongPlaylist from "./SongPlaylist.js";
 
@@ -10,6 +10,7 @@ export default class SongPlayer {
     #current = 0;
     #volume = 1;
     #autoplay = false;
+    #wasPlaying = false;
     #playlistChangeListeners = [];
     #currentSongChangeListeners = [];
     #volumeChangeListeners = [];
@@ -95,7 +96,7 @@ export default class SongPlayer {
                 this.currentSong.fetchAudio().addEventListener(key, listener);
             });
         });
-        if (this.#autoplay) {
+        if (this.#wasPlaying || this.#autoplay) {
             this.playCurrent();
         }
         return true;
@@ -110,12 +111,12 @@ export default class SongPlayer {
     }
 
     playCurrent() {
-        console.log("Attempting to play...");
+        console.log("playing " + this.#current);
         this.currentSong.fetchAudio((audio) => {
             audio.volume = this.volume;
             audio.play();
-            console.log("playing...");
         });
+        this.#wasPlaying = true;
     }
 
     /**

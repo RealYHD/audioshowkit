@@ -1,13 +1,14 @@
 .player.play-btn {
     box-sizing: border-box;
-    height: 60px;
+    height: 48px;
+    width: 48;
     transition: 80ms all ease;
     will-change: border-width;
     cursor: pointer;
     border-color: transparent transparent transparent black;
 
     border-style: solid;
-    border-width: 30px 0px 30px 50px;
+    border-width: 24px 0px 24px 48px;
 }
 
 .player.play-btn.pause {
@@ -18,10 +19,14 @@
 
 .player.next {
     border-style: none;
+    width: 48px;
+    height: 48px;
 }
 
 .player.previous {
     border-style: none;
+    width: 48px;
+    height: 48px;
 }
 
 table.player {

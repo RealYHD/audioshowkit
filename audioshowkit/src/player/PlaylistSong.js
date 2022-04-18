@@ -36,18 +36,27 @@ export default class PlayListSong {
      * @returns {HTMLAudioElement} The audio element that represents this song.
      */
     fetchAudio(onReady) {
+        console.log("Fetching audio...");
         if (this.#audio) {
             if (this.#ready) {
+                console.log("Already ready.");
                 if (onReady) onReady(this.#audio);
+            } else if (onReady) {
+                this.#audio.addEventListener("canplaythrough", () => {
+                    onReady(this.#audio);
+                }, { once: true });
             }
             return this.#audio;
         }
         this.#audio = new Audio(this.#url);
-        console.log("Audio is not ready. Loading.");
+        console.log("Fetching from url: " + this.#url);
         const listener = () => {
             this.#ready = true;
+            console.log("attempting to invoke onReady.");
+            console.log(onReady);
             if (onReady && this.isAudioInstantiated()) {
                 onReady(this.#audio);
+                console.log("onReady invoked.");
             }
         };
         this.#audio.addEventListener("canplaythrough", listener, { once: true });
@@ -180,7 +189,9 @@ export default class PlayListSong {
      * Stops the visualizer.
      */
     unloadVisualizer() {
-        this.#visualizer.stop();
-        this.#visualizer = null;
+        if (this.#visualizer) {
+            this.#visualizer.stop();
+            this.#visualizer = null;
+        }
     }
 }
