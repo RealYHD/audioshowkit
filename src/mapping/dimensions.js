@@ -1,5 +1,5 @@
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
-import { mapBinNumerical, mapRangedAvgNumerical } from "./generic.js";
+import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
 /**
  * Maps the width of an element to frequency bin(s).

@@ -1,6 +1,6 @@
-import { parseColor, rgbaToHexRgba } from "./colors.js";
+import { parseColor, rgbaToHexRgba } from "../support/colors.js";
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
-import { mapBinNumerical, mapRangedAvgNumerical } from "./generic.js";
+import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
 
 /**
