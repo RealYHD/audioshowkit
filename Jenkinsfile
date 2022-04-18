@@ -11,7 +11,7 @@ pipeline {
         stage("build") {
             steps {
                 nodejs('NodeJS (17.4.0)') {
-                    sh "npm run build"
+                    sh "npm run build:dev"
                 }
             }
         }

@@ -1,7 +1,7 @@
-import path from "path";
+const path = require("path");
 
-export default {
-    mode: "production",
+module.exports = {
+
     entry: {
         audioshowkit: path.resolve("./src/audioshowkitlib.js"),
     },
@@ -26,9 +26,7 @@ export default {
     output: {
         filename: "[name].js",
         path: path.resolve("./dist"),
-        library: ["[name]"]
+        library: ["[name]"],
+        clean: true
     },
-    plugins: [
-
-    ]
 };

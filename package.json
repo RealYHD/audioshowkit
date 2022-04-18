@@ -6,7 +6,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build:prod": "webpack --config webpack.prod.cjs",
+    "build:dev": "webpack --config webpack.dev.cjs",
+    "build": "webpack --config webpack.dev.cjs",
     "test": "mocha tests/** --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test_results.xml",
     "docs": "jsdoc src README.md -r -d docs -c jsdoc.config.json"
   },
@@ -22,14 +24,12 @@
     "eslint": "^8.13.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsdoc": "^39.2.1",
-    "html-loader": "^3.1.0",
     "jsdoc": "^3.6.10",
     "mocha": "^9.2.2",
     "mocha-junit-reporter": "^2.0.2",
     "style-loader": "^3.3.1",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.8.1",
     "webpack-merge": "^5.8.0"
   }
 }
