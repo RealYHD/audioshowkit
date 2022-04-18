@@ -9,6 +9,8 @@ import SongPlayer from "./SongPlayer.js";
  * Automatically loads the songs.
  */
 export default class VisualizedSongPlayer extends SongPlayer {
+    #fftSize = 1024;
+    #visualizerUpdateManager;
 
     /**
      * Instantiates a song player with visualization features.
@@ -18,18 +20,16 @@ export default class VisualizedSongPlayer extends SongPlayer {
      */
     constructor(playlist, fftSize = 1024) {
         super(playlist);
-        this._fftSize = fftSize;
-        this._visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
+        this.#fftSize = fftSize;
+        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
     }
 
     /**
      * Sets the the playlist.
-     * 
-     * @param {SongPlaylist} playlist the new playlist of songs that this player is in charge of.
      */
-    setPlaylist(playlist) {
-        super.setPlaylist(playlist);
-        this._visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
+    set playlist(playlist) {
+        super.playlist = playlist;
+        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
     }
 
     /**
@@ -37,10 +37,10 @@ export default class VisualizedSongPlayer extends SongPlayer {
      * @returns {boolean} true if and only if successful in changing to the next song.
      */
     next() {
-        const updateListeners = this._visualizerUpdateManager.getBinnedListeners();
+        const updateListeners = this.#visualizerUpdateManager.getBinnedListeners();
         if (!super.next()) return false;
-        this._visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
-        this._visualizerUpdateManager.setBinnedListeners(updateListeners);
+        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
+        this.#visualizerUpdateManager.setBinnedListeners(updateListeners);
         return true;
     }
 
@@ -50,11 +50,11 @@ export default class VisualizedSongPlayer extends SongPlayer {
      * @returns {boolean} true if and only if successful in switching to the previous song in the playlist.
      */
     previous() {
-        const updateListeners = this._visualizerUpdateManager.getBinnedListeners();
+        const updateListeners = this.#visualizerUpdateManager.getBinnedListeners();
         if (!super.previous()) return false;
 
-        this._visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
-        this._visualizerUpdateManager.setBinnedListeners(updateListeners);
+        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
+        this.#visualizerUpdateManager.setBinnedListeners(updateListeners);
         return true;
     }
 
@@ -66,24 +66,22 @@ export default class VisualizedSongPlayer extends SongPlayer {
     changeCurrent(index) {
         const updateListeners = this.VisualizerUpdateManager.getBinnedListeners();
         if (!super.changeCurrent(index)) return false;
-        this._visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
-        this._visualizerUpdateManager.setBinnedListeners = updateListeners();
+        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentSongVisualizer());
+        this.#visualizerUpdateManager.setBinnedListeners = updateListeners();
         return true;
     }
 
     /**
-     * 
-     * @returns {VisualizerUpdateManager} the current visualizer update manager.
+     * The current visualizer update manager.
      */
-    getCurrentVisualizerUpdateManager() {
-        return this._visualizerUpdateManager();
+    get currentVisualizerUpdateManager() {
+        return this.#visualizerUpdateManager();
     }
 
     /**
-     * 
-     * @returns {Visualizer} the current song's visualizer.
+     * The current song's visualizer.
      */
-    getCurrentSongVisualizer() {
+    get currentSongVisualizer() {
         return this.getCurrentSong().getVisualizer();
     }
 }

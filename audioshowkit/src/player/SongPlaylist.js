@@ -4,6 +4,8 @@ import PlaylistSong from "./PlaylistSong.js";
  * A playlist that holds a multitude of songs in the form of {@see PlaylistSong}.
  */
 export default class SongPlaylist {
+    #list = [];
+    #name;
 
     /**
      * Instantiates a playlist for songs.
@@ -11,17 +13,15 @@ export default class SongPlaylist {
      * @param {string} name The name of the playlist.
      */
     constructor(name) {
-        this._list = [];
-        this._name = name;
-        this._current = 0;
+        this.#name = name;
     }
 
     /**
      * 
-     * @returns {string} the name of the string.
+     * The name of the playlist.
      */
-    getName() {
-        return this._name;
+    get name() {
+        return this.#name;
     }
 
     /**
@@ -30,7 +30,7 @@ export default class SongPlaylist {
      * @returns {PlaylistSong} the song at the given index.
      */
     songAtIndex(index) {
-        if (index >= this._list.length) {
+        if (index >= this.#list.length) {
             return null;
         }
         return this.list[index];
@@ -44,7 +44,7 @@ export default class SongPlaylist {
      * @param {string} author the author(s) of the song.
      */
     add(url, name, author) {
-        this._list.push(new PlaylistSong(url, name, author, this));
+        this.#list.push(new PlaylistSong(url, name, author, this));
     }
 
     /**
@@ -54,10 +54,10 @@ export default class SongPlaylist {
      * @returns {PlaylistSong} the song that was removed, or null if the index of was invalid.
      */
     remove(index) {
-        if (index >= this._list.length) {
+        if (index >= this.#list.length) {
             return null;
         }
-        let removed = this._list.splice(index, 1)[0];
+        let removed = this.#list.splice(index, 1)[0];
         if (removed.length > 0) {
             return removed[0];
         }
@@ -70,7 +70,7 @@ export default class SongPlaylist {
      * @returns {number} the index of the song found, or -1 if it was not found.
      */
     findSongIndex(name) {
-        return this._list.findIndex((item) => item.getDisplayName() == name);
+        return this.#list.findIndex((item) => item.getDisplayName() == name);
     }
 
     /**
@@ -78,14 +78,14 @@ export default class SongPlaylist {
      * @returns {number} total number of songs in this playlist.
      */
     total() {
-        return this._list.length;
+        return this.#list.length;
     }
 
     /**
      * Unloads the audio data of all songs in this playlist.
      */
     unloadAllAudio() {
-        this._list.forEach(playlistSong => {
+        this.#list.forEach(playlistSong => {
             playlistSong.unloadAudio();
         });
     }

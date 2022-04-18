@@ -1,5 +1,4 @@
 import { parseColor, rgbaToHexRgba } from "../support/colors.js";
-import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
 
@@ -14,7 +13,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {interpolator} rgbaMapConfiguration.interpolator The interpolation function to use.
  * @param {number} [rgbaMapConfiguration.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
  * @param {boolean} [rgbaMapConfiguration.reversed=true] If true, then the quieter, the greater the red value.
- * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The ranged listener that was added.
+ * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: visualizerRangedUpdateListener}} The ranged listener that was added.
  */
 export function mapRgba({ element, color, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const rgbaStr = "rgba";

@@ -5,6 +5,12 @@ import Visualizer from "../visualization/Visualizer.js";
  * 
  */
 export default class PlayListSong {
+    #displayName;
+    #author;
+    #url;
+    #audio;
+    #visualizer;
+    #ready = false;
 
     /**
      * Constructs a song for a {@link SongPlaylist}.
@@ -14,20 +20,13 @@ export default class PlayListSong {
      * @param {string} author the author of the song.
      */
     constructor(url, name, author) {
-        this._displayName = name;
-        this._author = author;
-        this._url = url;
-        this._audio = null;
-        this._visualizer = null;
-
-        /**
-         * Whether or not this song is ready to be played.
-         */
-        this.ready = false;
+        this.#displayName = name;
+        this.#author = author;
+        this.#url = url;
     }
 
     /**
-     * @callback AudioEventCallback
+     * @typedef {function} AudioEventCallback
      * @param {HTMLAudioElement} audio
      */
 
@@ -36,45 +35,45 @@ export default class PlayListSong {
      * @param {AudioEventCallback} [onReady] called when the song is ready, including right away if the song is already ready.
      * @returns {HTMLAudioElement} The audio element that represents this song.
      */
-    getAudio(onReady) {
-        if (this._audio) {
+    fetchAudio(onReady) {
+        if (this.#audio) {
             if (this.ready) {
-                if (onReady) onReady(this._audio);
+                if (onReady) onReady(this.#audio);
             }
-            return this._audio;
+            return this.#audio;
         }
-        this._audio = new Audio(this._url);
+        this.#audio = new Audio(this._url);
 
-        this._audio.addEventListener("canplaythrough", () => {
+        this.#audio.addEventListener("canplaythrough", () => {
             this.ready = true;
             if (onReady && this.isAudioInstantiated()) {
-                onReady(this._audio);
+                onReady(this.#audio);
             }
         });
-        return this._audio;
+        return this.#audio;
     }
 
     /**
      * 
-     * @returns {string} representing the name of the song to be displayed.
+     * The name of the song to be displayed.
      */
-    getDisplayName() {
+    get displayName() {
         return this._displayName;
     }
 
     /**
      * 
-     * @returns {string} representing the author of the song.
+     * The author of the song.
      */
-    getAuthor() {
+    get author() {
         return this._getAuthor;
     }
 
     /**
      * 
-     * @returns {string} representing the url at which the file for this song can be found.
+     * The url at which the file for this song can be found.
      */
-    getUrl() {
+    get url() {
         return this._url;
     }
 
@@ -83,7 +82,7 @@ export default class PlayListSong {
      * @returns {boolean} true if and only if there is audio data that is either already loaded or is being loaded.
      */
     isAudioInstantiated() {
-        return this._audio ? true : false;
+        return this.#audio ? true : false;
     }
 
     /**
@@ -92,7 +91,7 @@ export default class PlayListSong {
      * This function uses the {@link PlaylistSong#getAudio} function and specifically, the {@link AudioEventCallback}.
      */
     play() {
-        this.getAudio((audio) => {
+        this.fetchAudio((audio) => {
             audio.play();
         });
     }
@@ -102,48 +101,48 @@ export default class PlayListSong {
      */
     pause() {
         if (!this.isAudioInstantiated()) return;
-        this.getAudio((audio) => {
+        this.fetchAudio((audio) => {
             audio.pause();
         });
     }
 
     /**
      * 
-     * @returns {number} the volume on a scale of 0 to 1.
+     * The volume on a scale of 0 to 1.
      */
-    getVolume() {
-        return this.getAudio().volume;
+    get volume() {
+        return this.fetchAudio().volume;
     }
 
     /**
      * 
-     * @param {number} volume a normalized volume on a scale of 0 to 1.
+     * The normalized volume on a scale of 0 to 1.
      */
-    setVolume(volume) {
-        this.getAudio().volume = volume;
+    set volume(volume) {
+        this.fetchAudio().volume = volume;
     }
     /**
      * 
-     * @returns {number} the number of seconds into the song.
+     * The number of seconds into the song.
      */
-    getCurrentTime() {
-        return this.getAudio().currentTime;
-    }
-
-    /**
-     * 
-     * @param {number} currentTime the time position in the song to jump to in seconds.
-     */
-    setCurrentTime(currentTime) {
-        this.getAudio().currentTime = currentTime;
+    get currentTime() {
+        return this.fetchAudio().currentTime;
     }
 
     /**
      * 
-     * @returns {number} the duration of the song.
+     * The time position in the song to jump to in seconds.
      */
-    getDuration() {
-        return this.getAudio().duration;
+    set currentTime(currentTime) {
+        this.fetchAudio().currentTime = currentTime;
+    }
+
+    /**
+     * 
+     * The duration of the song.
+     */
+    get duration() {
+        return this.fetchAudio().duration;
     }
 
     /**
@@ -154,9 +153,9 @@ export default class PlayListSong {
      */
     unloadAudio() {
         if (!this.isAudioInstantiated()) return;
-        this._audio.pause();
+        this.#audio.pause();
         this.unloadVisualizer();
-        this._audio = null;
+        this.#audio = null;
         this.ready = false;
     }
 
@@ -167,7 +166,7 @@ export default class PlayListSong {
      */
     getVisualizer(fftSize = 1024) {
         if (this._visualizer && this._visualizer.getFftSize() === fftSize) return this._visualizer;
-        this._visualizer = new Visualizer(this.getAudio(), fftSize);
+        this._visualizer = new Visualizer(this.fetchAudio(), fftSize);
         return this._visualizer;
     }
 
