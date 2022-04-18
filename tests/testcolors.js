@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { expect } from "chai";
 import { describe } from "mocha";
-import { cssRgbaToRgba, cssRgbToRgba, rgbaHexToRgba, parseColor, rgbaToHexRgba, rgbHexToRgba } from "../src/mapping/colors.js";
+import { cssRgbaToRgba, cssRgbToRgba, rgbaHexToRgba, parseColor, rgbaToHexRgba, rgbHexToRgba } from "../src/support/colors.js";
 
 describe("Color utilities", function () {
     describe("the hex to rgba conversion function", function () {
