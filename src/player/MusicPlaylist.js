@@ -2,18 +2,6 @@ import Music from "./Music.js";
 
 
 
-/**
- * @callback positionChangeListener
- * @param {number} old the previous position.
- * @param {number} current the the current (new) position.
- */
-
-/**
- * @callback lengthChangeListener
- * @param {number} changed The index of the music that has changed.
- * @param {boolean} added True if and only if the change was caused by adding music.
- * @param {Music} music The music that was added or removed.
- */
 
 /**
  * A playlist that holds a multitude of musics in the form of {@link Music}.
@@ -24,6 +12,20 @@ export default class MusicPlaylist {
     #current = 0;
     #positionChangeListeners = [];
     #lengthChangeListeners = [];
+
+
+    /**
+     * @callback MusicPlaylist~positionChangeListener
+     * @param {number} old the previous position.
+     * @param {number} current the the current (new) position.
+     */
+
+    /**
+     * @callback MusicPlaylist~lengthChangeListener
+     * @param {number} changed The index of the music that has changed.
+     * @param {boolean} added True if and only if the change was caused by adding music.
+     * @param {Music} music The music that was added or removed.
+     */
 
     /**
      * Instantiates a playlist for musics.
@@ -155,7 +157,7 @@ export default class MusicPlaylist {
 
     /**
      * 
-     * @param {positionChangeListener} listener the listener to receive the updates.
+     * @param {MusicPlaylist~positionChangeListener} listener the listener to receive the updates.
      * @returns {boolean} true if and only if successfully added the listener.
      */
     addPositionChangeListener(listener) {
@@ -166,7 +168,7 @@ export default class MusicPlaylist {
 
     /**
      * 
-     * @param {positionChangeListener} listener the music change listener to remove.
+     * @param {MusicPlaylist~positionChangeListener} listener the music change listener to remove.
      * @returns {boolean} true if and only if the music change listener given was successfully removed.
      */
     removePositionChangeListener(listener) {
@@ -180,7 +182,7 @@ export default class MusicPlaylist {
     /**
      * Adds a listener for whether music was added or removed to the playlist.
      * 
-     * @param {lengthChangeListener} listener The listener to be added.
+     * @param {MusicPlaylist~lengthChangeListener} listener The listener to be added.
      * @returns {boolean} True if and only if the listener was successfully added.
      */
     addLengthChangeListener(listener) {
@@ -192,7 +194,7 @@ export default class MusicPlaylist {
     /**
      * Removes a listener for whether music is added or removed to the playlist.
      * 
-     * @param {lengthChangeListener} listener The listener to be removed.
+     * @param {MusicPlaylist~lengthChangeListener} listener The listener to be removed.
      * @returns {boolean} True if and only if the provided listener was successfully removed.
      */
     removeLengthChangeListener(listener) {

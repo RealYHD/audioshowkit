@@ -23,9 +23,9 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @param {number} conf.maxVal The maximum value of the numerical value.
  * @param {number} conf.lowerBin The lower bin of the range of bins this value is to be mapped to.
  * @param {number} conf.upperBin The upper bin of the range of bins this value si to be mapped to.
- * @param {numericalGetter} conf.getter The getter callback to be used to get the current number.
- * @param {numericalSetter} conf.setter The setter callback to be used to set the new number.
- * @param {interpolator} conf.interpolator The interpolation function to use.
+ * @param {module:mappings/numeric~numericalGetter} conf.getter The getter callback to be used to get the current number.
+ * @param {module:mappings/numeric~numericalSetter} conf.setter The setter callback to be used to set the new number.
+ * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to use.
  * @param {VisUpdateRouter} conf.visUpdateRouter the visualizer update manager this mapping corresponds with.
  * @param {boolean} [conf.reversed = false] If true, then high amplitudes will be mapped to low values and vice versa.
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} An object containing the lower and upper bounds for the range of a listener, which is also in the object.
@@ -64,9 +64,9 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
  * @param {number} conf.minVal The minimum value the mapping can produce.
  * @param {number} conf.maxVal The maximum value the mapping can produce.
  * @param {number} conf.bin The bin to map this number to.
- * @param {numericalGetter} conf.getter The callback to be used to get the current number.
- * @param {numericalSetter} conf.setter The callback to be used to set the new number.
- * @param {interpolator} conf.interpolator The interpolation function to use.
+ * @param {module:mappings/numeric~numericalGetter} conf.getter The callback to be used to get the current number.
+ * @param {module:mappings/numeric~numericalSetter} conf.setter The callback to be used to set the new number.
+ * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to use.
  * @param {VisUpdateRouter} conf.visUpdateRouter The update manager to map to.
  * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}} The bin listener that was added.

@@ -1,8 +1,3 @@
-/**
- * @callback visualizerUpdateListener
- * @param {number} delta elapsed time since last update.
- * @param {Uint8Array} bins the bins with varying frequency values. 
- */
 
 /**
  * Provides a simplified access point to the frequency bins in the form of a visualization update listener.
@@ -17,6 +12,12 @@ export default class Visualizer {
     #buffer;
     #lastUpdate;
     #fftSize;
+
+    /**
+     * @callback Visualizer~visualizerUpdateListener
+     * @param {number} delta elapsed time since last update.
+     * @param {Uint8Array} bins the bins with varying frequency values. 
+     */
 
     /**
      * 
@@ -81,7 +82,7 @@ export default class Visualizer {
 
     /**
      * 
-     * @param {visualizerUpdateListener} listener the visualizer update listener to be registered.
+     * @param {Visualizer~visualizerUpdateListener} listener the visualizer update listener to be registered.
      * @returns {boolean} true if and only if the listener was successfully added.
      */
     addUpdateListener(listener) {
@@ -93,7 +94,7 @@ export default class Visualizer {
 
     /**
      * 
-     * @param {visualizerUpdateListener} listener the visualizer update listener to remove.
+     * @param {Visualizer~visualizerUpdateListener} listener the visualizer update listener to remove.
      * @returns {boolean} true if and only if the removal of the listener was a success.
      */
     removeUpdateListener(listener) {

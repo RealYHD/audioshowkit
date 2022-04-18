@@ -12,7 +12,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {number} rgbaMapConfiguration.color Where r for red, g, for green, b for blue, and a for alpha.
  * @param {number} rgbaMapConfiguration.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} rgbaMapConfiguration.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
- * @param {interpolator} rgbaMapConfiguration.interpolator The interpolation function to use.
+ * @param {Function} rgbaMapConfiguration.interpolator The interpolation function to use.
  * @param {number} [rgbaMapConfiguration.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
  * @param {boolean} [rgbaMapConfiguration.reversed=true] If true, then the quieter, the greater the red value.
  * @returns {{bin: number, listener: visualizerBinUpdateListener}|{lower: number, upper: number, listener: visualizerRangedUpdateListener}} The ranged listener that was added.
@@ -58,7 +58,7 @@ export function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolato
  * @param {string} fontSizeMapConfiguration.unit The unit the upper and lower bounds are measured in.
  * @param {number} fontSizeMapConfiguration.lowerBin The lower boundary of bins to be mapped (or the single bin to be mapped if the upper bin is undefined).
  * @param {VisUpdateRouter} fontSizeMapConfiguration.visUpdateRouter the visualizer update manager to be mapped to.
- * @param {interpolator} fontSizeMapConfiguration.interpolator The interpolation function to be used to transition from one value to the next.
+ * @param {module:support/easings~interpolator} fontSizeMapConfiguration.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [fontSizeMapConfiguration.upperBin=undefined] The upper bin, or undefined, which results in mapping to a single bin.
  * @param {boolean} [fontSizeMapConfiguration.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).

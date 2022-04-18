@@ -3,11 +3,6 @@ import MusicPlaylist from "./MusicPlaylist.js";
 
 
 
-/**
- * @callback changeListener
- * @param {*} old the previous value.
- * @param {*} current the the current (new) value.
- */
 
 /**
  * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of music audio data and attempts to reduce memory usage when possible.
@@ -20,6 +15,12 @@ export default class MusicPlayer {
     #playlistChangeListeners = [];
     #volumeChangeListeners = [];
     #allAudioEventListeners = {};
+
+    /**
+     * @callback MusicPlayer~changeListener
+     * @param {*} old the previous value.
+     * @param {*} current the the current (new) value.
+     */
 
     /**
      * 
@@ -224,7 +225,7 @@ export default class MusicPlayer {
 
     /**
      * 
-     * @param {changeListener} listener the playlist change listener to add to the callback list.
+     * @param {MusicPlayer~changeListener} listener the playlist change listener to add to the callback list.
      * @returns {boolean} true if and only if the given listener was successfully registered.
      */
     addPlaylistChangeListener(listener) {
@@ -236,7 +237,7 @@ export default class MusicPlayer {
 
     /**
      * 
-     * @param {changeListener} listener the playlist change listener to remove.
+     * @param {MusicPlayer~changeListener} listener the playlist change listener to remove.
      * @returns {boolean} true if and only if a listener was successfully removed from the callback list.
      */
     removePlaylistChangeListener(listener) {
@@ -249,7 +250,7 @@ export default class MusicPlayer {
 
     /**
      * 
-     * @param {changeListener} listener the listener that is called when the player's volume is changed.
+     * @param {MusicPlayer~changeListener} listener the listener that is called when the player's volume is changed.
      * @returns {boolean} true if and only if the listener was successfully added.
      */
     addVolumeChangeListener(listener) {
@@ -260,7 +261,7 @@ export default class MusicPlayer {
 
     /**
      * 
-     * @param {changeListener} listener the volume change listener to remove.
+     * @param {MusicPlayer~changeListener} listener the volume change listener to remove.
      * @returns {boolean} true if and only if a listener was successfully removed from the callback list.
      */
     removeVolumeChangeListener(listener) {

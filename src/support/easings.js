@@ -13,7 +13,7 @@
 /**
  * 
  * @param {number} rate the number of frequency values to shift by per second.
- * @returns {interpolator} the interpolation function with the given rate.
+ * @returns {module:support/easings~interpolator} the interpolation function with the given rate.
  */
 export function createEaseLinear(rate) {
     return (current, dest, frameDelta) => {

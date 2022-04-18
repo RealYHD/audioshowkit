@@ -2,18 +2,6 @@
 
 import Visualizer from "./Visualizer.js";
 
-/**
- * @callback visualizerBinUpdateListener
- * @param {number} timeDelta elapsed time since last update.
- * @param {number} amplitude The amplitude of the associated bin.
- * @param {number} ampDelta change in amplitude of the frequency bin.
- */
-
-/**
- * @callback visualizerRangedUpdateListener
- * @param {number} timeDelta elapsed time since last update.
- * @param {number} bins the bins of the range.
- */
 
 
 /**
@@ -28,6 +16,18 @@ export default class VisUpdateRouter {
     #lastBins;
     #visualizer;
 
+    /**
+     * @callback VisUpdateRouter~visualizerBinUpdateListener
+     * @param {number} timeDelta elapsed time since last update.
+     * @param {number} amplitude The amplitude of the associated bin.
+     * @param {number} ampDelta change in amplitude of the frequency bin.
+     */
+
+    /**
+     * @callback VisUpdateRouter~visualizerRangedUpdateListener
+     * @param {number} timeDelta elapsed time since last update.
+     * @param {number} bins the bins of the range.
+     */
 
     /**
      * 
@@ -73,7 +73,7 @@ export default class VisUpdateRouter {
      * 
      * @param {object} freqBinListener the listener for a specific frequency bin.
      * @param {number} freqBinListener.freqBin the frequency bin this update listener should listen to.
-     * @param {visualizerBinUpdateListener} freqBinListener.listener the listener itself that will be called upon the bin updating.
+     * @param {VisUpdateRouter~visualizerBinUpdateListener} freqBinListener.listener the listener itself that will be called upon the bin updating.
      * @returns {boolean} true if and only if the updater was added successfully.
      */
     AddVisualizerBinUpdateListener({ freqBin, listener }) {
@@ -88,7 +88,7 @@ export default class VisUpdateRouter {
      * @param {object} rangedUpdateListener The ranged update listener to add.
      * @param {number} rangedUpdateListener.lower The lower bound of the bins to listen to (inclusive).
      * @param {number} rangedUpdateListener.upper The upper bound of the bins to listen to (inclusive).
-     * @param {visualizerRangedUpdateListener} rangedUpdateListener.listener The listener to register to the range. 
+     * @param {VisUpdateRouter~visualizerRangedUpdateListener} rangedUpdateListener.listener The listener to register to the range. 
      * @returns {boolean} True if and only if the ranged listener was added successfully.
      */
     addVisualizerRangedUpdateListener({ lower, upper, listener }) {
@@ -108,7 +108,7 @@ export default class VisUpdateRouter {
      * 
      * @param {object} binFreqListener The bin frequency listener to remove.
      * @param {number} binFreqListener.freqBin the frequency bin the update listener to be removed from is in.
-     * @param {visualizerBinUpdateListener} binFreqListener.listener the listener that is to be removed.
+     * @param {VisUpdateRouter~visualizerBinUpdateListener} binFreqListener.listener the listener that is to be removed.
      * @returns {boolean} true if and only if the listener was successfully removed.
      */
     removeVisualizerBinUpdateListener({ freqBin, listener }) {
@@ -124,7 +124,7 @@ export default class VisUpdateRouter {
      * @param {object} rangedListener The ranged listener to remove.
      * @param {number} rangedListener.lower The lower bound of bins to remove the listener from (inclusive).
      * @param {number} rangedListener.upper The upper bound of bin to remove the listener from (inclusive.)
-     * @param {visualizerRangedUpdateListener} rangedListener.listener The update listener to remove from the bins.
+     * @param {VisUpdateRouter~visualizerRangedUpdateListener} rangedListener.listener The update listener to remove from the bins.
      * @returns {boolean} True if and only if the given listener was removed.
      */
     removeVisualizerRangedUpdateListener({ lower, upper, listener }) {
@@ -145,7 +145,7 @@ export default class VisUpdateRouter {
      * @param {object[]} listeners.ranged The array of ranged listeners.
      * @param {number} listeners.ranged[].lower The lower bound of the listener.
      * @param {number} listeners.ranged[].upper The upper bound of the listener.
-     * @param {visualizerRangedUpdateListener} listeners.ranged[].listener The listener for the previously mentioned ranges.
+     * @param {VisUpdateRouter~visualizerRangedUpdateListener} listeners.ranged[].listener The listener for the previously mentioned ranges.
      * @returns {boolean} true if and only if successfully loaded the new listeners.
      */
     loadListeners(listeners) {

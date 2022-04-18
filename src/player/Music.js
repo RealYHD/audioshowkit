@@ -2,10 +2,6 @@ import Visualizer from "../visualization/Visualizer.js";
 
 
 
-/**
- * @callback AudioEventCallback
- * @param {HTMLAudioElement} audio
- */
 
 /**
  * A music with metadata that can be used as part of a {@link MusicPlaylist}.
@@ -18,6 +14,11 @@ export default class Music {
     #audio;
     #visualizer;
     #ready = false;
+
+    /**
+     * @callback Music~audioEventCallback
+     * @param {HTMLAudioElement} audio
+     */
 
     /**
      * Constructs a music for a {@link MusicPlaylist}.
@@ -35,7 +36,7 @@ export default class Music {
 
     /**
      * 
-     * @param {AudioEventCallback} [onReady] called when the music is ready, including right away if the music is already ready.
+     * @param {Music~audioEventCallback} [onReady] called when the music is ready, including right away if the music is already ready.
      * @returns {HTMLAudioElement} The audio element that represents this music.
      */
     fetchAudio(onReady) {
@@ -90,7 +91,7 @@ export default class Music {
     /**
      * Begins audio playback as soon as possible.
      * 
-     * This function uses the {@link PlaylistMusic#getAudio} function and specifically, the {@link AudioEventCallback}.
+     * This function uses the {@link PlaylistMusic#getAudio} function and specifically, the {@link Music~audioEventCallback}.
      */
     play() {
         this.fetchAudio((audio) => {
