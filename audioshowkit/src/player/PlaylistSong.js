@@ -26,7 +26,7 @@ export default class PlayListSong {
     }
 
     /**
-     * @typedef {function} AudioEventCallback
+     * @typedef {Function} AudioEventCallback
      * @param {HTMLAudioElement} audio
      */
 
@@ -55,31 +55,27 @@ export default class PlayListSong {
     }
 
     /**
-     * 
-     * The name of the song to be displayed.
+     * @returns {string} The name of the song to be displayed.
      */
     get displayName() {
         return this.#displayName;
     }
 
     /**
-     * 
-     * The author of the song.
+     * @returns {string} The author of the song.
      */
     get author() {
         return this.#author;
     }
 
     /**
-     * 
-     * The url at which the file for this song can be found.
+     * @returns {string} The url at which the file for this song can be found.
      */
     get url() {
         return this.#url;
     }
 
     /**
-     * 
      * @returns {boolean} true if and only if there is audio data that is either already loaded or is being loaded.
      */
     isAudioInstantiated() {
@@ -109,7 +105,7 @@ export default class PlayListSong {
 
     /**
      * 
-     * The volume on a scale of 0 to 1.
+     * @returns {number} The volume on a scale of 0 to 1.
      */
     get volume() {
         return this.fetchAudio().volume;
@@ -124,7 +120,7 @@ export default class PlayListSong {
     }
     /**
      * 
-     * The number of seconds into the song.
+     * @returns {number} The number of seconds into the song.
      */
     get currentTime() {
         return this.fetchAudio().currentTime;
@@ -140,7 +136,7 @@ export default class PlayListSong {
 
     /**
      * 
-     * The duration of the song.
+     * @returns {number} The duration of the song.
      */
     get duration() {
         return this.fetchAudio().duration;

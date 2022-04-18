@@ -1,7 +1,7 @@
 import PlaylistSong from "./PlaylistSong.js";
 
 /**
- * A playlist that holds a multitude of songs in the form of {@see PlaylistSong}.
+ * A playlist that holds a multitude of songs in the form of {@link PlaylistSong}.
  */
 export default class SongPlaylist {
     #list = [];
@@ -17,8 +17,7 @@ export default class SongPlaylist {
     }
 
     /**
-     * 
-     * The name of the playlist.
+     * @returns {string} The name of the playlist. 
      */
     get name() {
         return this.#name;

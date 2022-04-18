@@ -1,5 +1,7 @@
+import Visualizer from "../visualization/Visualizer.js";
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 import SongPlayer from "./SongPlayer.js";
+import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A song player that provides easier access to the current songs visualizer data.
@@ -72,14 +74,14 @@ export default class VisualizedSongPlayer extends SongPlayer {
     }
 
     /**
-     * The current visualizer update manager.
+     * @returns {VisualizerUpdateManager} The current visualizer update manager.
      */
     get currentVisualizerUpdateManager() {
         return this.#visualizerUpdateManager();
     }
 
     /**
-     * The current song's visualizer.
+     * @returns {Visualizer} The current song's visualizer.
      */
     get currentSongVisualizer() {
         return this.getCurrentSong().getVisualizer();

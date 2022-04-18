@@ -1,4 +1,6 @@
 import "../styles/songplayer.css";
+import PlayListSong from "./PlaylistSong.js";
+import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of song audio data and attempts to reduce memory usage when possible.
@@ -41,8 +43,9 @@ export default class SongPlayer {
     }
 
     /**
-     * 
      * The current playlist of songs that this player is in charge of.
+     * 
+     * @returns {SongPlaylist} The song playlist this player is currently using.
      */
     get playlist() {
         return this.#playlist;
@@ -100,7 +103,7 @@ export default class SongPlayer {
 
     /**
      * 
-     * The current song's index in the playlist.
+     * @returns {number} The current song's index in the playlist.
      */
     get currentSongIndex() {
         return this.#current;
@@ -115,6 +118,9 @@ export default class SongPlayer {
         });
     }
 
+    /**
+     * Pauses the current playing song (if there is one playing).
+     */
     pauseCurrent() {
         console.log("Pausing.");
         this.currentSong.fetchAudio().pause();
@@ -143,7 +149,7 @@ export default class SongPlayer {
 
     /**
      * 
-     * The current volume of the player represented by a number between 0 and 1 inclusive.
+     * @returns {number} The current volume of the player represented by a number between 0 and 1 inclusive.
      */
     get volume() {
         return this.#volume;
@@ -165,7 +171,7 @@ export default class SongPlayer {
 
     /**
      * 
-     * How many seconds into the audio track has been played in seconds.
+     * @returns {number} How many seconds into the audio track has been played in seconds.
      */
     get currentPosition() {
         return this.currentSong.fetchAudio().currentTime;
@@ -173,7 +179,7 @@ export default class SongPlayer {
 
     /**
      * 
-     * The total length of the song, or NaN if this information has not loaded yet.
+     * @returns {number} The total length of the song, or NaN if this information has not loaded yet.
      */
     get currentDuration() {
         return this.currentSong.fetchAudio().duration;
@@ -227,14 +233,14 @@ export default class SongPlayer {
     }
 
     /**
-     * The current {@link PlaylistSong}.
+     * @returns {PlayListSong} The current playlist being used.
      */
     get currentSong() {
         return this.#playlist.songAtIndex(this.#current);
     }
 
     /**
-     * @typedef {function} changeListener
+     * @typedef {Function} changeListener
      * @param {*} old the previous value.
      * @param {*} current the the current (new) value.
      */
@@ -348,7 +354,7 @@ export default class SongPlayer {
     }
 
     /**
-     * If the player is playing any songs right now.
+     * @returns {boolean} If the player is playing any songs right now.
      */
     get playing() {
         return this.currentSong.isAudioInstantiated() && !this.currentSong.fetchAudio().paused;
