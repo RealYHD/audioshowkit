@@ -3,12 +3,13 @@ import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js
 import SongPlayer from "./SongPlayer.js";
 import SongPlaylist from "./SongPlaylist.js";
 
+/**@module */
+
 /**
  * A song player that provides easier access to the current songs visualizer data.
- * 
  * Additionally, automatically re-binds all the visualizer update listeners for song changes.
  * 
- * Automatically loads the songs.
+ * @augments SongPlayer
  */
 export default class VisualizedSongPlayer extends SongPlayer {
     #fftSize = 1024;

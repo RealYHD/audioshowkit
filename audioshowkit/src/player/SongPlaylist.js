@@ -1,5 +1,7 @@
 import PlaylistSong from "./PlaylistSong.js";
 
+/**@module */
+
 /**
  * A playlist that holds a multitude of songs in the form of {@link PlaylistSong}.
  */

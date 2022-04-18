@@ -1,17 +1,17 @@
 import Visualizer from "../visualization/Visualizer.js";
 
+/**@module */
+
+/**
+ * @callback AudioEventCallback
+ * @param {HTMLAudioElement} audio
+ */
+
 /**
  * A song with metadata that can be used as part of a {@link SongPlaylist}.
  * 
  */
 export default class PlayListSong {
-    #displayName;
-    #author;
-    #url;
-    #audio;
-    #visualizer;
-    #ready = false;
-
     /**
      * Constructs a song for a {@link SongPlaylist}.
      * 
@@ -24,11 +24,12 @@ export default class PlayListSong {
         this.#author = author;
         this.#url = url;
     }
-
-    /**
-     * @callback AudioEventCallback
-     * @param {HTMLAudioElement} audio
-     */
+    #displayName;
+    #author;
+    #url;
+    #audio;
+    #visualizer;
+    #ready = false;
 
     /**
      * 

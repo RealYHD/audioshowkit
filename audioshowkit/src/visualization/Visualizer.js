@@ -1,3 +1,11 @@
+/**@module */
+
+/**
+ * @callback visualizerUpdateListener
+ * @param {number} delta elapsed time since last update.
+ * @param {Uint8Array} bins the bins with varying frequency values. 
+ */
+
 /**
  * Provides a simplified access point to the frequency bins in the form of a visualization update listener.
  */
@@ -10,12 +18,6 @@ export default class Visualizer {
     #analyzer;
     #buffer;
     #lastUpdate;
-
-    /**
-     * @callback visualizerUpdateListener
-     * @param {number} delta elapsed time since last update.
-     * @param {Uint8Array} bins the bins with varying frequency values. 
-     */
 
     /**
      * 

@@ -2,6 +2,14 @@ import "../styles/songPlayer.css";
 import PlayListSong from "./PlaylistSong.js";
 import SongPlaylist from "./SongPlaylist.js";
 
+/**@module */
+
+/**
+ * @callback changeListener
+ * @param {*} old the previous value.
+ * @param {*} current the the current (new) value.
+ */
+
 /**
  * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of song audio data and attempts to reduce memory usage when possible.
  */
@@ -241,12 +249,6 @@ export default class SongPlayer {
     }
 
     /**
-     * @callback changeListener
-     * @param {*} old the previous value.
-     * @param {*} current the the current (new) value.
-     */
-
-    /**
      * 
      * @param {changeListener} listener the listener to receive the updates.
      * @returns {boolean} true if and only if successfully added the listener.
@@ -323,7 +325,7 @@ export default class SongPlayer {
     /**
      * 
      * @param {string} type the type of the listener on the {@link HTMLAudioElement}.
-     * @param {EventListener|EventListenerObject} eventListener the event listener.
+     * @param {Function} eventListener the event listener.
      * @returns {boolean} true if and only if successfully registered event listener.
      */
     addEventListenerToCurrentAudio(type, eventListener) {
@@ -341,7 +343,7 @@ export default class SongPlayer {
     /**
      * 
      * @param {string} type the type of the listener on the {@link HTMLAudioElement}.  
-     * @param {EventListener|EventListenerObject} eventListener the event listener. 
+     * @param {Function} eventListener the event listener. 
      * @returns {boolean} true if and only if the event listener was successfully added.
      */
     removeEventListenerFromCurrentAudio(type, eventListener) {

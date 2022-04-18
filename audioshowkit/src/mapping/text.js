@@ -15,7 +15,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {boolean} [rgbaMapConfiguration.reversed=true] If true, then the quieter, the greater the red value.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-export function mapRgba({ element, color, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
+function mapRgba({ element, color, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const rgbaStr = "rgba";
     color = rgbaStr.indexOf(color);
     if (color < 0) throw new Error("Invalid color parameter provided.");
@@ -58,7 +58,7 @@ export function mapRgba({ element, color, lowerBin, visUpdateManager, interpolat
  * @param {boolean} [fontSizeMapConfiguration.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-export function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
+function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.fontSize);
     const setter = (value) => element.style.fontSize = value + unit;
     const conf = {
@@ -81,3 +81,6 @@ export function mapFontSize({ element, growLower, growUpper, unit, lowerBin, vis
 }
 
 // TODO: Future: map hue
+
+/**@module */
+export { mapRgba, mapFontSize };

@@ -6,7 +6,7 @@ import Visualizer from "../visualization/Visualizer.js";
  * @param {HTMLCanvasElement} canvasElement the canvas element to use to draw this horizontal visualizer.
  * @param {Visualizer} visualizer the visualizer in which the data to display is obtained.
  */
-export function horizontalVisualizer(canvasElement, visualizer) {
+function horizontalVisualizer(canvasElement, visualizer) {
     let _width = canvasElement.width;
     let _height = canvasElement.height;
     let _canvasCtx = canvasElement.getContext("2d");
@@ -25,3 +25,6 @@ export function horizontalVisualizer(canvasElement, visualizer) {
     };
     _visualizer.addUpdateListener(update);
 }
+
+/**@module */
+export { horizontalVisualizer };

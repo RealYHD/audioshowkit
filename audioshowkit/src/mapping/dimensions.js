@@ -1,6 +1,7 @@
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
+
 /**
  * Maps the width of an element to frequency bin(s).
  * 
@@ -16,7 +17,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-export function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
+function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => element.style.width;
     const setter = (value) => element.style.width = value + unit;
     const conf = {
@@ -54,7 +55,7 @@ export function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpd
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-export function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
+function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => element.style.height;
     const setter = (value) => element.style.height = value + unit;
     const conf = {
@@ -76,3 +77,6 @@ export function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUp
     }
     return mapBinNumerical(conf);
 }
+
+/**@module */
+export { mapWidth, mapHeight };

@@ -28,7 +28,7 @@
  * @param {boolean} [conf.reversed = false] If true, then high amplitudes will be mapped to low values and vice versa.
  * @returns {{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} An object containing the lower and upper bounds for the range of a listener, which is also in the object.
  */
-export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
+function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
     const rangedListener = {
         lower: lowerBin,
         upper: upperBin,
@@ -67,7 +67,7 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
  * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}} The bin listener that was added.
  */
-export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
+function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
     const listener = {
         bin: bin,
         listener: (timeDelta, amp) => {
@@ -82,3 +82,6 @@ export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpola
     }
     return null; // Technically doesn't occur since the functions are anonymous?
 }
+
+/**@module */
+export { mapRangedAvgNumerical, mapBinNumerical };

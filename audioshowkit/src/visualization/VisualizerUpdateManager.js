@@ -1,5 +1,21 @@
 import Visualizer from "./Visualizer.js";
 
+/**@module */
+
+/**
+ * @callback visualizerBinUpdateListener
+ * @param {number} timeDelta elapsed time since last update.
+ * @param {number} amplitude The amplitude of the associated bin.
+ * @param {number} ampDelta change in amplitude of the frequency bin.
+ */
+
+/**
+ * @callback visualizerRangedUpdateListener
+ * @param {number} timeDelta elapsed time since last update.
+ * @param {number} bins the bins of the range.
+ */
+
+
 /**
  * A visualizer update manager offers an extra layer of abstraction on top of the {@link Visualizer}'s update listener.
  * 
@@ -49,19 +65,6 @@ export default class VisualizerUpdateManager {
         };
         visualizer.addUpdateListener(this.#visualizerListener);
     }
-
-    /**
-     * @callback visualizerBinUpdateListener
-     * @param {number} timeDelta elapsed time since last update.
-     * @param {number} amplitude The amplitude of the associated bin.
-     * @param {number} ampDelta change in amplitude of the frequency bin.
-     */
-
-    /**
-     * @callback visualizerRangedUpdateListener
-     * @param {number} timeDelta elapsed time since last update.
-     * @param {number} bins the bins of the range.
-     */
 
 
     /**
