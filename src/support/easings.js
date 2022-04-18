@@ -1,3 +1,4 @@
+/**@module */
 
 /**
  * @callback interpolator
@@ -14,7 +15,7 @@
  * @param {number} rate the number of frequency values to shift by per second.
  * @returns {interpolator} the interpolation function with the given rate.
  */
-function createEaseLinear(rate) {
+export function createEaseLinear(rate) {
     return (current, dest, frameDelta) => {
         if (dest < current) {
             const res = current - (rate * frameDelta);
@@ -26,5 +27,3 @@ function createEaseLinear(rate) {
     };
 }
 
-
-export { createEaseLinear };

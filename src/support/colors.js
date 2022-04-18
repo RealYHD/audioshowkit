@@ -1,3 +1,4 @@
+/**@module */
 
 /**
  * Converts from rgba hex value to an array of four numbers representing r, g, b, and a respectively.
@@ -5,7 +6,7 @@
  * @param {string} hex the hex value.
  * @returns {number[]} the resulting components of the hex value.
  */
-function rgbaHexToRgba(hex) {
+export function rgbaHexToRgba(hex) {
     if (hex.startsWith("#")) {
         hex = hex.substring(1);
         if (hex.length > 8) {
@@ -31,7 +32,7 @@ function rgbaHexToRgba(hex) {
  * @param {string} hex the hex value.
  * @returns {number[]} the resulting r, g, and b components.
  */
-function rgbHexToRgba(hex) {
+export function rgbHexToRgba(hex) {
     const result = rgbaHexToRgba(hex + "FF");
     return result;
 }
@@ -42,7 +43,7 @@ function rgbHexToRgba(hex) {
  * @param {string} rgba The CSS rgba(r,g,b,a) call.
  * @returns {number[]} the rgba components.
  */
-function cssRgbaToRgba(rgba) {
+export function cssRgbaToRgba(rgba) {
     rgba = rgba.replaceAll(" ", "");
     const cssRgbaRegex = /rgba\((\d+),(\d+),(\d+),(\d+)\)/;
     try {
@@ -59,7 +60,7 @@ function cssRgbaToRgba(rgba) {
  * @param {string} rgb The CSS rgb(r,g,b) call.
  * @returns {number[]} the rgba components.
  */
-function cssRgbToRgba(rgb) {
+export function cssRgbToRgba(rgb) {
     rgb = rgb.replaceAll(" ", "");
     const cssRgbRegex = /rgb\((\d+),(\d+),(\d+)\)/;
     try {
@@ -76,7 +77,7 @@ function cssRgbToRgba(rgb) {
  * @param {number[]} rgba an array with red, green, blue, and alpha components in that order.
  * @returns {string} The resulting hex value.
  */
-function rgbaToHexRgba(rgba) {
+export function rgbaToHexRgba(rgba) {
     const filler = (hex) => hex.length < 2 ? "0" + hex : hex;
     return "#" + filler(rgba[0].toString(16)) + filler(rgba[1].toString(16)) + filler(rgba[2].toString(16)) + filler(rgba[3].toString(16));
 }
@@ -90,7 +91,7 @@ function rgbaToHexRgba(rgba) {
  * @param {string} color The string that contains the color information.
  * @returns {number[]} an array that contains the r, g, b and a components.
  */
-function parseColor(color) {
+export function parseColor(color) {
     if (color.startsWith("rgba(")) {
         return cssRgbaToRgba(color);
     } else if (color.startsWith("rgb(")) {
@@ -104,6 +105,3 @@ function parseColor(color) {
     }
     throw new Error("Could not parse to an rgba value.");
 }
-
-
-export { rgbaHexToRgba, rgbHexToRgba, cssRgbaToRgba, cssRgbToRgba, rgbaToHexRgba, parseColor };

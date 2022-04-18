@@ -2,6 +2,7 @@ import { parseColor, rgbaToHexRgba } from "../support/colors.js";
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
+/**@module */
 
 /**
  * Maps the red component of the text color to a certain range of bins.
@@ -16,7 +17,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {boolean} [rgbaMapConfiguration.reversed=true] If true, then the quieter, the greater the red value.
  * @returns {{bin: number, listener: visualizerBinUpdateListener}|{lower: number, upper: number, listener: visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
+export function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const rgbaStr = "rgba";
     color = rgbaStr.indexOf(color);
     if (color < 0) throw new Error("Invalid color parameter provided.");
@@ -62,7 +63,7 @@ function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolator, uppe
  * @param {boolean} [fontSizeMapConfiguration.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
+export function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.fontSize);
     const setter = (value) => element.style.fontSize = value + unit;
     const conf = {
@@ -85,6 +86,3 @@ function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateR
 }
 
 // TODO: Future: map hue
-
-
-export { mapRgba, mapFontSize };

@@ -1,5 +1,7 @@
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 
+/**@module */
+
 /**
  * 
  * @callback numericalGetter
@@ -28,7 +30,7 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @param {boolean} [conf.reversed = false] If true, then high amplitudes will be mapped to low values and vice versa.
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} An object containing the lower and upper bounds for the range of a listener, which is also in the object.
  */
-function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
+export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
     console.log("mapping average numerical.");
     const rangedListener = {
         lower: lowerBin,
@@ -69,7 +71,7 @@ function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin,
  * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}} The bin listener that was added.
  */
-function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
+export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
     console.log("mapping numerical...");
     const listener = {
         bin: bin,
@@ -85,6 +87,3 @@ function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, vi
     }
     return null; // Technically doesn't occur since the functions are anonymous?
 }
-
-
-export { mapRangedAvgNumerical, mapBinNumerical };
