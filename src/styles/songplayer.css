@@ -1,25 +1,29 @@
-.player-ctrl.play-btn {
+.player.play-btn {
     box-sizing: border-box;
-    width: 60px;
     height: 60px;
     transition: 80ms all ease;
     will-change: border-width;
     cursor: pointer;
-    border-color: transparent transparent transparent white;
+    border-color: transparent transparent transparent black;
 
     border-style: solid;
-    border-width: 60px 0px 30px 30px;
+    border-width: 30px 0px 30px 50px;
 }
 
-.player-ctrl.play-btn.paused {
+.player.play-btn.paused {
     border-style: double;
     border-width: 0px 0px 0px 60px;
 }
 
-.player-ctrl.next {
+
+.player.next {
     border-style: none;
 }
 
-.player-ctrl.previous {
+.player.previous {
     border-style: none;
+}
+
+table.player {
+    border-collapse: collapse;
 }
