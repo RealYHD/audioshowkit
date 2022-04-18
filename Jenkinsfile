@@ -15,7 +15,7 @@ pipeline {
                 }
             }
         }
-        stage("test") {
+        stage("tests") {
             steps {
                 nodejs('NodeJS (17.4.0)') {
                     sh "npm run test:junit"
