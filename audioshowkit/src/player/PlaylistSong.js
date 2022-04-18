@@ -50,7 +50,7 @@ export default class PlayListSong {
         }
         this.#audio = new Audio(this.#url);
         console.log("Fetching from url: " + this.#url);
-        const listener = () => {
+        this.#audio.addEventListener("canplaythrough", () => {
             this.#ready = true;
             console.log("attempting to invoke onReady.");
             console.log(onReady);
@@ -58,8 +58,7 @@ export default class PlayListSong {
                 onReady(this.#audio);
                 console.log("onReady invoked.");
             }
-        };
-        this.#audio.addEventListener("canplaythrough", listener, { once: true });
+        }, { once: true });
         return this.#audio;
     }
 
