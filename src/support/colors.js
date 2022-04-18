@@ -105,5 +105,5 @@ function parseColor(color) {
     throw new Error("Could not parse to an rgba value.");
 }
 
-/**@module */
+
 export { rgbaHexToRgba, rgbHexToRgba, cssRgbaToRgba, cssRgbToRgba, rgbaToHexRgba, parseColor };

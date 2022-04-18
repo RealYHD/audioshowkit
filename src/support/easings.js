@@ -26,5 +26,5 @@ function createEaseLinear(rate) {
     };
 }
 
-/**@module */
+
 export { createEaseLinear };

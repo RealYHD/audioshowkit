@@ -1,6 +1,6 @@
 import Music from "./Music.js";
 
-/**@module */
+
 
 /**
  * @callback positionChangeListener

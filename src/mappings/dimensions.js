@@ -78,5 +78,5 @@ function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateRou
     return mapBinNumerical(conf);
 }
 
-/**@module */
+
 export { mapWidth, mapHeight };

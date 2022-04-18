@@ -1,7 +1,7 @@
 import "../styles/musicPlayer.css";
 import MusicPlaylist from "./MusicPlaylist.js";
 
-/**@module */
+
 
 /**
  * @callback changeListener

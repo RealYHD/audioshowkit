@@ -26,5 +26,5 @@ function horizontalVisualizer(canvasElement, visualizer) {
     _visualizer.addUpdateListener(update);
 }
 
-/**@module */
+
 export { horizontalVisualizer };

@@ -1,6 +1,6 @@
 import Visualizer from "../visualization/Visualizer.js";
 
-/**@module */
+
 
 /**
  * @callback AudioEventCallback

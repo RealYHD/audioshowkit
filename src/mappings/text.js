@@ -86,5 +86,5 @@ function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateR
 
 // TODO: Future: map hue
 
-/**@module */
+
 export { mapRgba, mapFontSize };

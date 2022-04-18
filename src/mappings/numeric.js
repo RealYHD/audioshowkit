@@ -86,5 +86,5 @@ function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, vi
     return null; // Technically doesn't occur since the functions are anonymous?
 }
 
-/**@module */
+
 export { mapRangedAvgNumerical, mapBinNumerical };
