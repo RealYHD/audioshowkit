@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('audioshowkit') {
                     nodejs('NodeJS (17.4.0)') {
-                        sh "npm run test"
+                        sh "npm run test:junit"
                     }
                     junit 'junit/*.xml'
                 }
