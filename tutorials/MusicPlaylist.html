@@ -4,10 +4,10 @@
 <head>
     <link rel="stylesheet" href="./assets/css/prism.css" />
     <script src="./assets/js/prism.js" defer></script>
+    <script src="./assets/js/audioshowkit.js"></script>
 </head>
 
 <body>
-    <script src="./assets/js/audioshowkit.js"></script>
     <div>
         <h1>Creating a Music Playlist</h1>
         <p>
@@ -16,6 +16,7 @@
     </div>
     <div>
         <h2>Instantiation</h2>
+        <p>Instantiation is simple. We grab a reference to the audioshowkit library from global, and then under the "player" path, we find the music playlist constructor.</p>
         <pre><code class="language-js">
             // Get the entry point to all of AudioShowKit's glory.
             const ask = window.audioshowkit;
