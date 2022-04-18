@@ -1,0 +1,3 @@
+webpack.*.js
+webpack.*.cjs
+**/prism.js
