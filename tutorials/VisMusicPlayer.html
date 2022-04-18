@@ -102,8 +102,8 @@
         const ask = window.audioshowkit;
         const playlist = new ask.player.MusicPlaylist("Awesome Music");
 
-        playlist.add("/assets/audio/XXI.mp3", "XXI", "QR");
-        playlist.add("/assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen");
+        playlist.add("./assets/audio/XXI.mp3", "XXI", "QR");
+        playlist.add("./assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen");
 
         const player = new ask.player.VisMusicPlayer(playlist);
         const playbackCtrlsElem = document.getElementById("playback-ctrls");

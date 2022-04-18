@@ -65,8 +65,8 @@
             const ask = window.audioshowkit;
             const playlist = new ask.player.MusicPlaylist("Awesome Music");
 
-            playlist.add("/assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen"); // It's that easy.
-            playlist.add("/assets/audio/XXI.mp3", "XXI", "QR"); // Let's add another one.
+            playlist.add("./assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen"); // It's that easy.
+            playlist.add("./assets/audio/XXI.mp3", "XXI", "QR"); // Let's add another one.
 
             const pathetiqueMusic = new ask.player.Music("/assets/audio/pathetique.mp3", "Sonata No. 8", "Beethoven");
             playlist.addExisting(pathetiqueMusic);
