@@ -83,6 +83,7 @@ export default class Visualizer {
      * @returns {boolean} true if and only if the listener was successfully added.
      */
     addUpdateListener(listener) {
+        console.log("visualizer received listener");
         if (this.#updateListeners.includes(listener));
         this.#updateListeners.push(listener);
         return true;

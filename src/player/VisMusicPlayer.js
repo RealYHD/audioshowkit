@@ -13,7 +13,8 @@ import MusicPlaylist from "./MusicPlaylist.js";
  */
 export default class VisMusicPlayer extends MusicPlayer {
     #fftSize = 1024;
-    #visualizerUpdateManager;
+    #visUpdateRouter;
+    #visUpdateRouterListeners = null;
 
     /**
      * Instantiates a music player with visualization features.
@@ -23,75 +24,54 @@ export default class VisMusicPlayer extends MusicPlayer {
      */
     constructor(playlist, fftSize = 1024) {
         super(playlist);
+        playlist.addPositionChangeListener(this.#onMusicChange); // First time only: after setting the playlist, add the listener.
         this.#fftSize = fftSize;
-        this.#updateVisUpdateManager();
+        this.#visUpdateRouter = new VisUpdateRouter(fftSize);
     }
 
-    #updateVisUpdateManager() {
-        this.#visualizerUpdateManager = new VisUpdateRouter(this.getCurrentMusicVisualizer());
-    }
+    #onMusicChange = () => {
+        this.#visUpdateRouterListeners = this.#visUpdateRouter.retrieveListeners();
+        this.#visUpdateRouter?.unbindVisualizer();
+    };
 
     /**
      * Sets the the playlist.
      */
     set playlist(playlist) {
+        if (!this.playlist) {
+            super.playlist = playlist;
+            return; // HACK: If it's the first time, then wait until super() is done.
+        }
+        this.playlist?.removePositionChangeListener(this.#onMusicChange);
+        this.playlist.addPositionChangeListener(this.#onMusicChange);
         super.playlist = playlist;
-
     }
 
-    /**
-     * 
-     * @returns {boolean} true if and only if successful in changing to the next music.
-     */
-    next() {
-        const updateListeners = this.#visualizerUpdateManager.getBinnedListeners();
-        if (!super.next()) return false;
-        this.#updateVisUpdateManager();
-
-        this.#visualizerUpdateManager.setBinnedListeners(updateListeners);
-        return true;
+    get playlist() {
+        return super.playlist;
     }
 
-    /**
-     * Jumps to the previous music if possible.
-     * 
-     * @returns {boolean} true if and only if successful in switching to the previous music in the playlist.
-     */
-    previous() {
-        const updateListeners = this.#visualizerUpdateManager.getBinnedListeners();
-        if (!super.previous()) return false;
-
-        this.#updateVisUpdateManager();
-
-        this.#visualizerUpdateManager.setBinnedListeners(updateListeners);
-        return true;
+    playCurrent() {
+        console.log("attempted play from vis");
+        super.playCurrent();
+        const visualizer = this.playlist.currentMusic.fetchVisualizer();
+        this.#visUpdateRouter.visualizer = visualizer;
+        visualizer.analyze();
+        if (this.#visUpdateRouterListeners) this.#visUpdateRouter.loadListeners(this.#visUpdateRouterListeners);
     }
 
-    /**
-     * 
-     * @param {number} index the index of the music to change to.
-     * @returns {boolean} true if and only if successful in jumping to the given index.
-     */
-    changeCurrent(index) {
-        const updateListeners = this.VisualizerUpdateManager.getBinnedListeners();
-        if (!super.changeCurrent(index)) return false;
-        this.#updateVisUpdateManager();
-
-        this.#visualizerUpdateManager.setBinnedListeners = updateListeners();
-        return true;
-    }
 
     /**
      * @returns {VisUpdateRouter} The current visualizer update manager.
      */
-    get currentVisualizerUpdateManager() {
-        return this.#visualizerUpdateManager();
+    get visUpdateRouter() {
+        return this.#visUpdateRouter;
     }
 
     /**
      * @returns {Visualizer} The current music's visualizer.
      */
     get currentMusicVisualizer() {
-        return this.getCurrentMusic().getVisualizer();
+        return this.playlist.currentMusic.fetchVisualizer(this.#fftSize);
     }
 }

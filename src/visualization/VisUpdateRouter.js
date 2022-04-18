@@ -1,5 +1,3 @@
-import Visualizer from "./Visualizer.js";
-
 /**@module */
 
 /**
@@ -27,42 +25,52 @@ export default class VisUpdateRouter {
     #rangedListeners = [];
     #lastBins;
     #visualizer;
-    #visualizerListener;
 
 
     /**
      * 
-     * @param {Visualizer} visualizer the visualizer this manager obtains data from.
+     * @param {number} fftSize the fft window size of the visualizer this manager obtains data from.
      */
-    constructor(visualizer) {
+    constructor(fftSize) {
         this.#binnedListeners = [];
         this.#rangedListeners = [];
-        for (let i = 0; i < visualizer.getNumberOfBins(); i++) {
+        const bins = fftSize / 2; // TODO: Clean this up.
+        for (let i = 0; i < bins; i++) {
             this.#binnedListeners.push([]);
         }
         this.#lastBins = new Uint8Array(this.#binnedListeners.length);
-        this.#visualizer = visualizer;
-        this.#visualizerListener = (delta, bins) => {
-            const sortedCopyOfRangedListeners = [... this.#rangedListeners]; // We assume this is sorted properly. A priority queue could be better.
-            for (let binInd = 0; binInd < this.#lastBins.length; binInd++) {
-                const lastBin = this.#lastBins[binInd];
-                if (lastBin !== bins[binInd]) {
-                    this.#binnedListeners[binInd].forEach(listener => {
-                        listener(delta, bins[binInd], bins[binInd] - lastBin);
-                    });
-                    for (let rangedInd = 0; rangedInd < sortedCopyOfRangedListeners.length; rangedInd++) { // Could switch to a while loop.
-                        const { lower, upper, listener } = sortedCopyOfRangedListeners[rangedInd];
-                        if (lower > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
-                        if (binInd <= upper) {
-                            listener(delta, bins.slice(lower, upper));
-                            sortedCopyOfRangedListeners.shift();
-                            rangedInd--;
-                        }
+
+    }
+
+    #visualizerListener = (delta, bins) => {
+        const sortedCopyOfRangedListeners = [... this.#rangedListeners]; // We assume this is sorted properly. A priority queue could be better.
+        for (let binInd = 0; binInd < this.#lastBins.length; binInd++) {
+            const lastBin = this.#lastBins[binInd];
+            if (lastBin !== bins[binInd]) {
+                this.#binnedListeners[binInd].forEach(listener => {
+                    listener(delta, bins[binInd], bins[binInd] - lastBin);
+                });
+                for (let rangedInd = 0; rangedInd < sortedCopyOfRangedListeners.length; rangedInd++) { // Could switch to a while loop.
+                    const { lower, upper, listener } = sortedCopyOfRangedListeners[rangedInd];
+                    if (lower > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
+                    if (binInd <= upper) {
+                        listener(delta, bins.slice(lower, upper));
+                        sortedCopyOfRangedListeners.shift();
+                        rangedInd--;
                     }
-                    this.#lastBins[binInd] = bins[binInd];
                 }
+                this.#lastBins[binInd] = bins[binInd];
             }
-        };
+        }
+    };
+
+    /**
+     * Sets the current visualizer.
+     */
+    set visualizer(visualizer) {
+        console.log("vis update router visualizer set.");
+        if (this.#visualizer) this.unbindVisualizer();
+        this.#visualizer = visualizer;
         visualizer.addUpdateListener(this.#visualizerListener);
     }
 
@@ -91,6 +99,7 @@ export default class VisUpdateRouter {
      * @returns {boolean} True if and only if the ranged listener was added successfully.
      */
     addVisualizerRangedUpdateListener({ lower, upper, listener }) {
+        console.log("range update listener added.");
         const rangedListener = {
             lower: lower,
             upper: upper,
@@ -174,9 +183,10 @@ export default class VisUpdateRouter {
     }
 
     /**
-     * Unbinds this update manager from the initial visualizer. Effectively meaning this manager will no longer be used.
+     * Unbinds this update manager from the initial visualizer.
      */
     unbindVisualizer() {
         this.#visualizer.removeUpdateListener(this.#visualizerListener);
+        this.#visualizer = null;
     }
 }

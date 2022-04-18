@@ -9,13 +9,13 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {HTMLElement} rgbaMapConfiguration.element The element whose text's red value should be mapped.
  * @param {number} rgbaMapConfiguration.color Where r for red, g, for green, b for blue, and a for alpha.
  * @param {number} rgbaMapConfiguration.lowerBin The lower bound of the bins to be mapped.
- * @param {VisualizerUpdateManager} rgbaMapConfiguration.visUpdateManager The visualizer update manager associated with the audio playback you would like the mapping with.
+ * @param {VisualizerUpdateManager} rgbaMapConfiguration.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
  * @param {interpolator} rgbaMapConfiguration.interpolator The interpolation function to use.
  * @param {number} [rgbaMapConfiguration.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
  * @param {boolean} [rgbaMapConfiguration.reversed=true] If true, then the quieter, the greater the red value.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-function mapRgba({ element, color, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
+function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const rgbaStr = "rgba";
     color = rgbaStr.indexOf(color);
     if (color < 0) throw new Error("Invalid color parameter provided.");
@@ -32,7 +32,7 @@ function mapRgba({ element, color, lowerBin, visUpdateManager, interpolator, upp
         getter: getter,
         setter: setter,
         interpolator: interpolator,
-        visUpdateManager: visUpdateManager,
+        visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
     if (upperBin) {
@@ -52,13 +52,13 @@ function mapRgba({ element, color, lowerBin, visUpdateManager, interpolator, upp
  * @param {number} fontSizeMapConfiguration.growUpper The upper limit of the font size.
  * @param {string} fontSizeMapConfiguration.unit The unit the upper and lower bounds are measured in.
  * @param {number} fontSizeMapConfiguration.lowerBin The lower boundary of bins to be mapped (or the single bin to be mapped if the upper bin is undefined).
- * @param {VisualizerUpdateManager} fontSizeMapConfiguration.visUpdateManager the visualizer update manager to be mapped to.
+ * @param {VisualizerUpdateManager} fontSizeMapConfiguration.visUpdateRouter the visualizer update manager to be mapped to.
  * @param {interpolator} fontSizeMapConfiguration.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [fontSizeMapConfiguration.upperBin=undefined] The upper bin, or undefined, which results in mapping to a single bin.
  * @param {boolean} [fontSizeMapConfiguration.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
+function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.fontSize);
     const setter = (value) => element.style.fontSize = value + unit;
     const conf = {
@@ -68,7 +68,7 @@ function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateM
         getter: getter,
         setter: setter,
         interpolator: interpolator,
-        visUpdateManager: visUpdateManager,
+        visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
     if (upperBin) {

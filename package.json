@@ -12,10 +12,12 @@
     "test:console": "mocha tests/**",
     "watch:docs": "nodemon --watch dist/ --watch tutorials/ --watch src/ --exec 'npm run docs' -e js,mjs,json,htm,html,xml,markdown,md,xhtml --ignore ./tutorials/assets/js/audioshowkit.js",
     "watch:lib": "webpack --watch --config webpack.dev.cjs",
+    "serve:docs": "cd ./docs && live-server",
     "build": "npm run build:dev",
     "test": "npm run test:console",
     "watch": "npm run watch:lib",
-    "docs": "jsdoc -c jsdoc.config.json && cp ./dist/audioshowkit.js ./tutorials/assets/js/audioshowkit.js && syncdir ./tutorials/assets/ ./docs/assets/"
+    "docs": "jsdoc -c jsdoc.config.json && cp ./dist/audioshowkit.js ./tutorials/assets/js/audioshowkit.js && syncdir ./tutorials/assets/ ./docs/assets/",
+    "serve": "npm run serve:docs"
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +34,7 @@
     "eslint-plugin-jsdoc": "^39.2.2",
     "eslint-webpack-plugin": "^3.1.1",
     "jsdoc": "^3.6.10",
+    "live-server": "^1.2.1",
     "mocha": "^9.2.2",
     "mocha-junit-reporter": "^2.0.2",
     "nodemon": "^2.0.15",

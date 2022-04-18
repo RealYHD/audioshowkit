@@ -16,11 +16,13 @@
  */
 function createEaseLinear(rate) {
     return (current, dest, frameDelta) => {
-        let direction = 1;
         if (dest < current) {
-            direction = -1;
+            const res = current - (rate * frameDelta);
+            return res < dest ? dest : res;
+        } else {
+            const res = current + (rate * frameDelta);
+            return res > dest ? dest : res;
         }
-        return current + (Math.min(rate * frameDelta, dest) * direction);
     };
 }
 

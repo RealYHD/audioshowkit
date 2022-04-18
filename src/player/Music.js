@@ -162,12 +162,15 @@ export default class Music {
     }
 
     /**
+     * Fetches a visualizer for this music. If there did not exist one, one is instantiated.
+     * 
+     * If the provided fft window size is different from the current, a new one will also be instantiated.
      * 
      * @param {number} [fftSize=1024] the size of the FFT window.
      * @returns {Visualizer} returns the visualizer.
      */
-    getVisualizer(fftSize = 1024) {
-        if (this.#visualizer && this.#visualizer.getFftSize() === fftSize) return this.#visualizer;
+    fetchVisualizer(fftSize = 1024) {
+        if (this.#visualizer && this.#visualizer.fftSize === fftSize) return this.#visualizer;
         this.#visualizer = new Visualizer(this.fetchAudio(), fftSize);
         return this.#visualizer;
     }

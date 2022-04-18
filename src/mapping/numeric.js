@@ -24,30 +24,32 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @param {numericalGetter} conf.getter The getter callback to be used to get the current number.
  * @param {numericalSetter} conf.setter The setter callback to be used to set the new number.
  * @param {interpolator} conf.interpolator The interpolation function to use.
- * @param {VisUpdateRouter} conf.visUpdateManager the visualizer update manager this mapping corresponds with.
+ * @param {VisUpdateRouter} conf.visUpdateRouter the visualizer update manager this mapping corresponds with.
  * @param {boolean} [conf.reversed = false] If true, then high amplitudes will be mapped to low values and vice versa.
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} An object containing the lower and upper bounds for the range of a listener, which is also in the object.
  */
-function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
+function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
+    console.log("mapping average numerical.");
     const rangedListener = {
         lower: lowerBin,
         upper: upperBin,
         listener: (timeDelta, bins) => {
             const normalBins = [...bins];
             // TODO: Future: add weighting / distribution system?
-            let average = 0;
+            let normAvg = 0;
             for (let i = 0; i < normalBins.length; i++) {
                 normalBins[i] = normalBins[i] / 255.0;
-                average += normalBins[i];
+                normAvg += normalBins[i];
             }
-            average /= normalBins.length;
+            normAvg /= normalBins.length;
+
             const range = maxVal - minVal;
-            let interpolated = interpolator(getter(), average, timeDelta);
+            let interpolated = interpolator((getter() - minVal) / range, normAvg, Math.min(timeDelta, 1));
             if (reversed) interpolated = 1 - interpolated;
             setter(minVal + range * interpolated);
         }
     };
-    if (visUpdateManager.addVisualizerRangedUpdateListener(rangedListener)) {
+    if (visUpdateRouter.addVisualizerRangedUpdateListener(rangedListener)) {
         return rangedListener;
     }
     return null; // Technically doesn't occur since the functions are anonymous?
@@ -63,21 +65,22 @@ function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin,
  * @param {numericalGetter} conf.getter The callback to be used to get the current number.
  * @param {numericalSetter} conf.setter The callback to be used to set the new number.
  * @param {interpolator} conf.interpolator The interpolation function to use.
- * @param {VisUpdateRouter} conf.visUpdateManager The update manager to map to.
+ * @param {VisUpdateRouter} conf.visUpdateRouter The update manager to map to.
  * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}} The bin listener that was added.
  */
-function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateManager, reversed = false }) {
+function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
+    console.log("mapping numerical...");
     const listener = {
         bin: bin,
         listener: (timeDelta, amp) => {
             const range = maxVal - minVal;
-            let interpolated = interpolator(getter(), amp, timeDelta);
+            let interpolated = interpolator(getter(), amp, Math.min(timeDelta, 1));
             if (reversed) interpolated = 1 - interpolated;
             setter(minVal + range * interpolated);
         }
     };
-    if (visUpdateManager.AddVisualizerBinUpdateListener(listener)) {
+    if (visUpdateRouter.AddVisualizerBinUpdateListener(listener)) {
         return listener;
     }
     return null; // Technically doesn't occur since the functions are anonymous?
