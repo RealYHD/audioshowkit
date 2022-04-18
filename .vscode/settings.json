@@ -7,5 +7,6 @@
         "linebreak",
         "songplayer"
     ],
-    "javascript.preferences.importModuleSpecifierEnding": "js"
+    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "html.format.wrapLineLength": 0
 }
