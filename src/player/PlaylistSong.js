@@ -58,25 +58,25 @@ export default class PlayListSong {
      * 
      * @returns {string} representing the name of the song to be displayed.
      */
-    getDisplayName = function () {
+    getDisplayName() {
         return this._displayName;
-    };
+    }
 
     /**
      * 
      * @returns {string} representing the author of the song.
      */
-    getAuthor = function () {
+    getAuthor() {
         return this._getAuthor;
-    };
+    }
 
     /**
      * 
      * @returns {string} representing the url at which the file for this song can be found.
      */
-    getUrl = function () {
+    getUrl() {
         return this._url;
-    };
+    }
 
     /**
      * 
