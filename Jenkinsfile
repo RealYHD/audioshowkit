@@ -25,7 +25,7 @@ pipeline {
         }
         stage("archive product") {
             steps {
-                archiveArtifacts artifacts: 'audioshowkit/dist/audioshowkit.js', followSymlinks: false
+                archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
             }
         }
         stage("generate docs") {
