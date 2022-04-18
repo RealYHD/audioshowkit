@@ -22,7 +22,7 @@ import Visualizer from "./Visualizer.js";
  * Specifically, the update manager handles updates directly from the {@link Visualizer} and checks for changes in the individual bins. These changes are then broadcasted to the individual bin listeners.
  * In the rare event that a bin has not changed, then it will not receive an update call.
  */
-export default class VisualizerUpdateManager {
+export default class VisUpdateRouter {
     #binnedListeners = [];
     #rangedListeners = [];
     #lastBins;
@@ -82,7 +82,7 @@ export default class VisualizerUpdateManager {
     }
 
     /**
-     * Similar to {@link VisualizerUpdateManager#AddVisualizerBinUpdateListener}, this method adds a listener for to a range of bins.
+     * Similar to {@link VisUpdateRouter#AddVisualizerBinUpdateListener}, this method adds a listener for to a range of bins.
      * 
      * @param {object} rangedUpdateListener The ranged update listener to add.
      * @param {number} rangedUpdateListener.lower The lower bound of the bins to listen to (inclusive).
@@ -155,7 +155,7 @@ export default class VisualizerUpdateManager {
 
     /**
      * 
-     * @returns {object} All the listeners, both for binned, and ranged listeners. See {@link VisualizerUpdateManager#loadListeners} to see the structure of the returned object.
+     * @returns {object} All the listeners, both for binned, and ranged listeners. See {@link VisUpdateRouter#loadListeners} to see the structure of the returned object.
      */
     retrieveListeners() {
         return {

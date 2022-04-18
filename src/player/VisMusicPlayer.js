@@ -1,5 +1,5 @@
 import Visualizer from "../visualization/Visualizer.js";
-import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
+import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 import MusicPlayer from "./MusicPlayer.js";
 import MusicPlaylist from "./MusicPlaylist.js";
 
@@ -11,7 +11,7 @@ import MusicPlaylist from "./MusicPlaylist.js";
  * 
  * @augments MusicPlayer
  */
-export default class VisualizedMusicPlayer extends MusicPlayer {
+export default class VisMusicPlayer extends MusicPlayer {
     #fftSize = 1024;
     #visualizerUpdateManager;
 
@@ -24,7 +24,11 @@ export default class VisualizedMusicPlayer extends MusicPlayer {
     constructor(playlist, fftSize = 1024) {
         super(playlist);
         this.#fftSize = fftSize;
-        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentMusicVisualizer());
+        this.#updateVisUpdateManager();
+    }
+
+    #updateVisUpdateManager() {
+        this.#visualizerUpdateManager = new VisUpdateRouter(this.getCurrentMusicVisualizer());
     }
 
     /**
@@ -32,7 +36,7 @@ export default class VisualizedMusicPlayer extends MusicPlayer {
      */
     set playlist(playlist) {
         super.playlist = playlist;
-        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentMusicVisualizer());
+
     }
 
     /**
@@ -42,7 +46,8 @@ export default class VisualizedMusicPlayer extends MusicPlayer {
     next() {
         const updateListeners = this.#visualizerUpdateManager.getBinnedListeners();
         if (!super.next()) return false;
-        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentMusicVisualizer());
+        this.#updateVisUpdateManager();
+
         this.#visualizerUpdateManager.setBinnedListeners(updateListeners);
         return true;
     }
@@ -56,7 +61,8 @@ export default class VisualizedMusicPlayer extends MusicPlayer {
         const updateListeners = this.#visualizerUpdateManager.getBinnedListeners();
         if (!super.previous()) return false;
 
-        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentMusicVisualizer());
+        this.#updateVisUpdateManager();
+
         this.#visualizerUpdateManager.setBinnedListeners(updateListeners);
         return true;
     }
@@ -69,13 +75,14 @@ export default class VisualizedMusicPlayer extends MusicPlayer {
     changeCurrent(index) {
         const updateListeners = this.VisualizerUpdateManager.getBinnedListeners();
         if (!super.changeCurrent(index)) return false;
-        this.#visualizerUpdateManager = new VisualizerUpdateManager(this.getCurrentMusicVisualizer());
+        this.#updateVisUpdateManager();
+
         this.#visualizerUpdateManager.setBinnedListeners = updateListeners();
         return true;
     }
 
     /**
-     * @returns {VisualizerUpdateManager} The current visualizer update manager.
+     * @returns {VisUpdateRouter} The current visualizer update manager.
      */
     get currentVisualizerUpdateManager() {
         return this.#visualizerUpdateManager();

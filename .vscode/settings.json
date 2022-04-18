@@ -5,7 +5,14 @@
         "ckeditor",
         "easings",
         "linebreak",
-        "musicplayer"
+        "musicplayer",
+        "musicplaylist",
+        "nextbtn",
+        "pathetique",
+        "playbtn",
+        "prevbtn",
+        "Rosen",
+        "syncdir"
     ],
     "javascript.preferences.importModuleSpecifierEnding": "js",
     "html.format.wrapLineLength": 0,

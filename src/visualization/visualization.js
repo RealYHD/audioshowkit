@@ -1,5 +1,5 @@
 import Visualizer from "./Visualizer.js";
-import VisualizerUpdateManager from "./VisualizerUpdateManager.js";
+import VisUpdateRouter from "./VisUpdateRouter.js";
 
 /**@module */
-export { Visualizer, VisualizerUpdateManager };
+export { Visualizer, VisUpdateRouter };

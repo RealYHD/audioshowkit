@@ -1,4 +1,4 @@
-import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
+import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
 
@@ -11,11 +11,11 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {number} conf.growUpper The upper limit of the width.
  * @param {string} conf.unit The unit the upper and lower bounds are measured in.
  * @param {number} conf.lowerBin The lower boundary of bins to be mapped (or the single bin to be mapped if the upper bin is undefined).
- * @param {VisualizerUpdateManager} conf.visUpdateManager The visualizer update manager to be mapped to.
+ * @param {VisUpdateRouter} conf.visUpdateManager The visualizer update manager to be mapped to.
  * @param {interpolator} conf.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [conf.upperBin] The upper bin or undefined, which results in mapping to a single bin.
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
+ * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => element.style.width;
@@ -49,11 +49,11 @@ function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateMana
  * @param {number} conf.growUpper The upper limit of the height.
  * @param {string} conf.unit The unit the upper and lower bounds are measured in.
  * @param {number} conf.lowerBin The lower boundary of bins to be mapped (or the single bin to be mapped if the upper bin is undefined).
- * @param {VisualizerUpdateManager} conf.visUpdateManager The visualizer update manager to be mapped to.
+ * @param {VisUpdateRouter} conf.visUpdateManager The visualizer update manager to be mapped to.
  * @param {interpolator} conf.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [conf.upperBin] The upper bin or undefined, which results in mapping to a single bin.
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisualizerUpdateManager.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisualizerUpdateManager.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
+ * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateManager, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => element.style.height;
