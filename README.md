@@ -11,7 +11,7 @@ From here, add the downloaded javascript bundle to your html as you would any ot
 <script src="./audioshowkit.js" defer></script>
 ```
 
-Now, any script that is loaded after the `audioshowkit.js` script loads will have access to the `audioshowkit` object. Prepared are three tutorials with demonstrations. I recommend starting with [this one](https://dev.sys.reslate.xyz/dev-auto/job/AudioShowKit/job/master/AudioShowKit_20JSDocs/).
+Now, any script that is loaded after the `audioshowkit.js` script loads will have access to the `audioshowkit` object. Prepared are three tutorials with demonstrations. I recommend starting with the Music Playlist tutorial.
 
 ## Documentation
 
