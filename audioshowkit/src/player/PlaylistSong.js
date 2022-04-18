@@ -12,6 +12,13 @@ import Visualizer from "../visualization/Visualizer.js";
  * 
  */
 export default class PlayListSong {
+    #displayName;
+    #author;
+    #url;
+    #audio;
+    #visualizer;
+    #ready = false;
+
     /**
      * Constructs a song for a {@link SongPlaylist}.
      * 
@@ -24,12 +31,7 @@ export default class PlayListSong {
         this.#author = author;
         this.#url = url;
     }
-    #displayName;
-    #author;
-    #url;
-    #audio;
-    #visualizer;
-    #ready = false;
+
 
     /**
      * 

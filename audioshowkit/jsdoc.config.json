@@ -1,4 +1,14 @@
 {
+    "source": {
+        "include": [
+            "./src",
+            "README.md"
+        ]
+    },
+    "opts": {
+        "destination": "./docs",
+        "recurse": true
+    },
     "plugins": [
         "node_modules/@ckeditor/jsdoc-plugins/lib/export-fixer/export-fixer.js",
         "node_modules/@ckeditor/jsdoc-plugins/lib/longname-fixer/longname-fixer.js"
