@@ -1,3 +1,4 @@
+import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
 
 /**
