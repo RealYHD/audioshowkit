@@ -56,7 +56,7 @@ function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateRout
  * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
-    const getter = () => element.style.height;
+    const getter = () => parseInt(element.style.height) || 0;
     const setter = (value) => element.style.height = value + unit;
     const conf = {
         minVal: growLower,

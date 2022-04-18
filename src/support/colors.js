@@ -43,6 +43,7 @@ function rgbHexToRgba(hex) {
  * @returns {number[]} the rgba components.
  */
 function cssRgbaToRgba(rgba) {
+    rgba = rgba.replaceAll(" ", "");
     const cssRgbaRegex = /rgba\((\d+),(\d+),(\d+),(\d+)\)/;
     try {
         const matches = rgba.match(cssRgbaRegex);
@@ -59,6 +60,7 @@ function cssRgbaToRgba(rgba) {
  * @returns {number[]} the rgba components.
  */
 function cssRgbToRgba(rgb) {
+    rgb = rgb.replaceAll(" ", "");
     const cssRgbRegex = /rgb\((\d+),(\d+),(\d+)\)/;
     try {
         const matches = rgb.match(cssRgbRegex);

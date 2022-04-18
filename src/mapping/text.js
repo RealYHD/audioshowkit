@@ -19,7 +19,10 @@ function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolator, uppe
     const rgbaStr = "rgba";
     color = rgbaStr.indexOf(color);
     if (color < 0) throw new Error("Invalid color parameter provided.");
-    const getter = () => parseColor(element.style.color)[color];
+    const getter = () => {
+        if (!element.style.color) element.style.color = "rgb(0,0,255)";
+        return parseColor(element.style.color)[color];
+    };
     const setter = (value) => {
         const changed = parseColor(element.style.color);
         changed[color] = value;

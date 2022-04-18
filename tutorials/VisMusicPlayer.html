@@ -36,9 +36,66 @@
     <div>
         <h2>Visualization</h2>
         <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements!</p>
-        <div class="result">
+
+        <h3>The first one here shows mapping the width.</h3>
+        <div class="result" style="width: 10rem;">
             <div id="width-map-demo" style="height: 2rem; background-color: black;"></div>
         </div>
+        <p>Produced by the following code...</p>
+        <pre><code class="language-js">
+            const widthElem = document.getElementById("width-map-demo"); // selecting an element.
+            ask.mappings.dimensions.mapWidth({ // the mapping function for width.
+                element: widthElem, // the element to map.
+                growLower: 2, // the minimum width
+                growUpper: 8, // the maximum width
+                unit: "rem", // the units the minimum and maximum are described in.
+                lowerBin: 24, // the lower frequency bin.
+                upperBin: 80, // the upper frequency bin.
+                visUpdateRouter: player.visUpdateRouter, // the visualizer to use (we got ours from the VisMusicPlayer).
+                interpolator: ask.support.easings.createEaseLinear(2.5) // an interpolation function to make transitions between frames cleaner.
+            });
+        </code></pre>
+
+        <h3>This next one does the same, except with height.</h3>
+        <div class="result" style="height: 10rem;">
+            <div id="height-map-demo" style="height: 2rem; background-color: black;"></div>
+        </div>
+        <p>Produced by the following code</p>
+        <pre><code class="language-js">
+            const heightElem = document.getElementById("height-map-demo"); // Only big difference is the function being called.
+            ask.mappings.dimensions.mapHeight({
+                element: heightElem,
+                growLower: 2, // height smallest can be 2 rem, tallest can be 8 rem.
+                growUpper: 8,
+                unit: "rem",
+                lowerBin: 80, // Changed the bin range just for fun.
+                upperBin: 120,
+                visUpdateRouter: player.visUpdateRouter,
+                interpolator: ask.support.easings.createEaseLinear(2.5)
+            });
+        </code></pre>
+
+        <h3>What's that? you want multiple mappings on one?</h3>
+        <p>Of course it's possible</p>
+        <div class="result" style="height: 10rem; min-width: 10rem;">
+            <div id="square-map-demo" style="height: 2rem; width: 2rem; background-color: black;"></div>
+        </div>
+        <p>Produced by the following code</p>
+        <pre><code class="language-js">
+            const squareElem = document.getElementById("square-map-demo"); // Same stuff as before..
+            const squareElemConf = { // Use an object for commonly used mappings.
+                element: squareElem,
+                growLower: 0.5,
+                growUpper: 8,
+                unit: "rem",
+                lowerBin: 128,
+                upperBin: 160,
+                visUpdateRouter: player.visUpdateRouter,
+                interpolator: ask.support.easings.createEaseLinear(2.5)
+            }
+            ask.mappings.dimensions.mapWidth(squareElemConf); // Apply them easily!
+            ask.mappings.dimensions.mapHeight(squareElemConf);
+        </code></pre>
     </div>
 
     <script>
@@ -58,17 +115,43 @@
         playbackCtrlsElem.appendChild(nextElem);
 
         const widthElem = document.getElementById("width-map-demo");
-        console.log("attempting to map");
         ask.mappings.dimensions.mapWidth({
             element: widthElem,
             growLower: 2,
-            growUpper: 5,
+            growUpper: 8,
             unit: "rem",
-            lowerBin: 0,
-            upperBin: 128,
+            lowerBin: 24,
+            upperBin: 60,
             visUpdateRouter: player.visUpdateRouter,
-            interpolator: ask.support.easings.createEaseLinear(1)
+            interpolator: ask.support.easings.createEaseLinear(2.5)
         });
+
+        const heightElem = document.getElementById("height-map-demo");
+        ask.mappings.dimensions.mapHeight({
+            element: heightElem,
+            growLower: 2,
+            growUpper: 8,
+            unit: "rem",
+            lowerBin: 80,
+            upperBin: 120,
+            visUpdateRouter: player.visUpdateRouter,
+            interpolator: ask.support.easings.createEaseLinear(2.5)
+        });
+
+        const squareElem = document.getElementById("square-map-demo");
+        const squareElemConf = {
+            element: squareElem,
+            growLower: 0.5,
+            growUpper: 8,
+            unit: "rem",
+            lowerBin: 128,
+            upperBin: 160,
+            visUpdateRouter: player.visUpdateRouter,
+            interpolator: ask.support.easings.createEaseLinear(2.5)
+        }
+        ask.mappings.dimensions.mapWidth(squareElemConf);
+        ask.mappings.dimensions.mapHeight(squareElemConf);
+
     </script>
 </body>
 
