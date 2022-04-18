@@ -1,6 +1,4 @@
-// TODO: add for width
-// TODO: add for height
-// TODO: add for background
+import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 
 /**
  * 
@@ -12,6 +10,8 @@
  * @callback numericalSetter
  * @param {number} value The new numerical value to update to.
  */
+
+// FIXME: Warnings about interpolator not being defined are broken. Docs generate fine.
 
 /**
  * Maps the average of a range of bins to numerical value defined by a getter and a setter.
@@ -42,7 +42,7 @@ function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin,
             }
             average /= normalBins.length;
             const range = maxVal - minVal;
-            let interpolated = interpolator(getter(), average, timeDelta); // TODO: May be optimized by allowing for transferring of previous style state.
+            let interpolated = interpolator(getter(), average, timeDelta);
             if (reversed) interpolated = 1 - interpolated;
             setter(minVal + range * interpolated);
         }

@@ -8,10 +8,10 @@ import Visualizer from "../visualization/Visualizer.js";
  */
 
 /**
- * A song with metadata that can be used as part of a {@link SongPlaylist}.
+ * A music with metadata that can be used as part of a {@link MusicPlaylist}.
  * 
  */
-export default class PlayListSong {
+export default class Music {
     #displayName;
     #author;
     #url;
@@ -20,11 +20,11 @@ export default class PlayListSong {
     #ready = false;
 
     /**
-     * Constructs a song for a {@link SongPlaylist}.
+     * Constructs a music for a {@link MusicPlaylist}.
      * 
-     * @param {string} url the url to fetch the song from.
-     * @param {string} name the name of the song.
-     * @param {string} author the author of the song.
+     * @param {string} url the url to fetch the music from.
+     * @param {string} name the name of the music.
+     * @param {string} author the author of the music.
      */
     constructor(url, name, author) {
         this.#displayName = name;
@@ -35,14 +35,12 @@ export default class PlayListSong {
 
     /**
      * 
-     * @param {AudioEventCallback} [onReady] called when the song is ready, including right away if the song is already ready.
-     * @returns {HTMLAudioElement} The audio element that represents this song.
+     * @param {AudioEventCallback} [onReady] called when the music is ready, including right away if the music is already ready.
+     * @returns {HTMLAudioElement} The audio element that represents this music.
      */
     fetchAudio(onReady) {
-        console.log("Fetching audio...");
         if (this.#audio) {
             if (this.#ready) {
-                console.log("Already ready.");
                 if (onReady) onReady(this.#audio);
             } else if (onReady) {
                 this.#audio.addEventListener("canplaythrough", () => {
@@ -52,35 +50,31 @@ export default class PlayListSong {
             return this.#audio;
         }
         this.#audio = new Audio(this.#url);
-        console.log("Fetching from url: " + this.#url);
         this.#audio.addEventListener("canplaythrough", () => {
             this.#ready = true;
-            console.log("attempting to invoke onReady.");
-            console.log(onReady);
             if (onReady && this.isAudioInstantiated()) {
                 onReady(this.#audio);
-                console.log("onReady invoked.");
             }
         }, { once: true });
         return this.#audio;
     }
 
     /**
-     * @returns {string} The name of the song to be displayed.
+     * @returns {string} The name of the music to be displayed.
      */
     get displayName() {
         return this.#displayName;
     }
 
     /**
-     * @returns {string} The author of the song.
+     * @returns {string} The author of the music.
      */
     get author() {
         return this.#author;
     }
 
     /**
-     * @returns {string} The url at which the file for this song can be found.
+     * @returns {string} The url at which the file for this music can be found.
      */
     get url() {
         return this.#url;
@@ -96,7 +90,7 @@ export default class PlayListSong {
     /**
      * Begins audio playback as soon as possible.
      * 
-     * This function uses the {@link PlaylistSong#getAudio} function and specifically, the {@link AudioEventCallback}.
+     * This function uses the {@link PlaylistMusic#getAudio} function and specifically, the {@link AudioEventCallback}.
      */
     play() {
         this.fetchAudio((audio) => {
@@ -131,7 +125,7 @@ export default class PlayListSong {
     }
     /**
      * 
-     * @returns {number} The number of seconds into the song.
+     * @returns {number} The number of seconds into the music.
      */
     get currentTime() {
         return this.fetchAudio().currentTime;
@@ -139,7 +133,7 @@ export default class PlayListSong {
 
     /**
      * 
-     * The time position in the song to jump to in seconds.
+     * The time position in the music to jump to in seconds.
      */
     set currentTime(currentTime) {
         this.fetchAudio().currentTime = currentTime;
@@ -147,7 +141,7 @@ export default class PlayListSong {
 
     /**
      * 
-     * @returns {number} The duration of the song.
+     * @returns {number} The duration of the music.
      */
     get duration() {
         return this.fetchAudio().duration;
@@ -157,7 +151,7 @@ export default class PlayListSong {
      * Unloads the audio data.
      * Makes sure the audio is paused.
      * 
-     * Also calls {@link PlaylistSong#unloadVisualizer}.
+     * Also calls {@link PlaylistMusic#unloadVisualizer}.
      */
     unloadAudio() {
         if (!this.isAudioInstantiated()) return;

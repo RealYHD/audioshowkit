@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="./assets/css/prism.css" />
+    <script src="./assets/js/prism.js" defer></script>
+</head>
+
+<body>
+    <script src="./assets/js/audioshowkit.js"></script>
+    <div>
+        <h1>Creating a Music Playlist</h1>
+        <p>
+            A music playlist is a list of {@link module:player/Music} which maintains metadata about the playlist, such as the length, and the name of the playlist. It also keeps track of an index for a position in the playlist.
+        </p>
+    </div>
+    <div>
+        <h2>Instantiation</h2>
+        <pre><code class="language-js">
+            // Get the entry point to all of AudioShowKit's glory.
+            const ask = window.audioshowkit;
+
+            // The only parameter is the name of the playlist.
+            const playlist = new ask.player.MusicPlaylist("Awesome Music"); 
+        </code></pre>
+    </div>
+    <div>
+        <h2>Adding Music</h2>
+        <p>A music playlist is no good if it doesn't have music. Lets add some.</p>
+        <pre><code class="language-js">
+            // Still using the same context from the instantiation example...
+
+            playlist.add("/assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen"); // It's that easy.
+            playlist.add("/assets/audio/XXI.mp3", "XXI", "QR"); // Let's add another one.
+        </code></pre>
+
+        <p>If for whatever reason, you decided to instantiate your own {@link module:player/Music}, that's okay too!</p>
+        <pre><code class="language-js">
+            // Still using the same context from the instantiation example...
+
+            // Either instantiate, or otherwise have this Music object.
+            const pathetiqueMusic = new ask.player.Music("/assets/audio/pathetique.mp3", "Sonata No. 8", "Beethoven");
+            playlist.addExisting(pathetiqueMusic); // Wow, a special function!
+        </code></pre>
+    </div>
+    <div>
+        <h2>Display</h2>
+        <p>In the case you want to show the playlist without coding your own display, we provide a simple generator for you!</p>
+        <pre><code class="language-js">
+            // Still using the same context from the instantiation example...
+
+            const playlistElem = playlist.generatePlaylistElement(); // Returns an HTMLElement!
+
+            // Assuming we do have an acceptable element that can take a child element.
+            document.getElementById("musicplaylist-demo").appendChild(playlistElem); 
+        </code></pre>
+        <div class="result">
+            <h3>Result</h3>
+            <div id="musicplaylist-demo">
+            </div>
+        </div>
+
+        <script>
+            const ask = window.audioshowkit;
+            const playlist = new ask.player.MusicPlaylist("Awesome Music");
+
+            playlist.add("/assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen"); // It's that easy.
+            playlist.add("/assets/audio/XXI.mp3", "XXI", "QR"); // Let's add another one.
+
+            const pathetiqueMusic = new ask.player.Music("/assets/audio/pathetique.mp3", "Sonata No. 8", "Beethoven");
+            playlist.addExisting(pathetiqueMusic);
+
+            const playlistElem = playlist.generatePlaylistElement();
+            document.getElementById("musicplaylist-demo").appendChild(playlistElem); 
+        </script>
+    </div>
+</body>
+
+</html>

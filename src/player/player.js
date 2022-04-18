@@ -1,7 +1,7 @@
-import SongPlayer from "./SongPlayer.js";
-import SongPlaylist from "./SongPlaylist.js";
-import VisualizedSongPlayer from "./VisualizedSongPlayer.js";
-import PlayListSong from "./PlaylistSong.js";
+import MusicPlayer from "./MusicPlayer.js";
+import MusicPlaylist from "./MusicPlaylist.js";
+import VisualizedMusicPlayer from "./VisualizedMusicPlayer.js";
+import Music from "./Music.js";
 
 /**@module */
-export { SongPlayer, SongPlaylist, VisualizedSongPlayer, PlayListSong };
+export { MusicPlayer, MusicPlaylist, VisualizedMusicPlayer, Music };

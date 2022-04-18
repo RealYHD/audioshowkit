@@ -5,8 +5,9 @@
         "ckeditor",
         "easings",
         "linebreak",
-        "songplayer"
+        "musicplayer"
     ],
     "javascript.preferences.importModuleSpecifierEnding": "js",
-    "html.format.wrapLineLength": 0
+    "html.format.wrapLineLength": 0,
+    "liveServer.settings.port": 5501
 }

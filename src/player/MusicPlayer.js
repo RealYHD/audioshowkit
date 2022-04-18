@@ -1,6 +1,5 @@
-import "../styles/songPlayer.css";
-import PlayListSong from "./PlaylistSong.js";
-import SongPlaylist from "./SongPlaylist.js";
+import "../styles/musicPlayer.css";
+import MusicPlaylist from "./MusicPlaylist.js";
 
 /**@module */
 
@@ -11,22 +10,20 @@ import SongPlaylist from "./SongPlaylist.js";
  */
 
 /**
- * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of song audio data and attempts to reduce memory usage when possible.
+ * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of music audio data and attempts to reduce memory usage when possible.
  */
-export default class SongPlayer {
+export default class MusicPlayer {
     #playlist;
-    #current = 0;
     #volume = 1;
     #autoplay = false;
     #wasPlaying = false;
     #playlistChangeListeners = [];
-    #currentSongChangeListeners = [];
     #volumeChangeListeners = [];
     #allAudioEventListeners = {};
 
     /**
      * 
-     * @param {SongPlaylist} playlist the playlist of songs that this player is in charge of.
+     * @param {MusicPlaylist} playlist the playlist of musics that this player is in charge of.
      */
     constructor(playlist) {
         this.playlist = playlist;
@@ -36,15 +33,15 @@ export default class SongPlayer {
     }
 
     /**
-     * The new playlist of songs that this player is in charge of.
+     * The new playlist of musics that this player is in charge of.
      */
     set playlist(playlist) {
-        this.#playlist?.unloadAllAudio();
+        if (this.playlist) this.unloadAllAudio();
+        if (this.playlist) this.playlist.removePositionChangeListener(this.#onMusicChange);
         const old = this.#playlist;
         this.#playlist = playlist;
-        if (!this.changeCurrentSongIndex(0)) {
-            throw new Error("The provided playlist has no songs.");
-        }
+        this.#playlist.addPositionChangeListener(this.#onMusicChange);
+        this.#playlist.currentPosition = 0; // Updates the listener.
         this.#playlistChangeListeners.forEach(playlistChangeListener => {
             playlistChangeListener(old, this.getPlaylist());
         });
@@ -52,9 +49,9 @@ export default class SongPlayer {
     }
 
     /**
-     * The current playlist of songs that this player is in charge of.
+     * The current playlist of musics that this player is in charge of.
      * 
-     * @returns {SongPlaylist} The song playlist this player is currently using.
+     * @returns {MusicPlaylist} The music playlist this player is currently using.
      */
     get playlist() {
         return this.#playlist;
@@ -62,65 +59,51 @@ export default class SongPlayer {
 
     /**
      * 
-     * @returns {boolean} true if and only if successful in going to the next song.
+     * @returns {boolean} true if and only if successful in going to the next music.
      */
     next() {
-        return this.changeCurrentSongIndex(this.currentSongIndex + 1);
+        return this.playlist.currentPosition += 1;
     }
 
     /**
-     * attempts to go to the previous song.
+     * attempts to go to the previous music.
      * 
-     * @returns {boolean} true if and only if successful in going to the previous song.
+     * @returns {boolean} true if and only if successful in going to the previous music.
      */
     previous() {
-        return this.changeCurrentSongIndex(this.currentSongIndex - 1);
+        return this.playlist.currentPosition -= 1;
     }
 
     /**
-     * 
-     * @param {number} index the index of the song to jump to.
+     * @param {number} old the index of the previous music.
+     * @param {number} current the index of the current music.
      * @returns {boolean} true if and only if successful jumping to the given index.
      */
-    changeCurrentSongIndex(index) {
-        console.log("Changing current song to " + index);
-        if (index >= this.#playlist.total()) return false;
-        if (index < 0) return false;
+    #onMusicChange = (old, current) => { // Anonymous to avoid overriding "this".
+        const oldMusic = this.playlist.musicAtIndex(old);
+        const currentMusic = this.playlist.musicAtIndex(current);
         Object.keys(this.#allAudioEventListeners).forEach(key => {
             const listeners = this.#allAudioEventListeners[key];
             listeners.forEach(listener => {
-                this.currentSong.fetchAudio().removeEventListener(key, listener);
+                oldMusic.fetchAudio().removeEventListener(key, listener);
             });
         });
-        this.currentSong.unloadAudio();
-        const old = this.currentSong;
-        this.#current = index;
-        this.#currentSongChangeListeners.forEach(currentChangeListener => {
-            currentChangeListener(old, this.currentSong);
-        });
+        oldMusic.unloadAudio();
+
         Object.keys(this.#allAudioEventListeners).forEach(key => {
             const listeners = this.#allAudioEventListeners[key];
             listeners.forEach(listener => {
-                this.currentSong.fetchAudio().addEventListener(key, listener);
+                currentMusic.fetchAudio().addEventListener(key, listener);
             });
         });
         if (this.#wasPlaying || this.#autoplay) {
             this.playCurrent();
         }
         return true;
-    }
-
-    /**
-     * 
-     * @returns {number} The current song's index in the playlist.
-     */
-    get currentSongIndex() {
-        return this.#current;
-    }
+    };
 
     playCurrent() {
-        console.log("playing " + this.#current);
-        this.currentSong.fetchAudio((audio) => {
+        this.playlist.currentMusic.fetchAudio((audio) => {
             audio.volume = this.volume;
             audio.play();
         });
@@ -128,15 +111,14 @@ export default class SongPlayer {
     }
 
     /**
-     * Pauses the current playing song (if there is one playing).
+     * Pauses the current playing music (if there is one playing).
      */
     pauseCurrent() {
-        console.log("Pausing.");
-        this.currentSong.fetchAudio().pause();
+        this.playlist.currentMusic.fetchAudio().pause();
     }
 
     /**
-     * Toggles whether or not the current song is playing.
+     * Toggles whether or not the current music is playing.
      */
     togglePlay() {
         if (this.playing) {
@@ -153,7 +135,7 @@ export default class SongPlayer {
         if (volume > 1) volume = 1;
         if (volume < 0) volume = 0;
         this.#volume = volume;
-        this.currentSong.fetchAudio().volume = this.#volume;
+        this.playlist.currentMusic.fetchAudio().volume = this.#volume;
     }
 
     /**
@@ -171,8 +153,8 @@ export default class SongPlayer {
      * @returns {boolean} true if and only if the position to seek to is within the duration of the track. This also means that if the track has not finished loading the duration data, than this will always return false.
      */
     seek(position) {
-        if (position > this.currentSong.fetchAudio().duration || position < 0) return false;
-        this.currentSong.fetchAudio(audio => {
+        if (position > this.playlist.playlist.currentMusic.fetchAudio().duration || position < 0) return false;
+        this.playlist.playlist.currentMusic.fetchAudio(audio => {
             audio.currentTime = position;
         });
         return true;
@@ -183,15 +165,15 @@ export default class SongPlayer {
      * @returns {number} How many seconds into the audio track has been played in seconds.
      */
     get currentPosition() {
-        return this.currentSong.fetchAudio().currentTime;
+        return this.playlist.playlist.currentMusic.fetchAudio().currentTime;
     }
 
     /**
      * 
-     * @returns {number} The total length of the song, or NaN if this information has not loaded yet.
+     * @returns {number} The total length of the music, or NaN if this information has not loaded yet.
      */
     get currentDuration() {
-        return this.currentSong.fetchAudio().duration;
+        return this.playlist.playlist.currentMusic.fetchAudio().duration;
     }
 
     /**
@@ -208,7 +190,6 @@ export default class SongPlayer {
         if (this.playing) playButton.classList.add("pause");
 
         playButton.addEventListener("click", () => {
-            console.log("Generated play button has been pressed.");
             this.togglePlay();
         });
 
@@ -239,37 +220,6 @@ export default class SongPlayer {
             this.previous();
         });
         return previousButton;
-    }
-
-    /**
-     * @returns {PlayListSong} The current playlist being used.
-     */
-    get currentSong() {
-        return this.#playlist.songAtIndex(this.#current);
-    }
-
-    /**
-     * 
-     * @param {changeListener} listener the listener to receive the updates.
-     * @returns {boolean} true if and only if successfully added the listener.
-     */
-    addCurrentSongChangeListener(listener) {
-        if (this.#currentSongChangeListeners.includes(listener)) return false;
-        this.#currentSongChangeListeners.push(listener);
-        return true;
-    }
-
-    /**
-     * 
-     * @param {changeListener} listener the song change listener to remove.
-     * @returns {boolean} true if and only if the song change listener given was successfully removed.
-     */
-    removeCurrentSongChangeListener(listener) {
-        const removeIndex = this.#currentSongChangeListeners.indexOf(listener);
-        if (removeIndex < 0) return false;
-
-        this.#currentSongChangeListeners.splice(removeIndex, 1);
-        return true;
     }
 
     /**
@@ -336,7 +286,7 @@ export default class SongPlayer {
         }
         if (typeListeners.includes(eventListener)) return false;
         typeListeners.push(eventListener);
-        this.currentSong.fetchAudio().addEventListener(type, eventListener);
+        this.playlist.currentMusic.fetchAudio().addEventListener(type, eventListener);
         return true;
     }
 
@@ -352,14 +302,23 @@ export default class SongPlayer {
         const removeIndex = typeListeners.indexOf(eventListener);
         if (removeIndex < 0) return false;
         typeListeners.splice(removeIndex, 1);
-        this.currentSong.fetchAudio().removeEventListener(type, eventListener);
+        this.playlist.playlist.currentMusic.fetchAudio().removeEventListener(type, eventListener);
         return true;
     }
 
     /**
-     * @returns {boolean} If the player is playing any songs right now.
+     * @returns {boolean} If the player is playing any musics right now.
      */
     get playing() {
-        return this.currentSong.isAudioInstantiated() && !this.currentSong.fetchAudio().paused;
+        return this.playlist.currentMusic.isAudioInstantiated() && !this.playlist.currentMusic.fetchAudio().paused;
+    }
+
+    /**
+     * Unloads the audio data of all musics in this playlist.
+     */
+    unloadAllAudio() {
+        this.playlist.forEach(music => {
+            music.unloadAudio();
+        });
     }
 }

@@ -10,12 +10,12 @@
     "build:dev": "webpack --config webpack.dev.cjs",
     "test:junit": "mocha tests/** --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test_results.xml",
     "test:console": "mocha tests/**",
-    "watch:docs": "nodemon --watch dist/ --watch tutorials/ --watch src/ --exec 'npm run docs' -e js,mjs,json,htm,html,xml,markdown,md,xhtml",
+    "watch:docs": "nodemon --watch dist/ --watch tutorials/ --watch src/ --exec 'npm run docs' -e js,mjs,json,htm,html,xml,markdown,md,xhtml --ignore ./tutorials/assets/js/audioshowkit.js",
     "watch:lib": "webpack --watch --config webpack.dev.cjs",
     "build": "npm run build:dev",
     "test": "npm run test:console",
     "watch": "npm run watch:lib",
-    "docs": "jsdoc -c jsdoc.config.json"
+    "docs": "jsdoc -c jsdoc.config.json && cp ./dist/audioshowkit.js ./tutorials/assets/js/audioshowkit.js && syncdir ./tutorials/assets/ ./docs/assets/"
   },
   "author": "",
   "license": "ISC",
@@ -36,6 +36,7 @@
     "mocha-junit-reporter": "^2.0.2",
     "nodemon": "^2.0.15",
     "style-loader": "^3.3.1",
+    "sync-directory": "^4.0.12",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-merge": "^5.8.0"
