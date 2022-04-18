@@ -109,7 +109,7 @@ export default class Visualizer {
      * @returns {number} The number of bins based on the size of the FFT window.
      */
     get numberOfBins() {
-        return this.#buffer.length;
+        return this.#fftSize / 2;
     }
 
     /**

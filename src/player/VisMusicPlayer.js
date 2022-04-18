@@ -3,7 +3,7 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 import MusicPlayer from "./MusicPlayer.js";
 import MusicPlaylist from "./MusicPlaylist.js";
 
-/**@module */
+
 
 /**
  * A music player that provides easier access to the current musics visualizer data.
@@ -25,14 +25,19 @@ export default class VisMusicPlayer extends MusicPlayer {
         super(playlist);
         playlist.addPositionChangeListener(this.#onMusicChange); // First time only: after setting the playlist, add the listener.
         this.#fftSize = fftSize;
-        this.#visUpdateRouter = new VisUpdateRouter(fftSize);
+        this.playlist.currentPosition = 0;
     }
 
     #onMusicChange = () => {
-        const visUpdateRouterListeners = this.#visUpdateRouter.retrieveListeners();
-        this.#visUpdateRouter.unbindVisualizer();
+        let visUpdateRouterListeners = null;
+        if (this.#visUpdateRouter) {
+            visUpdateRouterListeners = this.#visUpdateRouter.retrieveListeners();
+            this.#visUpdateRouter.unbindVisualizer();
+        }
         this.#visUpdateRouter = new VisUpdateRouter(this.currentMusicVisualizer);
-        this.#visUpdateRouter.loadListeners(visUpdateRouterListeners);
+        if (visUpdateRouterListeners) {
+            this.#visUpdateRouter.loadListeners(visUpdateRouterListeners);
+        }
     };
 
     /**
