@@ -1,6 +1,6 @@
 
 /**
- * @callback interpolator
+ * @typedef {function} interpolator
  * @param {number} current the current value.
  * @param {number} dest the destination value.
  * @param {number} frameDelta the time elapsed since the last update.

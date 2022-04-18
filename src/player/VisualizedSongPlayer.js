@@ -1,7 +1,5 @@
-import Visualizer from "../visualization/Visualizer.js";
 import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
 import SongPlayer from "./SongPlayer.js";
-import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A song player that provides easier access to the current songs visualizer data.

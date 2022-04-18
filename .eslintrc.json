@@ -5,16 +5,12 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:jsdoc/recommended",
         "plugin:import/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": [
-        "jsdoc"
-    ],
     "rules": {
         "indent": [
             "error",

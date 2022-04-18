@@ -1,5 +1,4 @@
 import "../styles/songplayer.css";
-import SongPlaylist from "./SongPlaylist.js";
 
 /**
  * A player that keeps track of global properties for playback as well as traversing a playlist. Additionally keeps track of song audio data and attempts to reduce memory usage when possible.

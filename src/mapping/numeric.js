@@ -2,8 +2,6 @@
 // TODO: add for height
 // TODO: add for background
 
-import VisualizerUpdateManager from "../visualization/VisualizerUpdateManager.js";
-
 /**
  * 
  * @callback numericalGetter

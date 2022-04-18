@@ -1,6 +1,3 @@
-import Visualizer from "./Visualizer.js";
-
-
 /**
  * A visualizer update manager offers an extra layer of abstraction on top of the {@link Visualizer}'s update listener.
  * 
