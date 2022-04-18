@@ -497,3 +497,6 @@ docs
 
 # Don't include junit coverage report.
 junit
+
+# Don't include the built version of the library in the assets folder.
+tutorials/assets/**/audioshowkit.js
