@@ -1,4 +1,4 @@
-import "../styles/musicPlayer.css";
+import "../styles/music-player.css";
 import MusicPlaylist from "./MusicPlaylist.js";
 
 
@@ -196,10 +196,15 @@ export default class MusicPlayer {
 
         this.addEventListenerToCurrentAudio("play", () => {
             playButton.classList.add("pause");
+            playButton.innerText = "Pause";
         });
         this.addEventListenerToCurrentAudio("pause", () => {
             playButton.classList.remove("pause");
+            playButton.innerText = "Play";
         });
+
+        playButton.innerText = "Play";
+
         return playButton;
     }
 
@@ -210,6 +215,7 @@ export default class MusicPlayer {
         nextButton.addEventListener("click", () => {
             this.next();
         });
+        nextButton.innerText = "Next";
         return nextButton;
     }
 
@@ -220,6 +226,7 @@ export default class MusicPlayer {
         previousButton.addEventListener("click", () => {
             this.previous();
         });
+        previousButton.innerText = "Previous";
         return previousButton;
     }
 

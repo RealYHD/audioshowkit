@@ -206,20 +206,20 @@ export default class MusicPlaylist {
 
     generatePlaylistElement() {
         const element = document.createElement("table");
-        element.createTHead().textContent = "Playlist";
+        element.createTHead().innerText = "Playlist";
         const headers = element.insertRow();
         const musicHeader = document.createElement("th");
-        musicHeader.textContent = "Music";
+        musicHeader.innerText = "Music";
         headers.appendChild(musicHeader);
         const authorHeader = document.createElement("th");
-        authorHeader.textContent = "Author";
+        authorHeader.innerText = "Author";
         headers.appendChild(authorHeader);
 
         const insertMusic = (music, musicPos = undefined) => {
             if (musicPos) musicPos++;
             const row = element.insertRow(musicPos);
-            row.insertCell().textContent = music.displayName;
-            row.insertCell().textContent = music.author;
+            row.insertCell().innerText = music.displayName;
+            row.insertCell().innerText = music.author;
         };
         for (const music of this) {
             insertMusic(music);

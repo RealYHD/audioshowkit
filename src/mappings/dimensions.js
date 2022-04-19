@@ -16,7 +16,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [conf.upperBin] The upper bin or undefined, which results in mapping to a single bin.
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
+ * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 export function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.width) || 0;
@@ -54,7 +54,7 @@ export function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpd
  * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to be used to transition from one value to the next.
  * @param {number} [conf.upperBin] The upper bin or undefined, which results in mapping to a single bin.
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
+ * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 export function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.height) || 0;

@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "watch:docs",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: watch:docs",
+			"detail": "nodemon --watch dist/ --watch tutorials/ --watch src/ --exec 'npm run docs' -e js,mjs,json,htm,html,xml,markdown,md,xhtml --ignore ./tutorials/assets/js/audioshowkit.js"
+		},
+		{
+			"type": "npm",
+			"script": "watch:lib",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: watch:lib",
+			"detail": "webpack --watch --config webpack.dev.cjs"
+		},
+		{
+			"type": "npm",
+			"script": "serve:docs",
+			"problemMatcher": [],
+			"label": "npm: serve:docs",
+			"detail": "cd ./docs && live-server"
+		},
+		{
+			"label": "Live Development",
+			"dependsOn": [
+				"npm: watch:docs",
+				"npm: watch:lib",
+				"npm: serve:docs"
+			]
+		}
+	]
+}

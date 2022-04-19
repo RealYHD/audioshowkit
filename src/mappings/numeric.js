@@ -69,7 +69,7 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
  * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to use.
  * @param {VisUpdateRouter} conf.visUpdateRouter The update manager to map to.
  * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisUpdateRouter.visualizerBinUpdateListener}} The bin listener that was added.
+ * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}} The bin listener that was added.
  */
 export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
     console.log("mapping numerical...");
