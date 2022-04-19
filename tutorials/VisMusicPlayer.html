@@ -38,10 +38,10 @@
         <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements!</p>
 
         <h3>The first one here shows mapping the width.</h3>
-        <div class="result" style="width: 10rem;">
-            <div id="width-map-demo" style="height: 2rem; background-color: black;"></div>
+        <div class="result">
+            <div id="width-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
         </div>
-        <p>Produced by the following code...</p>
+        <p>To do this, we need to perform what's called a <strong>mapping</strong> between a range of frequency bins, or a single frequency bin, and the width property of the <code>div</code> element. We can then define a multitude of parameters to specify how the mapping will work. Following is the code that produced the example above with comment annotations.</p>
         <pre><code class="language-js">
             const widthElem = document.getElementById("width-map-demo"); // selecting an element.
             ask.mappings.dimensions.mapWidth({ // the mapping function for width.
@@ -58,9 +58,8 @@
 
         <h3>This next one does the same, except with height.</h3>
         <div class="result" style="height: 10rem;">
-            <div id="height-map-demo" style="height: 2rem; background-color: black;"></div>
+            <div id="height-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
         </div>
-        <p>Produced by the following code</p>
         <pre><code class="language-js">
             const heightElem = document.getElementById("height-map-demo"); // Only big difference is the function being called.
             ask.mappings.dimensions.mapHeight({
@@ -78,9 +77,8 @@
         <h3>What's that? you want multiple mappings on one?</h3>
         <p>Of course it's possible</p>
         <div class="result" style="height: 10rem; min-width: 10rem;">
-            <div id="square-map-demo" style="height: 2rem; width: 2rem; background-color: black;"></div>
+            <div id="square-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
         </div>
-        <p>Produced by the following code</p>
         <pre><code class="language-js">
             const squareElem = document.getElementById("square-map-demo"); // Same stuff as before..
             const squareElemConf = { // Use an object for commonly used mappings.
