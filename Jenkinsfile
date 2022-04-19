@@ -17,9 +17,6 @@ pipeline {
             }
         }
         stage("build") {
-            when {
-                branch "master"
-            }
             steps {
                 nodejs('NodeJS (17.4.0)') {
                     sh "npm run build:prod"
