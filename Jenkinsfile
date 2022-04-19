@@ -29,6 +29,7 @@ pipeline {
         }
         stage("generate docs") {
             steps {
+                sh "rm -r ./docs"
                 nodejs('NodeJS (17.4.0)') {
                     sh "npm run docs"
                 }
