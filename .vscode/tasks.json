@@ -30,7 +30,8 @@
 				"npm: watch:docs",
 				"npm: watch:lib",
 				"npm: serve:docs"
-			]
+			],
+			"problemMatcher": []
 		}
 	]
 }

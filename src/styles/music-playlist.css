@@ -1,0 +1,23 @@
+table.music-playlist {
+    border-collapse: collapse;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+}
+
+table.music-playlist tr th {
+    border-left-style: none;
+    border-right-style: none;
+    background-color: lightgray;
+}
+
+
+table.music-playlist tr td {
+    border-left-style: none;
+    border-right-style: none;
+}
+
+table.music-playlist .active {
+    background-color: gray;
+    color: white;
+}

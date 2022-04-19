@@ -10,7 +10,7 @@
     "build:dev": "webpack --config webpack.dev.cjs",
     "test:junit": "mocha tests/** --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test_results.xml",
     "test:console": "mocha tests/**",
-    "watch:docs": "nodemon --watch dist/ --watch tutorials/ --watch src/ --exec 'npm run docs' -e js,mjs,json,htm,html,xml,markdown,md,xhtml --ignore ./tutorials/assets/js/audioshowkit.js",
+    "watch:docs": "nodemon --watch dist/ --watch tutorials/ --watch src/ --exec 'npm run docs' -e js,mjs,json,htm,html,xml,markdown,md,xhtml,css --ignore ./tutorials/assets/js/audioshowkit.js",
     "watch:lib": "webpack --watch --config webpack.dev.cjs",
     "serve:docs": "cd ./docs && live-server",
     "build": "npm run build:dev",

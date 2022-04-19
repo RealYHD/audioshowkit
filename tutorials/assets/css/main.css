@@ -1,0 +1,14 @@
+@import url("./prism.css");
+
+.result {
+    background-repeat: repeat;
+    background-image: url("../textures/45degree_fabric.webp");
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 2.5rem;
+    border-radius: 5px;
+    box-shadow: inset;
+}

@@ -1,7 +1,5 @@
+import "../styles/music-playlist.css";
 import Music from "./Music.js";
-
-
-
 
 /**
  * A playlist that holds a multitude of musics in the form of {@link Music}.
@@ -206,7 +204,6 @@ export default class MusicPlaylist {
 
     generatePlaylistElement() {
         const element = document.createElement("table");
-        element.createTHead().innerText = "Playlist";
         const headers = element.insertRow();
         const musicHeader = document.createElement("th");
         musicHeader.innerText = "Music";
@@ -239,6 +236,8 @@ export default class MusicPlaylist {
             element.rows[old + 1].classList.remove("active");
             element.rows[current + 1].classList.add("active");
         });
+
+        element.classList.add("music-playlist");
         return element;
     }
 
