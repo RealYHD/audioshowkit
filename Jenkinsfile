@@ -8,13 +8,6 @@ pipeline {
                 }
             }
         }
-        stage("build") {
-            steps {
-                nodejs('NodeJS (17.4.0)') {
-                    sh "npm run build:dev"
-                }
-            }
-        }
         stage("tests") {
             steps {
                 nodejs('NodeJS (17.4.0)') {
@@ -23,8 +16,14 @@ pipeline {
                 junit 'junit/*.xml'
             }
         }
-        stage("archive product") {
+        stage("build") {
+            when {
+                branch "master"
+            }
             steps {
+                nodejs('NodeJS (17.4.0)') {
+                    sh "npm run build:prod"
+                }
                 archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
             }
         }
