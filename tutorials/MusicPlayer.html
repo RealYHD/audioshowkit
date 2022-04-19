@@ -20,6 +20,12 @@
             const playlist = previousPlaylist; // We are assuming you have a playlist ready.
             const player = new ask.player.MusicPlayer(playlist) // Creates a new music player with the playlist.
         </code></pre>
+
+        <p>We'll also show the playlist display so you can see how it updates corresponding to the music currently selected.</p>
+        <div class="result">
+            <div id="playlist-display">
+            </div>
+        </div>
     </div>
     <div>
         <h2>Display a Play Button</h2>
@@ -65,6 +71,9 @@
 
         playlist.add("./assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen");
         playlist.add("./assets/audio/XXI.mp3", "XXI", "QR");
+
+        const playlistDispElement = playlist.generatePlaylistElement();
+        document.getElementById("playlist-display").append(playlistDispElement);
 
         const player = new ask.player.MusicPlayer(playlist);
         const playElem = player.generatePlayElement();

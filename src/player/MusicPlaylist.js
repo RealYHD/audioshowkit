@@ -212,14 +212,20 @@ export default class MusicPlaylist {
         authorHeader.innerText = "Author";
         headers.appendChild(authorHeader);
 
-        const insertMusic = (music, musicPos = undefined) => {
-            if (musicPos) musicPos++;
+        const insertMusic = (music, musicPos) => {
+            if (isNaN(musicPos)) throw new Error("Music position in playlist required.");
+            musicPos++;
             const row = element.insertRow(musicPos);
             row.insertCell().innerText = music.displayName;
             row.insertCell().innerText = music.author;
+            row.addEventListener("click", () => {
+                this.currentPosition = musicPos - 1;
+            });
         };
+        let musicInd = 0;
         for (const music of this) {
-            insertMusic(music);
+            insertMusic(music, musicInd);
+            musicInd++;
         }
 
         this.addLengthChangeListener((changed, added, music) => {
