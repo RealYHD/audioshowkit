@@ -21,6 +21,7 @@ pipeline {
                 nodejs('NodeJS (17.4.0)') {
                     sh "npm run build:prod"
                 }
+                fingerprint "dist/**"
                 archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
             }
         }
