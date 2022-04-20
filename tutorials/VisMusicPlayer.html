@@ -1,165 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="./assets/css/main.css" />
+<script src="./assets/js/prism.js" defer></script>
+<script src="./assets/js/audioshowkit.js"></script>
 
-<head>
-    <link rel="stylesheet" href="./assets/css/main.css" />
-    <script src="./assets/js/prism.js" defer></script>
-    <script src="./assets/js/audioshowkit.js"></script>
-</head>
-
-<body>
-    <section>
-        <h1>Visualizing Music</h1>
-        <p>This is the fun part. We can use a {@link VisualizedMusicPlayer} and a {@link MusicPlaylist} to create a music player that is like {@link MusicPlayer} but with the ability to automatically fetch the current {@link Visualizer}. On top of that, it then routes that visualizer data to {@link VisualizerUpdateManager} which can be to make much more refined mappings.</p>
-        This library comes with a variety of mapping tools:
-        <ul>
-            <li>Want to map ranges of frequency bins to a plethora of element style properties? Take a look at {@link module:mappings/numeric} and {@link module:mappings/dimensions}!</li>
-            <li>Check out {@link module:patterns/canvas} for built in canvas patterns.</li>
-            <li>We even do font size and color with the {@link module:mappings/text} module!</li>
-        </ul>
-    </section>
-    <section>
-        <h2>Instantiation</h2>
-        <p>Exactly like when instantiating a normal music player, you will need a playlist. Other than that, it's simple.</p>
+<div class="part">
+    <h1>Visualizing Music</h1>
+    <p>This is the fun part. We can use a {@link VisualizedMusicPlayer} and a {@link MusicPlaylist} to create a music player that is like {@link MusicPlayer} but with the ability to automatically fetch the current {@link Visualizer}. On top of that, it then routes that visualizer data to {@link VisualizerUpdateManager} which can be to make much more refined mappings.</p>
+    This library comes with a variety of mapping tools:
+    <ul>
+        <li>Want to map ranges of frequency bins to a plethora of element style properties? Take a look at {@link module:mappings/numeric} and {@link module:mappings/dimensions}!</li>
+        <li>Check out {@link module:patterns/canvas} for built in canvas patterns.</li>
+        <li>We even do font size and color with the {@link module:mappings/text} module!</li>
+    </ul>
+</div>
+<div class="part">
+    <h2>Instantiation</h2>
+    <p>Exactly like when instantiating a normal music player, you will need a playlist. Other than that, it's simple.</p>
+    <pre><code class="language-js">
+        const ask = window.audioshowkit; // Get a reference to the audioshowkit stuff.
+        const playlist = previousPlaylist; // We are assuming you have a playlist ready.
+        const player = new ask.player.VisualizedMusicPlayer(playlist) // Creates a new music player with the playlist.
+    </code></pre>
+</div>
+<div class="part">
+    <h2>Playback</h2>
+    <p>Since the usage of playback is the same as a normal {@link module:player/MusicPlayer}, see [the MusicPlayer tutorial]{@tutorial MusicPlayer} for more information.</p>
+    <div class="result">
+        <div id="playback-ctrls">
+        </div>
+    </div>
+</div>
+<div class="part">
+    <h2>Visualization</h2>
+    <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements! Remember to hit the play button above to see the mappings in effect!</p>
+    <div class="part">
+        <h3>Mapping Width</h3>
+        <p>The first one here shows mapping the width.</p>
+        <div class="result">
+            <div id="width-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
+        </div>
+        <p>To do this, we need to perform what's called a <strong>mapping</strong> between a range of frequency bins, or a single frequency bin, and the width property of the <code>div</code> element. We can then define a multitude of parameters to specify how the mapping will work. Following is the code that produced the example above with comment annotations.</p>
         <pre><code class="language-js">
-            const ask = window.audioshowkit; // Get a reference to the audioshowkit stuff.
-            const playlist = previousPlaylist; // We are assuming you have a playlist ready.
-            const player = new ask.player.VisualizedMusicPlayer(playlist) // Creates a new music player with the playlist.
+            const widthElem = document.getElementById("width-map-demo"); // selecting an element.
+            ask.mappings.dimensions.mapWidth({ // the mapping function for width.
+                element: widthElem, // the element to map.
+                growLower: 2, // the minimum width
+                growUpper: 8, // the maximum width
+                unit: "rem", // the units the minimum and maximum are described in.
+                lowerBin: 24, // the lower frequency bin.
+                upperBin: 80, // the upper frequency bin.
+                visUpdateRouter: player.visUpdateRouter, // the visualizer to use (we got ours from the VisMusicPlayer).
+                interpolator: ask.support.easings.createEaseLinear(2.5) // an interpolation function to make transitions between frames cleaner.
+            });
         </code></pre>
-    </section>
-    <section>
-        <div>
-            <h2>Playback</h2>
-            <p>Since the usage of playback is the same as a normal {@link module:player/MusicPlayer}, see [the MusicPlayer tutorial]{@tutorial MusicPlayer} for more information.</p>
-            <div class="result">
-                <div id="playback-ctrls">
-                </div>
-            </div>
+    </div>
+    <div class="part">
+        <h3>Mapping Height</h3>
+        <p>This next one does the same, except with height.</p>
+        <div class="result" style="height: 10rem;">
+            <div id="height-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
         </div>
-    </section>
-    <section>
-        <h2>Visualization</h2>
-        <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements! Remember to hit the play button above to see the mappings in effect!</p>
-        <div class="part">
-            <h3>Mapping Width</h3>
-            <p>The first one here shows mapping the width.</p>
-            <div class="result">
-                <div id="width-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
-            </div>
-            <p>To do this, we need to perform what's called a <strong>mapping</strong> between a range of frequency bins, or a single frequency bin, and the width property of the <code>div</code> element. We can then define a multitude of parameters to specify how the mapping will work. Following is the code that produced the example above with comment annotations.</p>
-            <pre><code class="language-js">
-                const widthElem = document.getElementById("width-map-demo"); // selecting an element.
-                ask.mappings.dimensions.mapWidth({ // the mapping function for width.
-                    element: widthElem, // the element to map.
-                    growLower: 2, // the minimum width
-                    growUpper: 8, // the maximum width
-                    unit: "rem", // the units the minimum and maximum are described in.
-                    lowerBin: 24, // the lower frequency bin.
-                    upperBin: 80, // the upper frequency bin.
-                    visUpdateRouter: player.visUpdateRouter, // the visualizer to use (we got ours from the VisMusicPlayer).
-                    interpolator: ask.support.easings.createEaseLinear(2.5) // an interpolation function to make transitions between frames cleaner.
-                });
-            </code></pre>
+        <pre><code class="language-js">
+            const heightElem = document.getElementById("height-map-demo"); // Only big difference is the function being called.
+            ask.mappings.dimensions.mapHeight({
+                element: heightElem,
+                growLower: 2, // height smallest can be 2 rem, tallest can be 8 rem.
+                growUpper: 8,
+                unit: "rem",
+                lowerBin: 80, // Changed the bin range just for fun.
+                upperBin: 120,
+                visUpdateRouter: player.visUpdateRouter,
+                interpolator: ask.support.easings.createEaseLinear(2.5)
+            });
+        </code></pre>
+    </div>
+    <div class="part">
+        <h3>Mapping Multiple Style Properties</h3>
+        <p>What's that? you want multiple mappings on one? Here it is!</p>
+        <div class="result" style="height: 10rem;">
+            <div id="square-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
         </div>
-        <div class="part">
-            <h3>Mapping Height</h3>
-            <p>This next one does the same, except with height.</p>
-            <div class="result" style="height: 10rem;">
-                <div id="height-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
-            </div>
-            <pre><code class="language-js">
-                const heightElem = document.getElementById("height-map-demo"); // Only big difference is the function being called.
-                ask.mappings.dimensions.mapHeight({
-                    element: heightElem,
-                    growLower: 2, // height smallest can be 2 rem, tallest can be 8 rem.
-                    growUpper: 8,
-                    unit: "rem",
-                    lowerBin: 80, // Changed the bin range just for fun.
-                    upperBin: 120,
-                    visUpdateRouter: player.visUpdateRouter,
-                    interpolator: ask.support.easings.createEaseLinear(2.5)
-                });
-            </code></pre>
-        </div>
-        <div class="part">
-            <h3>Mapping Multiple Style Properties</h3>
-            <p>What's that? you want multiple mappings on one? Here it is!</p>
-            <div class="result" style="height: 10rem; min-width: 10rem;">
-                <div id="square-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
-            </div>
-            <pre><code class="language-js">
-                const squareElem = document.getElementById("square-map-demo"); // Same stuff as before..
-                const squareElemConf = { // Use an object for commonly used mappings.
-                    element: squareElem,
-                    growLower: 0.5,
-                    growUpper: 8,
-                    unit: "rem",
-                    lowerBin: 128,
-                    upperBin: 160,
-                    visUpdateRouter: player.visUpdateRouter,
-                    interpolator: ask.support.easings.createEaseLinear(2.5)
-                }
-                ask.mappings.dimensions.mapWidth(squareElemConf); // Apply them easily!
-                ask.mappings.dimensions.mapHeight(squareElemConf);
-            </code></pre>
-        </div>
-    </section>
+        <pre><code class="language-js">
+            const squareElem = document.getElementById("square-map-demo"); // Same stuff as before..
+            const squareElemConf = { // Use an object for commonly used mappings.
+                element: squareElem,
+                growLower: 0.5,
+                growUpper: 8,
+                unit: "rem",
+                lowerBin: 128,
+                upperBin: 160,
+                visUpdateRouter: player.visUpdateRouter,
+                interpolator: ask.support.easings.createEaseLinear(2.5)
+            }
+            ask.mappings.dimensions.mapWidth(squareElemConf); // Apply them easily!
+            ask.mappings.dimensions.mapHeight(squareElemConf);
+        </code></pre>
+    </div>
+</div>
 
-    <script>
-        const ask = window.audioshowkit;
-        const playlist = new ask.player.MusicPlaylist("Awesome Music");
+<script>
+    const ask = window.audioshowkit;
+    const playlist = new ask.player.MusicPlaylist("Awesome Music");
 
-        playlist.add("./assets/audio/XXI.mp3", "XXI", "QR");
-        playlist.add("./assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen");
+    playlist.add("./assets/audio/XXI.mp3", "XXI", "QR");
+    playlist.add("./assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen");
 
-        const player = new ask.player.VisMusicPlayer(playlist);
-        const playbackCtrlsElem = document.getElementById("playback-ctrls");
-        const prevElem = player.generatePreviousElement();
-        const playElem = player.generatePlayElement();
-        const nextElem = player.generateNextElement();
-        playbackCtrlsElem.appendChild(prevElem);
-        playbackCtrlsElem.appendChild(playElem);
-        playbackCtrlsElem.appendChild(nextElem);
+    const player = new ask.player.VisMusicPlayer(playlist);
+    const playbackCtrlsElem = document.getElementById("playback-ctrls");
+    const prevElem = player.generatePreviousElement();
+    const playElem = player.generatePlayElement();
+    const nextElem = player.generateNextElement();
+    playbackCtrlsElem.appendChild(prevElem);
+    playbackCtrlsElem.appendChild(playElem);
+    playbackCtrlsElem.appendChild(nextElem);
 
-        const widthElem = document.getElementById("width-map-demo");
-        ask.mappings.dimensions.mapWidth({
-            element: widthElem,
-            growLower: 2,
-            growUpper: 8,
-            unit: "rem",
-            lowerBin: 24,
-            upperBin: 60,
-            visUpdateRouter: player.visUpdateRouter,
-            interpolator: ask.support.easings.createEaseLinear(2.5)
-        });
+    const widthElem = document.getElementById("width-map-demo");
+    ask.mappings.dimensions.mapWidth({
+        element: widthElem,
+        growLower: 2,
+        growUpper: 8,
+        unit: "rem",
+        lowerBin: 24,
+        upperBin: 60,
+        visUpdateRouter: player.visUpdateRouter,
+        interpolator: ask.support.easings.createEaseLinear(2.5)
+    });
 
-        const heightElem = document.getElementById("height-map-demo");
-        ask.mappings.dimensions.mapHeight({
-            element: heightElem,
-            growLower: 2,
-            growUpper: 8,
-            unit: "rem",
-            lowerBin: 80,
-            upperBin: 120,
-            visUpdateRouter: player.visUpdateRouter,
-            interpolator: ask.support.easings.createEaseLinear(2.5)
-        });
+    const heightElem = document.getElementById("height-map-demo");
+    ask.mappings.dimensions.mapHeight({
+        element: heightElem,
+        growLower: 2,
+        growUpper: 8,
+        unit: "rem",
+        lowerBin: 80,
+        upperBin: 120,
+        visUpdateRouter: player.visUpdateRouter,
+        interpolator: ask.support.easings.createEaseLinear(2.5)
+    });
 
-        const squareElem = document.getElementById("square-map-demo");
-        const squareElemConf = {
-            element: squareElem,
-            growLower: 0.5,
-            growUpper: 8,
-            unit: "rem",
-            lowerBin: 128,
-            upperBin: 160,
-            visUpdateRouter: player.visUpdateRouter,
-            interpolator: ask.support.easings.createEaseLinear(2.5)
-        }
-        ask.mappings.dimensions.mapWidth(squareElemConf);
-        ask.mappings.dimensions.mapHeight(squareElemConf);
+    const squareElem = document.getElementById("square-map-demo");
+    const squareElemConf = {
+        element: squareElem,
+        growLower: 0.5,
+        growUpper: 8,
+        unit: "rem",
+        lowerBin: 128,
+        upperBin: 160,
+        visUpdateRouter: player.visUpdateRouter,
+        interpolator: ask.support.easings.createEaseLinear(2.5)
+    }
+    ask.mappings.dimensions.mapWidth(squareElemConf);
+    ask.mappings.dimensions.mapHeight(squareElemConf);
 
-    </script>
-</body>
-
-</html>
+</script>

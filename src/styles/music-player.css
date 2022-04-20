@@ -1,0 +1,38 @@
+button.music-player.play-btn {
+    border-width: 2px;
+    border-style: solid;
+    border-color: gray;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+button.music-player.play-btn.pause {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+button.music-player.next {
+    border-width: 2px;
+    border-style: solid;
+    border-color: gray;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+button.music-player.previous {
+    border-width: 2px;
+    border-style: solid;
+    border-color: gray;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 15px;
+}

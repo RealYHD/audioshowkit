@@ -186,7 +186,7 @@ export default class MusicPlayer {
      */
     generatePlayElement() {
         const playButton = document.createElement("button");
-        playButton.classList.add("player");
+        playButton.classList.add("music-player");
         playButton.classList.add("play-btn");
         if (this.playing) playButton.classList.add("pause");
 
@@ -210,7 +210,7 @@ export default class MusicPlayer {
 
     generateNextElement() {
         const nextButton = document.createElement("button");
-        nextButton.classList.add("player");
+        nextButton.classList.add("music-player");
         nextButton.classList.add("next");
         nextButton.addEventListener("click", () => {
             this.next();
@@ -221,7 +221,7 @@ export default class MusicPlayer {
 
     generatePreviousElement() {
         const previousButton = document.createElement("button");
-        previousButton.classList.add("player");
+        previousButton.classList.add("music-player");
         previousButton.classList.add("previous");
         previousButton.addEventListener("click", () => {
             this.previous();

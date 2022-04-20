@@ -9,15 +9,21 @@ table.music-playlist tr th {
     border-left-style: none;
     border-right-style: none;
     background-color: lightgray;
+    border-bottom-color: black;
+    cursor: default;
 }
-
 
 table.music-playlist tr td {
     border-left-style: none;
     border-right-style: none;
+    border-bottom-color: darkgray;
 }
 
-table.music-playlist .active {
+table.music-playlist tr {
+    cursor: pointer;
+}
+
+table.music-playlist tr.active {
     background-color: gray;
     color: white;
 }
