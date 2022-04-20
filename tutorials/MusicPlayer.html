@@ -14,12 +14,6 @@
         const playlist = previousPlaylist; // We are assuming you have a playlist ready.
         const player = new ask.player.MusicPlayer(playlist) // Creates a new music player with the playlist.
     </code></pre>
-
-    <p>We'll also show the playlist display so you can see how it updates corresponding to the music currently selected.</p>
-    <div class="result">
-        <div id="playlist-display">
-        </div>
-    </div>
 </div>
 <div class="part">
     <h2>Display a Play Button</h2>
@@ -41,20 +35,18 @@
     <p>We can also traverse the playlist by the player via a previous and next button. These buttons can be generated as well as programmed.</p>
     <pre><code class="language-js">
         // Still using the same context from the instantiation example...
-        const nextElement = player.generateNextElement();
-        document.getElementById("musicplayer-nextbtn-demo").appendChild(nextElement);
-
+        const nextElem = player.generateNextElement();
+        document.getElementById("musicplayer-nav-demo").appendChild(nextElem);
+    
         const prevElem = player.generatePreviousElement();
-        document.getElementById("musicplayer-prevbtn-demo").appendChild(prevElem);    
+        document.getElementById("musicplayer-nav-demo").appendChild(prevElem);   
     </code></pre>
-    <h3>The next button</h3>
+    <h3>Produces</h3>
+    <p>Feel free to try the buttons and see what happens! We'll show the playlist display demonstrated in the [MusicPlaylist tutorial]{@tutorial MusicPlaylist}.</p>
     <div class="result">
-        <div id="musicplayer-nextbtn-demo">
+        <div id="musicplayer-playlist-display">
         </div>
-    </div>
-    <h3>The previous button</h3>
-    <div class="result">
-        <div id="musicplayer-prevbtn-demo">
+        <div id="musicplayer-nav-demo">
         </div>
     </div>
 </div>
@@ -65,16 +57,17 @@
     playlist.add("./assets/audio/moments.mp3", "Moments", "Lost Identities x Robbie Rosen");
     playlist.add("./assets/audio/XXI.mp3", "XXI", "QR");
 
+
     const playlistDispElement = playlist.generatePlaylistElement();
-    document.getElementById("playlist-display").append(playlistDispElement);
+    document.getElementById("musicplayer-playlist-display").append(playlistDispElement);
 
     const player = new ask.player.MusicPlayer(playlist);
     const playElem = player.generatePlayElement();
     document.getElementById("musicplayer-playbtn-demo").appendChild(playElem);
 
     const nextElem = player.generateNextElement();
-    document.getElementById("musicplayer-nextbtn-demo").appendChild(nextElem);
+    document.getElementById("musicplayer-nav-demo").appendChild(nextElem);
 
     const prevElem = player.generatePreviousElement();
-    document.getElementById("musicplayer-prevbtn-demo").appendChild(prevElem);
+    document.getElementById("musicplayer-nav-demo").appendChild(prevElem);
 </script>
