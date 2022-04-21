@@ -7,9 +7,9 @@
     <p>This is the fun part. We can use a {@link VisualizedMusicPlayer} and a {@link MusicPlaylist} to create a music player that is like {@link MusicPlayer} but with the ability to automatically fetch the current {@link Visualizer}. On top of that, it then routes that visualizer data to {@link VisualizerUpdateManager} which can be to make much more refined mappings.</p>
     This library comes with a variety of mapping tools:
     <ul>
-        <li>Want to map ranges of frequency bins to a plethora of element style properties? Take a look at {@link module:mappings/numeric} and {@link module:mappings/dimensions}!</li>
+        <li>Want to map ranges of frequency bins to width, height, and other dimensions related properties? Take a look at {@link module:mappings/numeric} and {@link module:mappings/dimensions}!</li>
         <li>Check out {@link module:patterns/canvas} for built in canvas patterns.</li>
-        <li>We even do font size and color with the {@link module:mappings/text} module!</li>
+        <li>We even do font color in the {@link module:mappings/coloring} module!</li>
     </ul>
 </div>
 <div class="part">
@@ -41,7 +41,7 @@
         <p>To do this, we need to perform what's called a <strong>mapping</strong> between a range of frequency bins, or a single frequency bin, and the width property of the <code>div</code> element. We can then define a multitude of parameters to specify how the mapping will work. Following is the code that produced the example above with comment annotations.</p>
         <pre><code class="language-js">
             const widthElem = document.getElementById("width-map-demo"); // selecting an element.
-            ask.mappings.dimensions.mapWidth({ // the mapping function for width.
+            ask.mappings.dimensions.width({ // the mapping function for width.
                 element: widthElem, // the element to map.
                 growLower: 2, // the minimum width
                 growUpper: 8, // the maximum width
@@ -61,7 +61,7 @@
         </div>
         <pre><code class="language-js">
             const heightElem = document.getElementById("height-map-demo"); // Only big difference is the function being called.
-            ask.mappings.dimensions.mapHeight({
+            ask.mappings.dimensions.height({
                 element: heightElem,
                 growLower: 2, // height smallest can be 2 rem, tallest can be 8 rem.
                 growUpper: 8,
@@ -91,8 +91,8 @@
                 visUpdateRouter: player.visUpdateRouter,
                 interpolator: ask.support.easings.createEaseLinear(2.5)
             }
-            ask.mappings.dimensions.mapWidth(squareElemConf); // Apply them easily!
-            ask.mappings.dimensions.mapHeight(squareElemConf);
+            ask.mappings.dimensions.width(squareElemConf); // Apply them easily!
+            ask.mappings.dimensions.height(squareElemConf);
         </code></pre>
     </div>
     <div class="part">
@@ -105,7 +105,7 @@
         </div>
         <pre><code class="language-js">
             const fontColorElem = document.getElementById("font-color-map-demo");
-            ask.mappings.coloring.mapFontRgba({ // Under mappings, the text module. We just want to map one of the RGBA color components...
+            ask.mappings.coloring.fontColorRgba({ // Under mappings, the text module. We just want to map one of the RGBA color components...
                 element: fontColorElem, // The element to map (same as above examples).
                 color: "r", // Choose the red component.
                 lowerBin: 128, // All other values are what we've seen above.
@@ -135,7 +135,7 @@
     playbackCtrlsElem.appendChild(nextElem);
 
     const widthElem = document.getElementById("width-map-demo");
-    ask.mappings.dimensions.mapWidth({
+    ask.mappings.dimensions.width({
         element: widthElem,
         growLower: 2,
         growUpper: 8,
@@ -147,7 +147,7 @@
     });
 
     const heightElem = document.getElementById("height-map-demo");
-    ask.mappings.dimensions.mapHeight({
+    ask.mappings.dimensions.height({
         element: heightElem,
         growLower: 2,
         growUpper: 8,
@@ -169,11 +169,11 @@
         visUpdateRouter: player.visUpdateRouter,
         interpolator: ask.support.easings.createEaseLinear(2.5)
     }
-    ask.mappings.dimensions.mapWidth(squareElemConf);
-    ask.mappings.dimensions.mapHeight(squareElemConf);
+    ask.mappings.dimensions.width(squareElemConf);
+    ask.mappings.dimensions.height(squareElemConf);
 
     const fontColorElem = document.getElementById("font-color-map-demo");
-    ask.mappings.coloring.mapFontRgba({
+    ask.mappings.coloring.fontColorRgba({
         element: fontColorElem,
         color: "r",
         lowerBin: 128,

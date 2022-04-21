@@ -22,7 +22,7 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @param {number} conf.minVal The minimum value of the numerical value.
  * @param {number} conf.maxVal The maximum value of the numerical value.
  * @param {number} conf.lowerBin The lower bin of the range of bins this value is to be mapped to.
- * @param {number} conf.upperBin The upper bin of the range of bins this value si to be mapped to.
+ * @param {number} [conf.upperBin=undefined] The upper bin of the range of bins this value si to be mapped to.
  * @param {module:mappings/numeric~numericalGetter} conf.getter The getter callback to be used to get the current number.
  * @param {module:mappings/numeric~numericalSetter} conf.setter The setter callback to be used to set the new number.
  * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to use.
@@ -30,10 +30,10 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @param {boolean} [conf.reversed = false] If true, then high amplitudes will be mapped to low values and vice versa.
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} An object containing the lower and upper bounds for the range of a listener, which is also in the object.
  */
-export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
+export function numerical({ minVal, maxVal, lowerBin, upperBin = undefined, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
     const rangedListener = {
         lower: lowerBin,
-        upper: upperBin,
+        upper: upperBin ? upperBin : lowerBin,
         listener: (timeDelta, bins) => {
             const normalBins = [...bins];
             // TODO: Future: add weighting / distribution system?
@@ -50,38 +50,8 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
             setter(minVal + range * interpolated);
         }
     };
-    if (visUpdateRouter.addVisualizerRangedUpdateListener(rangedListener)) {
+    if (visUpdateRouter.addUpdateListener(rangedListener)) {
         return rangedListener;
-    }
-    return null; // Technically doesn't occur since the functions are anonymous?
-}
-
-/**
- * Maps a single bin of frequency amplitudes to a numerical value defined by a getter and a setter.
- * 
- * @param {object} conf The configuration for mapping a single bin to a numerical value.
- * @param {number} conf.minVal The minimum value the mapping can produce.
- * @param {number} conf.maxVal The maximum value the mapping can produce.
- * @param {number} conf.bin The bin to map this number to.
- * @param {module:mappings/numeric~numericalGetter} conf.getter The callback to be used to get the current number.
- * @param {module:mappings/numeric~numericalSetter} conf.setter The callback to be used to set the new number.
- * @param {module:support/easings~interpolator} conf.interpolator The interpolation function to use.
- * @param {VisUpdateRouter} conf.visUpdateRouter The update manager to map to.
- * @param {boolean} [conf.reversed] If true, then high amplitudes will be mapped to lower values and vice versa.
- * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}} The bin listener that was added.
- */
-export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
-    const listener = {
-        bin: bin,
-        listener: (timeDelta, amp) => {
-            const range = maxVal - minVal;
-            let interpolated = interpolator(getter(), amp, Math.min(timeDelta, 1));
-            if (reversed) interpolated = 1 - interpolated;
-            setter(minVal + range * interpolated);
-        }
-    };
-    if (visUpdateRouter.AddVisualizerBinUpdateListener(listener)) {
-        return listener;
     }
     return null; // Technically doesn't occur since the functions are anonymous?
 }

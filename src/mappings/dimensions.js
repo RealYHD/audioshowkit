@@ -1,5 +1,5 @@
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
-import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
+import { numerical } from "./numeric.js";
 
 /**@module */
 
@@ -18,27 +18,21 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-export function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
+export function width({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.width) || 0;
     const setter = (value) => element.style.width = value + unit;
     const conf = {
         minVal: growLower,
         maxVal: growUpper,
-        bin: lowerBin,
+        lowerBin: lowerBin,
+        upperBin: upperBin,
         getter: getter,
         setter: setter,
         interpolator: interpolator,
         visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
-
-    if (upperBin) {
-        conf.bin = undefined;
-        conf.lowerBin = lowerBin;
-        conf.upperBin = upperBin;
-        return mapRangedAvgNumerical(conf);
-    }
-    return mapBinNumerical(conf);
+    return numerical(conf);
 }
 
 /**
@@ -56,27 +50,21 @@ export function mapWidth({ element, growLower, growUpper, unit, lowerBin, visUpd
  * @param {boolean} [conf.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-export function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
+export function height({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.height) || 0;
     const setter = (value) => element.style.height = value + unit;
     const conf = {
         minVal: growLower,
         maxVal: growUpper,
-        bin: lowerBin,
+        lowerBin: lowerBin,
+        upperBin: upperBin,
         getter: getter,
         setter: setter,
         interpolator: interpolator,
         visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
-
-    if (upperBin) {
-        conf.bin = undefined;
-        conf.lowerBin = lowerBin;
-        conf.upperBin = upperBin;
-        return mapRangedAvgNumerical(conf);
-    }
-    return mapBinNumerical(conf);
+    return numerical(conf);
 }
 
 /**
@@ -93,24 +81,19 @@ export function mapHeight({ element, growLower, growUpper, unit, lowerBin, visUp
  * @param {boolean} [fontSizeMapConfiguration.reversed=false] If true, then high amplitudes are mapped to lower values and vice versa.
  * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
-export function mapFontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
+export function fontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
     const getter = () => parseInt(element.style.fontSize);
     const setter = (value) => element.style.fontSize = value + unit;
     const conf = {
         minVal: growLower,
         maxVal: growUpper,
-        bin: lowerBin,
+        lowerBin: lowerBin,
+        upperBin: upperBin,
         getter: getter,
         setter: setter,
         interpolator: interpolator,
         visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
-    if (upperBin) {
-        conf.bin = undefined;
-        conf.lowerBin = lowerBin;
-        conf.upperBin = upperBin;
-        return mapRangedAvgNumerical(conf);
-    }
-    return mapBinNumerical(conf);
+    return numerical(conf);
 }

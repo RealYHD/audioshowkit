@@ -11,8 +11,7 @@ import Visualizer from "./Visualizer.js";
  * In the rare event that a bin has not changed, then it will not receive an update call.
  */
 export default class VisUpdateRouter {
-    #binnedListeners = [];
-    #rangedListeners = [];
+    listeners = [];
     #lastBins;
     #visualizer;
 
@@ -34,31 +33,23 @@ export default class VisUpdateRouter {
      * @param {Visualizer} visualizer the fft window size of the visualizer this manager obtains data from.
      */
     constructor(visualizer) {
-        this.#binnedListeners = [];
-        this.#rangedListeners = [];
-        const bins = visualizer.numberOfBins; // TODO: Clean this up.
-        for (let i = 0; i < bins; i++) {
-            this.#binnedListeners.push([]);
-        }
-        this.#lastBins = new Uint8Array(this.#binnedListeners.length);
+        this.listeners = [];
+        this.#lastBins = new Uint8Array(visualizer.numberOfBins);
         this.#visualizer = visualizer;
         this.#visualizer.addUpdateListener(this.#visualizerListener);
     }
 
     #visualizerListener = (delta, bins) => {
-        const sortedCopyOfRangedListeners = [... this.#rangedListeners]; // We assume this is sorted properly. A priority queue could be better.
+        const copyOfRangedListeners = [... this.listeners]; // We assume this is sorted properly. A priority queue could be better.
         for (let binInd = 0; binInd < this.#lastBins.length; binInd++) {
             const lastBin = this.#lastBins[binInd];
             if (lastBin !== bins[binInd]) {
-                this.#binnedListeners[binInd].forEach(listener => {
-                    listener(delta, bins[binInd], bins[binInd] - lastBin);
-                });
-                for (let rangedInd = 0; rangedInd < sortedCopyOfRangedListeners.length; rangedInd++) { // Could switch to a while loop.
-                    const { lower, upper, listener } = sortedCopyOfRangedListeners[rangedInd];
+                for (let rangedInd = 0; rangedInd < copyOfRangedListeners.length; rangedInd++) { // Could switch to a while loop.
+                    const { lower, upper, listener } = copyOfRangedListeners[rangedInd];
                     if (lower > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
                     if (binInd <= upper) {
                         listener(delta, bins.slice(lower, upper));
-                        sortedCopyOfRangedListeners.shift();
+                        copyOfRangedListeners.shift();
                         rangedInd--;
                     }
                 }
@@ -66,21 +57,6 @@ export default class VisUpdateRouter {
             }
         }
     };
-
-
-    /**
-     * Adds a listener to a specific frequency bin.
-     * 
-     * @param {object} freqBinListener the listener for a specific frequency bin.
-     * @param {number} freqBinListener.freqBin the frequency bin this update listener should listen to.
-     * @param {VisUpdateRouter~visualizerBinUpdateListener} freqBinListener.listener the listener itself that will be called upon the bin updating.
-     * @returns {boolean} true if and only if the updater was added successfully.
-     */
-    AddVisualizerBinUpdateListener({ freqBin, listener }) {
-        if (this.#binnedListeners[freqBin].includes(listener)) return false;
-        this.#binnedListeners[freqBin].push(listener);
-        return true;
-    }
 
     /**
      * Similar to {@link VisUpdateRouter#AddVisualizerBinUpdateListener}, this method adds a listener for to a range of bins.
@@ -91,29 +67,15 @@ export default class VisUpdateRouter {
      * @param {VisUpdateRouter~visualizerRangedUpdateListener} rangedUpdateListener.listener The listener to register to the range. 
      * @returns {boolean} True if and only if the ranged listener was added successfully.
      */
-    addVisualizerRangedUpdateListener({ lower, upper, listener }) {
+    addUpdateListener({ lower, upper, listener }) {
         const rangedListener = {
             lower: lower,
             upper: upper,
             listener: listener
         };
-        if (this.#rangedListeners.includes(rangedListener)) return false;
-        this.#rangedListeners.push(rangedListener);
-        this.#rangedListeners.sort((a, b) => a.lower - b.lower);
-        return true;
-    }
-
-    /**
-     * 
-     * @param {object} binFreqListener The bin frequency listener to remove.
-     * @param {number} binFreqListener.freqBin the frequency bin the update listener to be removed from is in.
-     * @param {VisUpdateRouter~visualizerBinUpdateListener} binFreqListener.listener the listener that is to be removed.
-     * @returns {boolean} true if and only if the listener was successfully removed.
-     */
-    removeVisualizerBinUpdateListener({ freqBin, listener }) {
-        const removeIndex = this.#binnedListeners[freqBin].indexOf(listener);
-        if (removeIndex < 0) return false;
-        this.#binnedListeners[freqBin].splice(removeIndex, 1);
+        if (this.listeners.includes(rangedListener)) return false;
+        this.listeners.push(rangedListener);
+        this.listeners.sort((a, b) => a.lower - b.lower);
         return true;
     }
 
@@ -126,52 +88,36 @@ export default class VisUpdateRouter {
      * @param {VisUpdateRouter~visualizerRangedUpdateListener} rangedListener.listener The update listener to remove from the bins.
      * @returns {boolean} True if and only if the given listener was removed.
      */
-    removeVisualizerRangedUpdateListener({ lower, upper, listener }) {
+    removeUpdateListener({ lower, upper, listener }) {
         const rangedListener = {
             lower: lower,
             upper: upper,
             listener: listener
         };
-        const removeIndex = this.#rangedListeners.indexOf(rangedListener);
+        const removeIndex = this.listeners.indexOf(rangedListener);
         if (removeIndex < 0) return false;
-        this.#binnedListeners.splice(removeIndex, 1);
+        this.listeners.splice(removeIndex, 1);
         return true;
     }
 
     /**
-     * @param {object} listeners The listeners that this visualizer update manager should be set to use.
-     * @param {visualizerBinUpdateListener[][]} listeners.binned The bin listeners.
-     * @param {object[]} listeners.ranged The array of ranged listeners.
-     * @param {number} listeners.ranged[].lower The lower bound of the listener.
-     * @param {number} listeners.ranged[].upper The upper bound of the listener.
-     * @param {VisUpdateRouter~visualizerRangedUpdateListener} listeners.ranged[].listener The listener for the previously mentioned ranges.
+     * @param {object[]} listeners The listeners that this visualizer update manager should be set to use.
+     * @param {number} listeners[].lower The lower bound of the listener.
+     * @param {number} listeners[].upper The upper bound of the listener.
+     * @param {VisUpdateRouter~visualizerRangedUpdateListener} listeners[].listener The listener for the previously mentioned ranges.
      * @returns {boolean} true if and only if successfully loaded the new listeners.
      */
     loadListeners(listeners) {
-        if (listeners.binned.length !== this.#binnedListeners.length) return false;
-        this.#binnedListeners = listeners.binned;
-        this.#rangedListeners = listeners.ranged.sort((a, b) => a.lower - b.lower);
+        this.listeners = listeners.sort((a, b) => a.lower - b.lower);
         return true;
     }
 
     /**
      * 
-     * @returns {object} All the listeners, both for binned, and ranged listeners. See {@link VisUpdateRouter#loadListeners} to see the structure of the returned object.
+     * @returns {object[]} All the listeners, both for binned, and ranged listeners. See {@link VisUpdateRouter#loadListeners} to see the structure of the returned object.
      */
     retrieveListeners() {
-        return {
-            binned: this.#binnedListeners,
-            ranged: this.#rangedListeners
-        };
-    }
-
-    /**
-     * Clears this manager of all listeners.
-     */
-    clearBinnedListeners() {
-        this.#binnedListeners.forEach(bin => {
-            bin.length = 0;
-        });
+        return this.listeners;
     }
 
     /**
