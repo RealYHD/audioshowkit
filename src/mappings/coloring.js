@@ -36,7 +36,7 @@ export function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolato
     upperVal = Math.min(Math.max(0, upperVal), 255);
     lowerVal = Math.min(Math.max(0, lowerVal), upperVal);
     const conf = {
-        minVal: lowerBin,
+        minVal: lowerVal,
         maxVal: upperVal,
         bin: lowerBin,
         getter: getter,
