@@ -22,7 +22,7 @@ export function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolato
     color = rgbaStr.indexOf(color);
     if (color < 0) throw new Error("Invalid color parameter provided.");
     const getter = () => {
-        if (!element.style.color) element.style.color = "rgb(0,0,255)";
+        if (!element.style.color) element.style.color = "rgba(0, 0, 0, 255)";
         return parseColor(element.style.color)[color];
     };
     const setter = (value) => {

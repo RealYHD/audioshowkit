@@ -92,7 +92,6 @@ export default class VisUpdateRouter {
      * @returns {boolean} True if and only if the ranged listener was added successfully.
      */
     addVisualizerRangedUpdateListener({ lower, upper, listener }) {
-        console.log("range update listener added.");
         const rangedListener = {
             lower: lower,
             upper: upper,

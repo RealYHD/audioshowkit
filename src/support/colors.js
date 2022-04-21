@@ -79,7 +79,7 @@ export function cssRgbToRgba(rgb) {
  */
 export function rgbaToHexRgba(rgba) {
     const filler = (hex) => hex.length < 2 ? "0" + hex : hex;
-    return "#" + filler(rgba[0].toString(16)) + filler(rgba[1].toString(16)) + filler(rgba[2].toString(16)) + filler(rgba[3].toString(16));
+    return "#" + filler(Math.round(rgba[0]).toString(16)) + filler(Math.round(rgba[1]).toString(16)) + filler(Math.round(rgba[2]).toString(16)) + filler(Math.round(rgba[3]).toString(16));
 }
 
 

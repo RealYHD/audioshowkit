@@ -31,7 +31,6 @@ import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter.visualizerRangedUpdateListener}} An object containing the lower and upper bounds for the range of a listener, which is also in the object.
  */
 export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, upperBin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
-    console.log("mapping average numerical.");
     const rangedListener = {
         lower: lowerBin,
         upper: upperBin,
@@ -72,7 +71,6 @@ export function mapRangedAvgNumerical({ minVal, maxVal, lowerBin = undefined, up
  * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}} The bin listener that was added.
  */
 export function mapBinNumerical({ minVal, maxVal, bin, getter, setter, interpolator, visUpdateRouter, reversed = false }) {
-    console.log("mapping numerical...");
     const listener = {
         bin: bin,
         listener: (timeDelta, amp) => {

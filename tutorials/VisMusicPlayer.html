@@ -95,6 +95,27 @@
             ask.mappings.dimensions.mapHeight(squareElemConf);
         </code></pre>
     </div>
+    <div class="part">
+        <h3>Mapping Font Color</h3>
+        <p>Now for a bit more of an eccentric mapping, you can map the color of a font to the music!</p>
+        <div class="result">
+            <div id="font-color-map-demo">
+                <strong>Hello world!</strong>
+            </div>
+        </div>
+        <pre><code class="language-js">
+            const fontColorElem = document.getElementById("font-color-map-demo");
+            ask.mappings.text.mapRgba({ // Under mappings, the text module. We just want to map one of the RGBA color components...
+                element: fontColorElem, // The element to map (same as above examples).
+                color: "r", // Choose the red component.
+                lowerBin: 128, // All other values are what we've seen above.
+                upperBin: 160,
+                visUpdateRouter: player.visUpdateRouter,
+                interpolator: ask.support.easings.createEaseLinear(2.5)
+            });
+        </code></pre>
+    </div>
+
 </div>
 
 <script>
@@ -150,5 +171,15 @@
     }
     ask.mappings.dimensions.mapWidth(squareElemConf);
     ask.mappings.dimensions.mapHeight(squareElemConf);
+
+    const fontColorElem = document.getElementById("font-color-map-demo");
+    ask.mappings.text.mapRgba({
+        element: fontColorElem,
+        color: "r",
+        lowerBin: 128,
+        upperBin: 160,
+        visUpdateRouter: player.visUpdateRouter,
+        interpolator: ask.support.easings.createEaseLinear(2.5)
+    });
 
 </script>
