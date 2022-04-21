@@ -1,6 +1,6 @@
 import * as dimensions from "./dimensions.js";
 import * as numeric from "./numeric.js";
-import * as text from "./text.js";
+import * as coloring from "./coloring.js";
 
 
-export { dimensions, numeric, text };
+export { dimensions, numeric, coloring };
