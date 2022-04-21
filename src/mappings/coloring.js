@@ -20,7 +20,7 @@ import { mapBinNumerical, mapRangedAvgNumerical } from "./numeric.js";
  * @param {number} [conf.upperVal=0] The upper boundary of possible values for the color component (0 to 255 inclusive).
  * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-export function mapRgba({ element, color, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
+export function mapFontRgba({ element, color, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
     const rgbaStr = "rgba";
     color = rgbaStr.indexOf(color);
     if (color < 0) throw new Error("Invalid color parameter provided.");
