@@ -99,21 +99,47 @@
         <h3>Mapping Font Color</h3>
         <p>Now for a bit more of an eccentric mapping, you can map the color of a font to the music!</p>
         <div class="result">
-            <div id="font-color-map-demo">
-                <strong>Hello world!</strong>
+            <div id="font-color-rgba-map-demo">
+                <strong>Hello colors!</strong>
             </div>
         </div>
         <pre><code class="language-js">
-            const fontColorElem = document.getElementById("font-color-map-demo");
+            const fontColorRgbaElem = document.getElementById("font-color-rgba-map-demo");
             ask.mappings.coloring.fontColorRgba({ // Under mappings, the text module. We just want to map one of the RGBA color components...
-                element: fontColorElem, // The element to map (same as above examples).
-                color: "r", // Choose the red component.
+                element: fontColorRgbaElem, // The element to map (same as above examples).
+                select: "r", // Choose the red component.
                 lowerBin: 128, // All other values are what we've seen above.
                 upperBin: 160,
                 visUpdateRouter: player.visUpdateRouter,
                 interpolator: ask.support.easings.createEaseLinear(2.5)
             });
         </code></pre>
+    </div>
+    <p>In the same vein of mapping, we can also map HSL values. If you haven't heard of HSL values, you can read up about it <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">anywhere online really</a>, but essentially, it's another way of describing a color where a hue is used to describe a color, and then the color is adjusted by its saturation and lightness. Importantly for your case, it may make it easier to achieve the type of dynamic color mapping you're looking for (potentially when used in conjunction with any of RGBA components).</p>
+    <div class="result">
+        <div id="font-color-hsla-map-demo">
+            <strong>Hello more colors!</strong>
+        </div>
+    </div>
+    <pre><code class="language-js">
+        const fontColorHslElem = document.getElementById("font-color-hsla-map-demo");
+        ask.mappings.coloring.fontColorHsla({ // Similar to the rgba example, except now with hsla.
+            element: fontColorHslElem,
+            select: "h", // Selecting the "hue" component.
+            lowerBin: 200,
+            upperBin: 220,
+            visUpdateRouter: player.visUpdateRouter,
+            interpolator: ask.support.easings.createEaseLinear(2.5)
+        })
+    </code></pre>
+
+    <div class="part">
+        <h3>Mapping Background Color</h3>
+        <p>This is kind of like the one for fonts, except, instead, for background colors!</p>
+        <div class="result">
+            <div id="bg-color-map-demo">
+            </div>
+        </div>
     </div>
 
 </div>
@@ -172,14 +198,23 @@
     ask.mappings.dimensions.width(squareElemConf);
     ask.mappings.dimensions.height(squareElemConf);
 
-    const fontColorElem = document.getElementById("font-color-map-demo");
+    const fontColorRgbaElem = document.getElementById("font-color-rgba-map-demo");
     ask.mappings.coloring.fontColorRgba({
-        element: fontColorElem,
-        color: "r",
+        element: fontColorRgbaElem,
+        select: "r",
         lowerBin: 128,
         upperBin: 160,
         visUpdateRouter: player.visUpdateRouter,
         interpolator: ask.support.easings.createEaseLinear(2.5)
     });
 
+    const fontColorHslElem = document.getElementById("font-color-hsla-map-demo");
+    ask.mappings.coloring.fontColorHsla({
+        element: fontColorHslElem,
+        select: "h",
+        lowerBin: 200,
+        upperBin: 220,
+        visUpdateRouter: player.visUpdateRouter,
+        interpolator: ask.support.easings.createEaseLinear(2.5)
+    })
 </script>
