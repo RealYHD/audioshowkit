@@ -22,14 +22,14 @@ import { numerical } from "./numeric.js";
  */
 export function backgroundColorRgba({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
     const rgbaStr = "rgba";
+    const defaultColor = [0, 0, 0, 255];
     select = rgbaStr.indexOf(select);
     if (select < 0) throw new Error("Invalid color parameter provided.");
     const getter = () => {
-        if (!element.style.backgroundColor) element.style.backgroundColor = "rgba(0, 0, 0, 255)";
-        return parseColorToRgba(element.style.backgroundColor)[select];
+        return (parseColorToRgba(element.style.backgroundColor) || defaultColor)[select];
     };
     const setter = (value) => {
-        const changed = parseColorToRgba(element.style.backgroundColor);
+        const changed = parseColorToRgba(element.style.backgroundColor) || defaultColor;
         changed[select] = value;
         if (element.style.backgroundColor.startsWith("rgb")) {
             element.style.backgroundColor = rgbaToCssRgba(changed);
@@ -74,15 +74,15 @@ export function backgroundColorRgba({ element, select, lowerBin, visUpdateRouter
  */
 export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
     const rgbaStr = "hsla";
+    const defaultColor = [0, 0.5, 0.5, 255];
     select = rgbaStr.indexOf(select);
     if (select < 0) throw new Error("Invalid color parameter provided.");
 
     const getter = () => {
-        if (!element.style.backgroundColor) element.style.backgroundColor = "hsl(0, 50%, 50%, 255)";
-        return parseColorToHsla(element.style.backgroundColor)[select];
+        return (parseColorToHsla(element.style.backgroundColor) || defaultColor)[select];
     };
     const setter = (value) => {
-        const changed = parseColorToHsla(element.style.backgroundColor);
+        const changed = parseColorToHsla(element.style.backgroundColor) || defaultColor;
         changed[select] = value;
         if (element.style.backgroundColor.startsWith("hsl")) {
             element.style.backgroundColor = hslaToCssHsla(changed);
@@ -100,6 +100,7 @@ export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter
     } else if (select === "a") {
         upperBound = 255;
     }
+    if (isNaN(upperVal)) upperVal = upperBound;
     upperVal = Math.min(Math.max(0, upperVal), upperBound);
     lowerVal = Math.min(Math.max(0, lowerVal), upperVal);
     const conf = {
@@ -133,14 +134,14 @@ export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter
  */
 export function fontColorRgba({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
     const rgbaStr = "rgba";
+    const defaultColor = [0, 0, 0, 255];
     select = rgbaStr.indexOf(select);
     if (select < 0) throw new Error("Invalid color parameter provided.");
     const getter = () => {
-        if (!element.style.color) element.style.color = "rgba(0, 0, 0, 255)";
-        return parseColorToRgba(element.style.color)[select];
+        return (parseColorToRgba(element.style.color) || defaultColor)[select];
     };
     const setter = (value) => {
-        const changed = parseColorToRgba(element.style.color);
+        const changed = parseColorToRgba(element.style.color) || defaultColor;
         changed[select] = value;
         if (element.style.color.startsWith("rgb")) {
             element.style.color = rgbaToCssRgba(changed);
@@ -185,15 +186,15 @@ export function fontColorRgba({ element, select, lowerBin, visUpdateRouter, inte
  */
 export function fontColorHsla({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
     const rgbaStr = "hsla";
+    const defaultColor = [0, 0.5, 0.5, 255];
     select = rgbaStr.indexOf(select);
     if (select < 0) throw new Error("Invalid color parameter provided.");
 
     const getter = () => {
-        if (!element.style.color) element.style.color = "hsl(0, 50%, 50%, 255)";
-        return parseColorToHsla(element.style.color)[select];
+        return (parseColorToHsla(element.style.color) || defaultColor)[select];
     };
     const setter = (value) => {
-        const changed = parseColorToHsla(element.style.color);
+        const changed = parseColorToHsla(element.style.color) || defaultColor;
         changed[select] = value;
         if (element.style.color.startsWith("hsl")) {
             element.style.color = hslaToCssHsla(changed);

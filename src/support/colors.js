@@ -88,7 +88,7 @@ export function rgbaToHexRgba(rgba) {
  * For hex, we assume there is no alpha channel unless the hex value is not minimized.
  * 
  * @param {string} color The string that contains the color information.
- * @returns {number[]} an array that contains the r, g, b and a components.
+ * @returns {number[]|null} an array that contains the r, g, b and a components. Returns null if there was an issue parsing the input.
  */
 export function parseColorToRgba(color) {
     if (color.startsWith("rgba(")) {
@@ -104,14 +104,14 @@ export function parseColorToRgba(color) {
     } else if (color.startsWith("hsl(")) {
         return hslaToRgba(cssHslaToHsla(color));
     }
-    throw new Error("Could not parse to an rgba value.");
+    return null;
 }
 
 /**
  * Converts a css rgb, rgba, hex, hsl(a), or rgba hex to an hsla array.
  * 
  * @param {string} color The string that contains the color information.
- * @returns {number[]} An array that contains the h, s, l and alpha channel components.
+ * @returns {number[]|null} An array that contains the h, s, l and alpha channel components. Returns null if there was an issue parsing the input.
  */
 export function parseColorToHsla(color) {
     if (color.startsWith("rgba(")) {
@@ -127,6 +127,7 @@ export function parseColorToHsla(color) {
     } else if (color.startsWith("hsl(")) {
         return cssHslaToHsla(color);
     }
+    return null;
 }
 
 /**
