@@ -1,4 +1,4 @@
-import { parseColor, rgbaToHexRgba } from "../support/colors.js";
+import { hslaToCssHsla, hslaToRgba, parseColorToHsla, parseColorToRgba, rgbaToCssRgba, rgbaToHexRgba, rgbaToHsla } from "../support/colors.js";
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 import { numerical } from "./numeric.js";
 
@@ -10,7 +10,7 @@ import { numerical } from "./numeric.js";
  * 
  * @param {object} conf The configuration of the mapping.
  * @param {HTMLElement} conf.element The element whose text's red value should be mapped.
- * @param {number} conf.color Where r for red, g, for green, b for blue, and a for alpha.
+ * @param {string} conf.color Where r for red, g, for green, b for blue, and a for alpha.
  * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
  * @param {Function} conf.interpolator The interpolation function to use.
@@ -26,14 +26,81 @@ export function backgroundColorRgba({ element, color, lowerBin, visUpdateRouter,
     if (color < 0) throw new Error("Invalid color parameter provided.");
     const getter = () => {
         if (!element.style.backgroundColor) element.style.backgroundColor = "rgba(0, 0, 0, 255)";
-        return parseColor(element.style.backgroundColor)[color];
+        return parseColorToRgba(element.style.backgroundColor)[color];
     };
     const setter = (value) => {
-        const changed = parseColor(element.style.backgroundColor);
+        const changed = parseColorToRgba(element.style.backgroundColor);
         changed[color] = value;
-        element.style.backgroundColor = rgbaToHexRgba(changed);
+        if (element.style.backgroundColor.startsWith("rgb")) {
+            element.style.backgroundColor = rgbaToCssRgba(changed);
+        } else if (element.style.backgroundColor.startsWith("hsl")) {
+            element.style.backgroundColor = hslaToCssHsla(rgbaToHsla(changed));
+        } else if (element.style.backgroundColor.startsWith("#")) {
+            element.style.backgroundColor = rgbaToHexRgba(changed);
+        } else {
+            element.style.backgroundColor = rgbaToHexRgba(changed);
+        }
     };
     upperVal = Math.min(Math.max(0, upperVal), 255);
+    lowerVal = Math.min(Math.max(0, lowerVal), upperVal);
+    const conf = {
+        minVal: lowerVal,
+        maxVal: upperVal,
+        lowerBin: lowerBin,
+        upperBin: upperBin,
+        getter: getter,
+        setter: setter,
+        interpolator: interpolator,
+        visUpdateRouter: visUpdateRouter,
+        reversed: reversed
+    };
+    return numerical(conf);
+}
+
+/**
+ * Maps a color component of an element background color to a certain range of frequency bins.
+ * 
+ * @param {object} conf The configuration of the mapping.
+ * @param {HTMLElement} conf.element The element whose text's red value should be mapped.
+ * @param {number} conf.select Where h for hue, s, for saturation, l for lightness, and a for alpha.
+ * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
+ * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
+ * @param {Function} conf.interpolator The interpolation function to use.
+ * @param {number} [conf.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
+ * @param {boolean} [conf.reversed=true] If true, then the quieter, the greater the red value.
+ * @param {number} [conf.lowerVal=0] The lower boundary of possible values for the color component (0 to upperVal inclusive).
+ * @param {number} [conf.upperVal=0] The upper boundary of possible values for the color component (0 to 360 if conf.color is "h", 1 if conf.color is "s" or "l", and 255 if conf.color is "a").
+ * @returns {{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The ranged listener that was added.
+ */
+export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
+    const rgbaStr = "hsla";
+    select = rgbaStr.indexOf(select);
+    if (select < 0) throw new Error("Invalid color parameter provided.");
+
+    const getter = () => {
+        if (!element.style.backgroundColor) element.style.backgroundColor = "hsl(0, 50%, 50%, 255)";
+        return parseColorToHsla(element.style.backgroundColor)[select];
+    };
+    const setter = (value) => {
+        const changed = parseColorToHsla(element.style.backgroundColor);
+        changed[select] = value;
+        if (element.style.backgroundColor.startsWith("hsl")) {
+            element.style.backgroundColor = hslaToCssHsla(changed);
+        } else if (element.style.backgroundColor.startsWith("rgb")) {
+            element.style.backgroundColor = rgbaToCssRgba(hslaToRgba(changed));
+        } else if (element.style.backgroundColor.startsWith("#")) {
+            element.style.backgroundColor = rgbaToHexRgba(hslaToRgba(changed));
+        } else {
+            element.style.backgroundColor = rgbaToHexRgba(hslaToRgba(changed)); // If we don't recognize the currently used color function, then just use hex.
+        }
+    };
+    let upperBound = 360;
+    if (select === "s" || select === "l") {
+        upperBound = 1;
+    } else if (select === "a") {
+        upperBound = 255;
+    }
+    upperVal = Math.min(Math.max(0, upperVal), upperBound);
     lowerVal = Math.min(Math.max(0, lowerVal), upperVal);
     const conf = {
         minVal: lowerVal,
@@ -54,7 +121,7 @@ export function backgroundColorRgba({ element, color, lowerBin, visUpdateRouter,
  * 
  * @param {object} conf The configuration of the mapping.
  * @param {HTMLElement} conf.element The element whose text's red value should be mapped.
- * @param {number} conf.color Where r for red, g, for green, b for blue, and a for alpha.
+ * @param {string} conf.color Where r for red, g, for green, b for blue, and a for alpha.
  * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
  * @param {Function} conf.interpolator The interpolation function to use.
@@ -70,12 +137,20 @@ export function fontColorRgba({ element, color, lowerBin, visUpdateRouter, inter
     if (color < 0) throw new Error("Invalid color parameter provided.");
     const getter = () => {
         if (!element.style.color) element.style.color = "rgba(0, 0, 0, 255)";
-        return parseColor(element.style.color)[color];
+        return parseColorToRgba(element.style.color)[color];
     };
     const setter = (value) => {
-        const changed = parseColor(element.style.color);
+        const changed = parseColorToRgba(element.style.color);
         changed[color] = value;
-        element.style.color = rgbaToHexRgba(changed);
+        if (element.style.color.startsWith("rgb")) {
+            element.style.color = rgbaToCssRgba(changed);
+        } else if (element.style.color.startsWith("hsl")) {
+            element.style.color = hslaToCssHsla(rgbaToHsla(changed));
+        } else if (element.style.color.startsWith("#")) {
+            element.style.color = rgbaToHexRgba(changed);
+        } else {
+            element.style.color = rgbaToHexRgba(changed);
+        }
     };
     upperVal = Math.min(Math.max(0, upperVal), 255);
     lowerVal = Math.min(Math.max(0, lowerVal), upperVal);
