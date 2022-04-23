@@ -3,7 +3,7 @@
 <script src="./assets/js/audioshowkit.js"></script>
 
 <div class="part">
-    <h1>Visualizing Music</h1>
+    <h2>Visualizing Music</h2>
     <p>This is the fun part. We can use a {@link VisualizedMusicPlayer} and a {@link MusicPlaylist} to create a music player that is like {@link MusicPlayer} but with the ability to automatically fetch the current {@link Visualizer}. On top of that, it then routes that visualizer data to {@link VisualizerUpdateManager} which can be to make much more refined mappings.</p>
 
     This library comes with a variety of mapping tools:
@@ -14,7 +14,7 @@
     </ul>
 </div>
 <div class="part">
-    <h2>Instantiation</h2>
+    <h3>Instantiation</h3>
     <p>Exactly like when instantiating a normal music player, you will need a playlist. Other than that, it's simple.</p>
     <pre><code class="language-js">
         const ask = window.audioshowkit; // Get a reference to the audioshowkit stuff.
@@ -23,7 +23,7 @@
     </code></pre>
 </div>
 <div class="part">
-    <h2>Playback</h2>
+    <h3>Playback</h3>
     <p>Since the usage of playback is the same as a normal {@link module:player/MusicPlayer}, see [the MusicPlayer tutorial]{@tutorial MusicPlayer} for more information. We also added the playlist display to show you which song you're listening to.</p>
     <div class="result">
         <div id="playlist-display">
@@ -33,7 +33,7 @@
     </div>
 </div>
 <div class="part">
-    <h2>Visualization</h2>
+    <h3>Visualization</h3>
     <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements! We'll demonstrate an example of the latter below, but check out [the Mapping Demonstration tutorial]{@tutorial MappingDemonstration} for many other mappings! Hit the play button to see the what the mapping did.</p>
     <div class="part">
         <div class="result">
