@@ -82,7 +82,7 @@ export function height({ element, growLower, growUpper, unit, lowerBin, visUpdat
  * @returns {{bin: number, listener: VisUpdateRouter~visualizerBinUpdateListener}|{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The listener that was added (ranged if an upper bound was provided, binned otherwise).
  */
 export function fontSize({ element, growLower, growUpper, unit, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false }) {
-    const getter = () => parseInt(element.style.fontSize);
+    const getter = () => parseInt(element.style.fontSize) || 0;
     const setter = (value) => element.style.fontSize = value + unit;
     const conf = {
         minVal: growLower,
