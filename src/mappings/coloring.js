@@ -1,6 +1,6 @@
 import { hslaToCssHsla, hslaToRgba, parseColorToHsla, parseColorToRgba, rgbaToCssRgba, rgbaToHexRgba, rgbaToHsla } from "../support/colors.js";
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
-import { numerical } from "./numeric.js";
+import { numericalBins } from "./numeric.js";
 
 
 /**@module */
@@ -13,14 +13,15 @@ import { numerical } from "./numeric.js";
  * @param {string} conf.select Where r for red, g, for green, b for blue, and a for alpha.
  * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
- * @param {Function} conf.interpolator The interpolation function to use.
+ * @param {module:support/bins~binSelector} [conf.binSelector=undefined] The bin selector to use to calculate a number to use for the mapping.
  * @param {number} [conf.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
+ * @param {Function} [conf.interpolator=undefined] The interpolation function to use.
  * @param {boolean} [conf.reversed=true] If true, then the quieter, the greater the red value.
  * @param {number} [conf.lowerVal=0] The lower boundary of possible values for the color component (0 to upperVal inclusive).
  * @param {number} [conf.upperVal=0] The upper boundary of possible values for the color component (0 to 255 inclusive).
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-export function backgroundColorRgba({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
+export function backgroundColorRgba({ element, select, lowerBin, visUpdateRouter, binSelector = undefined, upperBin = undefined, interpolator = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
     const rgbaStr = "rgba";
     const defaultColor = [0, 0, 0, 255];
     select = rgbaStr.indexOf(select);
@@ -50,11 +51,12 @@ export function backgroundColorRgba({ element, select, lowerBin, visUpdateRouter
         upperBin: upperBin,
         getter: getter,
         setter: setter,
-        interpolator: interpolator,
+        binSelector: binSelector,
         visUpdateRouter: visUpdateRouter,
+        interpolator: interpolator,
         reversed: reversed
     };
-    return numerical(conf);
+    return numericalBins(conf);
 }
 
 /**
@@ -65,14 +67,15 @@ export function backgroundColorRgba({ element, select, lowerBin, visUpdateRouter
  * @param {number} conf.select Where h for hue, s, for saturation, l for lightness, and a for alpha.
  * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
- * @param {Function} conf.interpolator The interpolation function to use.
+ * @param {module:support/bins~binSelector} [conf.binSelector=undefined] The bin selector to use to calculate a number to use for the mapping.
  * @param {number} [conf.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
+ * @param {Function} [conf.interpolator=undefined] The interpolation function to use.
  * @param {boolean} [conf.reversed=true] If true, then the quieter, the greater the red value.
  * @param {number} [conf.lowerVal=0] The lower boundary of possible values for the color component (0 to upperVal inclusive).
  * @param {number} [conf.upperVal=0] The upper boundary of possible values for the color component (0 to 360 if conf.color is "h", 1 if conf.color is "s" or "l", and 255 if conf.color is "a").
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
+export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter, binSelector = undefined, upperBin = undefined, interpolator = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
     const rgbaStr = "hsla";
     const defaultColor = [0, 0.5, 0.5, 255];
     select = rgbaStr.indexOf(select);
@@ -110,11 +113,12 @@ export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter
         upperBin: upperBin,
         getter: getter,
         setter: setter,
+        binSelector: binSelector,
         interpolator: interpolator,
         visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
-    return numerical(conf);
+    return numericalBins(conf);
 }
 
 /**
@@ -125,14 +129,15 @@ export function backgroundColorHsla({ element, select, lowerBin, visUpdateRouter
  * @param {string} conf.select Where r for red, g, for green, b for blue, and a for alpha.
  * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
- * @param {Function} conf.interpolator The interpolation function to use.
+ * @param {module:support/bins~binSelector} [conf.binSelector=undefined] The bin selector to use to calculate a number to use for the mapping.
  * @param {number} [conf.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
+ * @param {Function} [conf.interpolator=undefined] The interpolation function to use.
  * @param {boolean} [conf.reversed=true] If true, then the quieter, the greater the red value.
  * @param {number} [conf.lowerVal=0] The lower boundary of possible values for the color component (0 to upperVal inclusive).
  * @param {number} [conf.upperVal=0] The upper boundary of possible values for the color component (0 to 255 inclusive).
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-export function fontColorRgba({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
+export function fontColorRgba({ element, select, lowerBin, visUpdateRouter, binSelector = undefined, upperBin = undefined, interpolator = undefined, reversed = false, lowerVal = 0, upperVal = 255 }) {
     const rgbaStr = "rgba";
     const defaultColor = [0, 0, 0, 255];
     select = rgbaStr.indexOf(select);
@@ -162,11 +167,12 @@ export function fontColorRgba({ element, select, lowerBin, visUpdateRouter, inte
         upperBin: upperBin,
         getter: getter,
         setter: setter,
+        binSelector: binSelector,
         interpolator: interpolator,
         visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
-    return numerical(conf);
+    return numericalBins(conf);
 }
 
 /**
@@ -177,14 +183,15 @@ export function fontColorRgba({ element, select, lowerBin, visUpdateRouter, inte
  * @param {number} conf.select Where h for hue, s, for saturation, l for lightness, and a for alpha.
  * @param {number} conf.lowerBin The lower bound of the bins to be mapped.
  * @param {VisUpdateRouter} conf.visUpdateRouter The visualizer update manager associated with the audio playback you would like the mapping with.
- * @param {Function} conf.interpolator The interpolation function to use.
+ * @param {module:support/bins~binSelector} [conf.binSelector=undefined] The bin selector to use to calculate a number to use for the mapping.
  * @param {number} [conf.upperBin=undefined] The upper bound of the bins to be mapped. If left undefined, then only the bin defined by the min value is used.
+ * @param {Function} [conf.interpolator=undefined] The interpolation function to use.
  * @param {boolean} [conf.reversed=true] If true, then the quieter, the greater the red value.
  * @param {number} [conf.lowerVal=0] The lower boundary of possible values for the color component (0 to upperVal inclusive).
  * @param {number} [conf.upperVal=0] The upper boundary of possible values for the color component (0 to 360 if conf.color is "h", 1 if conf.color is "s" or "l", and 255 if conf.color is "a").
  * @returns {{lower: number, upper: number, listener: VisUpdateRouter~visualizerRangedUpdateListener}} The ranged listener that was added.
  */
-export function fontColorHsla({ element, select, lowerBin, visUpdateRouter, interpolator, upperBin = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
+export function fontColorHsla({ element, select, lowerBin, visUpdateRouter, binSelector = undefined, upperBin = undefined, interpolator = undefined, reversed = false, lowerVal = 0, upperVal = undefined }) {
     const rgbaStr = "hsla";
     const defaultColor = [0, 0.5, 0.5, 255];
     select = rgbaStr.indexOf(select);
@@ -224,9 +231,10 @@ export function fontColorHsla({ element, select, lowerBin, visUpdateRouter, inte
         upperBin: upperBin,
         getter: getter,
         setter: setter,
+        binSelector: binSelector,
         interpolator: interpolator,
         visUpdateRouter: visUpdateRouter,
         reversed: reversed
     };
-    return numerical(conf);
+    return numericalBins(conf);
 }
