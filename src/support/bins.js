@@ -1,7 +1,8 @@
-/**@module */
-
+import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
 import { createEaseLinear } from "./easings.js";
 
+
+/**@module */
 /**
  * @callback binSelector 
  * @param {number[]} bins Array of frequency bins.
