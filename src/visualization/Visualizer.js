@@ -17,6 +17,7 @@ export default class Visualizer {
      * @callback Visualizer~visualizerUpdateListener
      * @param {number} delta elapsed time since last update.
      * @param {Uint8Array} bins the bins with varying frequency values. 
+     * @param {number} sigBin The bin with the greatest amplitude.
      */
 
     /**
@@ -66,7 +67,7 @@ export default class Visualizer {
             self.#analyzer.getByteFrequencyData(self.#buffer);
 
             self.#updateListeners.forEach(listener => {
-                listener(delta, self.#buffer);
+                listener(delta, self.#buffer, self.#buffer.indexOf(Math.max(self.#buffer)));
             });
             requestAnimationFrame(update);
         };

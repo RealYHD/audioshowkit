@@ -16,16 +16,10 @@ export default class VisUpdateRouter {
     #visualizer;
 
     /**
-     * @callback VisUpdateRouter~visualizerBinUpdateListener
-     * @param {number} timeDelta elapsed time since last update.
-     * @param {number} amplitude The amplitude of the associated bin.
-     * @param {number} ampDelta change in amplitude of the frequency bin.
-     */
-
-    /**
      * @callback VisUpdateRouter~visualizerRangedUpdateListener
      * @param {number} timeDelta elapsed time since last update.
      * @param {number} bins the bins of the range.
+     * @param {number} sigBin The bin with the greatest amplitude. If this bin is outside of the given bounds for the updater, it is rounded to the nearest bound.
      */
 
     /**
@@ -39,7 +33,7 @@ export default class VisUpdateRouter {
         this.#visualizer.addUpdateListener(this.#visualizerListener);
     }
 
-    #visualizerListener = (delta, bins) => {
+    #visualizerListener = (delta, bins, sigBin) => {
         const copyOfRangedListeners = [... this.listeners]; // We assume this is sorted properly. A priority queue could be better.
         for (let binInd = 0; binInd < this.#lastBins.length; binInd++) {
             const lastBin = this.#lastBins[binInd];
@@ -48,7 +42,7 @@ export default class VisUpdateRouter {
                     const { lower, upper, listener } = copyOfRangedListeners[rangedInd];
                     if (lower > binInd) break; // Don't need to check the rest if the current lowest minimum is greater than the current bin index.
                     if (binInd <= upper) {
-                        listener(delta, bins.slice(lower, upper));
+                        listener(delta, bins.slice(lower, upper), Math.min(Math.max(sigBin, lower), upper));
                         copyOfRangedListeners.shift();
                         rangedInd--;
                     }
