@@ -1,6 +1,6 @@
 import { hslaToCssHsla, hslaToRgba, parseColorToHsla, parseColorToRgba, rgbaToCssRgba, rgbaToHexRgba, rgbaToHsla } from "../support/colors.js";
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
-import { numericalBins } from "./numeric.js";
+import { numericalBins } from "../support/bins.js";
 
 
 /**@module */

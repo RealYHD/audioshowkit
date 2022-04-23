@@ -1,5 +1,5 @@
 import VisUpdateRouter from "../visualization/VisUpdateRouter.js";
-import { numericalBins } from "./numeric.js";
+import { numericalBins } from "../support/bins.js";
 
 /**@module */
 

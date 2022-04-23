@@ -5,6 +5,7 @@
 <div class="part">
     <h1>Visualizing Music</h1>
     <p>This is the fun part. We can use a {@link VisualizedMusicPlayer} and a {@link MusicPlaylist} to create a music player that is like {@link MusicPlayer} but with the ability to automatically fetch the current {@link Visualizer}. On top of that, it then routes that visualizer data to {@link VisualizerUpdateManager} which can be to make much more refined mappings.</p>
+
     This library comes with a variety of mapping tools:
     <ul>
         <li>Want to map ranges of frequency bins to width, height, and other dimensions related properties? Take a look at {@link module:mappings/numeric} and {@link module:mappings/dimensions}!</li>
@@ -33,14 +34,12 @@
 </div>
 <div class="part">
     <h2>Visualization</h2>
-    <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements! Remember to hit the play button above to see the mappings in effect!</p>
+    <p>The actual visualization can be performed in a variety of ways. We can use canvases, or even better, actual HTML elements! We'll demonstrate an example of the latter below, but check out [the Mapping Demonstration tutorial]{@tutorial MappingDemonstration} for many other mappings! Hit the play button to see the what the mapping did.</p>
     <div class="part">
-        <h3>Mapping Width</h3>
-        <p>The first one here shows mapping the width.</p>
         <div class="result">
             <div id="width-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
         </div>
-        <p>To do this, we need to perform what's called a <strong>mapping</strong> between a range of frequency bins, or a single frequency bin, and the width property of the <code>div</code> element. We can then define a multitude of parameters to specify how the mapping will work. Following is the code that produced the example above with comment annotations.</p>
+        <p>Here, we perform what's called a <strong>mapping</strong> between a range of frequency bins, or a single frequency bin, and the width property of the <code>div</code> element. We can then define a multitude of parameters to specify how the mapping will work. Following is the code that produced the example above with comment annotations.</p>
         <pre><code class="language-js">
             ask.mappings.dimensions.width({ // The mapping function.
                 element: document.getElementById("width-map-demo"), // The element this mapping applies to.
@@ -54,138 +53,6 @@
             });
         </code></pre>
     </div>
-    <div class="part">
-        <h3>Mapping Height</h3>
-        <p>This next one does the same, except with height.</p>
-        <div class="result" style="height: 10rem;">
-            <div id="height-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
-        </div>
-        <pre><code class="language-js">
-            ask.mappings.dimensions.height({ // Only big difference is the function being called.
-                element: document.getElementById("height-map-demo"),
-                growLower: 2, // height smallest can be 2 rem, tallest can be 8 rem.
-                growUpper: 8,
-                unit: "rem",
-                lowerBin: 80, // Changed the bin range just for fun.
-                upperBin: 120,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2.5)
-            });
-        </code></pre>
-    </div>
-    <div class="part">
-        <h3>Mapping Multiple Style Properties</h3>
-        <p>What's that? you want multiple mappings on one? Here it is!</p>
-        <div class="result" style="height: 10rem;">
-            <div id="square-map-demo" style="width: 2rem; height: 2rem; background-color: black;"></div>
-        </div>
-        <pre><code class="language-js">
-            const squareElemConf = { // Use an object for commonly used mappings.
-                element: document.getElementById("square-map-demo"), // Same stuff as before..
-                growLower: 0.5,
-                growUpper: 8,
-                unit: "rem",
-                lowerBin: 128,
-                upperBin: 160,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2.5)
-            }
-            ask.mappings.dimensions.width(squareElemConf); // Apply them easily!
-            ask.mappings.dimensions.height(squareElemConf);
-        </code></pre>
-    </div>
-    <div class="part">
-        <h3>Mapping Font Size</h3>
-        <p>You can map font size to frequency bins as well.</p>
-        <div class="result" style="height: 6rem;">
-            <div id="font-size-map-demo">
-                Wonky text!
-            </div>
-        </div>
-        <pre><code class="language-js">
-            ask.mappings.dimensions.fontSize({
-                element: document.getElementById("font-size-map-demo"), // Nothing new here, just calling a different mapping function.
-                growLower: 1,
-                growUpper: 3,
-                unit: "rem",
-                lowerBin: 200,
-                upperBin: 256,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2)
-            });
-        </code></pre>
-    </div>
-    <div class="part">
-        <h3>Mapping Font Color</h3>
-        <p>Now for a bit more of an eccentric mapping, you can map the color of a font to the music!</p>
-        <div class="result">
-            <div id="font-color-rgba-map-demo">
-                <strong>Hello colors!</strong>
-            </div>
-        </div>
-        <pre><code class="language-js">
-            ask.mappings.coloring.fontColorRgba({ // Under mappings, the text module. We just want to map one of the RGBA color components...
-                element: document.getElementById("font-color-rgba-map-demo"), // The element to map (same as above examples).
-                select: "r", // Choose the red component.
-                lowerBin: 128, // All other values are what we've seen above.
-                upperBin: 160,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2.5)
-            });
-        </code></pre>
-    </div>
-    <div class="part">
-        <p>In the same vein of mapping, we can also map HSL values. If you haven't heard of HSL values, you can read up about it <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">anywhere online really</a>, but essentially, it's another way of describing a color where a hue is used to describe a color, and then the color is adjusted by its saturation and lightness. Importantly for your case, it may make it easier to achieve the type of dynamic color mapping you're looking for (potentially when used in conjunction with any of RGBA components).</p>
-        <div class="result">
-            <div id="font-color-hsla-map-demo">
-                <strong>Hello more colors!</strong>
-            </div>
-        </div>
-        <pre><code class="language-js">
-            ask.mappings.coloring.fontColorHsla({ // Similar to the rgba example, except now with hsla.
-                element: document.getElementById("font-color-hsla-map-demo"),
-                select: "h", // Selecting the "hue" component.
-                lowerBin: 200,
-                upperBin: 220,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2.5)
-            })
-        </code></pre>
-    </div>
-    <div class="part">
-        <h3>Mapping Background Color</h3>
-        <p>This is kind of like the one for fonts, except, instead, rgba for background colors!</p>
-        <div class="result">
-            <div id="bg-color-rgba-map-demo" style="width: 8rem; height: 8rem; background-color: black;">
-            </div>
-        </div>
-        <pre><code class="language-js">
-            ask.mappings.coloring.backgroundColorRgba({
-                element: document.getElementById("bg-color-rgba-map-demo"),
-                select: "g", // Selecting the green component this time...
-                lowerBin: 200,
-                upperBin: 220,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2.5)
-            });
-        </code></pre>
-        <p>And of course we can use hsla values too.</p>
-        <div class="result">
-            <div id="bg-color-hsla-map-demo" style="width: 8rem; height: 8rem; background-color: black;">
-            </div>
-        </div>
-        <pre><code class="language-js">
-            ask.mappings.coloring.backgroundColorHsla({
-                element: document.getElementById("bg-color-hsla-map-demo"),
-                select: "h", 
-                lowerBin: 200,
-                upperBin: 220,
-                visUpdateRouter: player.visUpdateRouter,
-                interpolator: ask.support.easings.createEaseLinear(2.5)
-            });
-        </code></pre>
-    </div>
-
 </div>
 
 <script>
@@ -214,77 +81,6 @@
         unit: "rem",
         lowerBin: 24,
         upperBin: 60,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2.5)
-    });
-
-    ask.mappings.dimensions.height({
-        element: document.getElementById("height-map-demo"),
-        growLower: 2,
-        growUpper: 8,
-        unit: "rem",
-        lowerBin: 80,
-        upperBin: 120,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2.5)
-    });
-
-    const squareElemConf = {
-        element: document.getElementById("square-map-demo"),
-        growLower: 0.5,
-        growUpper: 8,
-        unit: "rem",
-        lowerBin: 128,
-        upperBin: 160,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2.5)
-    }
-    ask.mappings.dimensions.width(squareElemConf);
-    ask.mappings.dimensions.height(squareElemConf);
-
-    ask.mappings.dimensions.fontSize({
-        element: document.getElementById("font-size-map-demo"),
-        growLower: 1,
-        growUpper: 3,
-        unit: "rem",
-        lowerBin: 200,
-        upperBin: 256,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2)
-    });
-
-    ask.mappings.coloring.fontColorRgba({
-        element: document.getElementById("font-color-rgba-map-demo"),
-        select: "r",
-        lowerBin: 128,
-        upperBin: 160,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2.5)
-    });
-
-    ask.mappings.coloring.fontColorHsla({
-        element: document.getElementById("font-color-hsla-map-demo"),
-        select: "h",
-        lowerBin: 200,
-        upperBin: 220,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2.5)
-    });
-
-    ask.mappings.coloring.backgroundColorRgba({
-        element: document.getElementById("bg-color-rgba-map-demo"),
-        select: "g",
-        lowerBin: 200,
-        upperBin: 220,
-        visUpdateRouter: player.visUpdateRouter,
-        interpolator: ask.support.easings.createEaseLinear(2.5)
-    });
-
-    ask.mappings.coloring.backgroundColorHsla({
-        element: document.getElementById("bg-color-hsla-map-demo"),
-        select: "h",
-        lowerBin: 200,
-        upperBin: 220,
         visUpdateRouter: player.visUpdateRouter,
         interpolator: ask.support.easings.createEaseLinear(2.5)
     });
