@@ -102,6 +102,18 @@
                 Wonky text!
             </div>
         </div>
+        <pre><code class="language-js">
+            ask.mappings.dimensions.fontSize({
+                element: document.getElementById("font-size-map-demo"), // Nothing new here, just calling a different mapping function.
+                growLower: 1,
+                growUpper: 3,
+                unit: "rem",
+                lowerBin: 200,
+                upperBin: 256,
+                visUpdateRouter: player.visUpdateRouter,
+                interpolator: ask.support.easings.createEaseLinear(2)
+            });
+        </code></pre>
     </div>
     <div class="part">
         <h3>Mapping Font Color</h3>
