@@ -3,14 +3,14 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                nodejs('NodeJS (17.4.0)') {
+                nodejs('System NodeJS') {
                     sh "npm install"
                 }
             }
         }
         stage("tests") {
             steps {
-                nodejs('NodeJS (17.4.0)') {
+                nodejs('System NodeJS') {
                     sh "npm run test:junit"
                 }
                 junit 'junit/*.xml'
@@ -18,7 +18,7 @@ pipeline {
         }
         stage("build") {
             steps {
-                nodejs('NodeJS (17.4.0)') {
+                nodejs('System NodeJS') {
                     sh "npm run build:prod"
                 }
                 fingerprint "dist/**"
@@ -28,7 +28,7 @@ pipeline {
         stage("generate docs") {
             steps {
                 sh "rm -r ./docs"
-                nodejs('NodeJS (17.4.0)') {
+                nodejs('System NodeJS') {
                     sh "npm run docs"
                 }
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './docs', reportFiles: 'index.html', reportName: 'AudioShowKit Docs', reportTitles: ''])
