@@ -15,4 +15,4 @@ Now, any script that is loaded after the `audioshowkit.js` script loads will hav
 
 ## Documentation
 
-[The documentation can be found here](https://dev.sys.reslate.xyz/dev-auto/job/AudioShowKit/job/master/AudioShowKit_20JSDocs/) along with the rest of the tutorials and demonstrations. It should be noted that the documentation is produced in the format of modules, as this library can be used modularly, or as a bundle as described above. **Please see the actual classes and global functions for the documentation as the module section is solely indended to describe the organization of the library**. To elaborate, any component that is described in the documentation can be found in the `audioshowkit` object by replacing the `/` in the module path with `.`. In other words, `mappings/dimensions` becomes `audioshowkit.mappings.dimensions`.
+[The documentation can be found here](https://dev.sys.reslate.xyz/dev-auto/job/AudioShowKit/job/master/AudioShowKit_20Docs/) along with the rest of the tutorials and demonstrations.
