@@ -27,7 +27,6 @@ pipeline {
         }
         stage("generate docs") {
             steps {
-                sh "rm -r ./docs"
                 nodejs('System') {
                     sh "npm run docs"
                 }
