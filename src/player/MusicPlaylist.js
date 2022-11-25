@@ -105,6 +105,7 @@ export default class MusicPlaylist {
         if (removed.length > 0) {
             return removed[0];
         }
+        return null;
     }
 
     /**
