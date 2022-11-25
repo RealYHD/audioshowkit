@@ -3,6 +3,8 @@ pipeline {
     stages {
         stage("install") {
             steps {
+                sh "fnm install"
+                sh "fnm use"
                 sh "npm install"
             }
         }
