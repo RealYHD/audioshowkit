@@ -3,27 +3,38 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                sh "fnm install"
-                sh "fnm use"
-                sh "npm install"
+                sh '''#!/usr/bin/env pwsh
+                conda env create -f environment.yml
+                conda activate webdev
+                npm install
+                '''
             }
         }
         stage("tests") {
             steps {
-                sh "npm run test:junit"
+                sh '''#!/usr/bin/env pwsh
+                conda activate webdev
+                npm run test:junit
+                '''
                 junit 'junit/*.xml'
             }
         }
         stage("build") {
             steps {
-                sh "npm run build:prod"
+                sh '''#!/usr/bin/env pwsh
+                conda activate webdev
+                npm run build:prod
+                '''
                 fingerprint "dist/**"
                 archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
             }
         }
         stage("generate docs") {
             steps {
-                sh "npm run docs"
+                sh '''#!/usr/bin/env pwsh
+                conda activate webdev
+                npm run docs
+                '''
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './docs', reportFiles: 'index.html', reportName: 'AudioShowKit Docs', reportTitles: ''])
             }
         }
