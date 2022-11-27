@@ -4,7 +4,7 @@ pipeline {
         stage("install") {
             steps {
                 sh '''#!/usr/bin/env pwsh
-                conda env create -f environment.yml
+                conda env create -q -f environment.yml
                 conda activate webdev
                 npm install
                 '''
