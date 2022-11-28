@@ -8,13 +8,17 @@ pipeline {
             steps {
                 sh 'curl -fsSL https://fnm.vercel.app/install | bash'
                 sh 'fnm install'
-                sh 'fnm use'
+                sh '''
+                echo 'eval "$(fnm env --use-on-cd)"' >> ~/.bashrc
+                '''
                 sh 'npm install'
             }
         }
         stage("test") {
             steps {
-                sh 'npm run test:junit'
+                sh '''
+                npm run test:junit
+                '''
                 junit 'junit/*.xml'
             }
         }
