@@ -6,11 +6,7 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                sh 'curl -fsSL https://fnm.vercel.app/install | bash'
-                sh 'fnm install'
-                sh '''
-                echo 'eval "$(fnm env --use-on-cd)"' >> ~/.bashrc
-                '''
+                sh 'brew install node@16'
                 sh 'npm install'
             }
         }
