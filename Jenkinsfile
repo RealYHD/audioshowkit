@@ -1,19 +1,24 @@
 pipeline {
     agent any
+    environment {
+        PATH = "/home/jenkins/.local/share/fnm:${PATH}"
+    }
     stages {
         stage("install") {
             steps {
-                sh '''#!/usr/bin/env pwsh
-                conda env create -q -f environment.yml
-                conda activate webdev
+                sh '''
+                curl -fsSL https://fnm.vercel.app/install | bash
+                eval "`fnm env`"
+                fnm install
+                fnm use
                 npm install
                 '''
             }
         }
-        stage("tests") {
+        stage("test") {
             steps {
-                sh '''#!/usr/bin/env pwsh
-                conda activate webdev
+                sh '''
+                eval "`fnm env`"
                 npm run test:junit
                 '''
                 junit 'junit/*.xml'
@@ -21,8 +26,8 @@ pipeline {
         }
         stage("build") {
             steps {
-                sh '''#!/usr/bin/env pwsh
-                conda activate webdev
+                sh '''
+                eval "`fnm env`"
                 npm run build:prod
                 '''
                 fingerprint "dist/**"
@@ -31,8 +36,8 @@ pipeline {
         }
         stage("generate docs") {
             steps {
-                sh '''#!/usr/bin/env pwsh
-                conda activate webdev
+                sh '''
+                eval "`fnm env`"
                 npm run docs
                 '''
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './docs', reportFiles: 'index.html', reportName: 'AudioShowKit Docs', reportTitles: ''])
