@@ -1,19 +1,12 @@
 pipeline {
     agent any
-    environment {
-        PATH = "/home/jenkins/.local/share/fnm:${PATH}"
-    }
     stages {
         stage("install") {
             steps {
-                sh 'curl -fsSL https://fnm.vercel.app/install | bash'
-                sh 'fnm install'
-                sh '''
-                echo 'eval "$(fnm env --use-on-cd)"' >> ~/.bashrc
-                source ~/.bashrc
-                fnm use
-                npm install
-                '''
+                sh 'mamba env update --file environment.yml'
+                sh 'echo "mamba activate webdev" >> ~/.bashrc'
+                sh 'node --version && npm --version'
+                sh 'npm install'
             }
         }
         stage("test") {
