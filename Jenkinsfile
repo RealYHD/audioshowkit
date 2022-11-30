@@ -3,26 +3,26 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                sh 'mamba env create -f environment.yml'
-                sh 'mamba activate webdev && npm install'
+                sh 'mamba update -y -q --file environment.yml --prune'
+                sh 'npm install'
             }
         }
         stage("test") {
             steps {
-                sh 'mamba activate webdev && npm run test:junit'
+                sh 'npm run test:junit'
                 junit 'junit/*.xml'
             }
         }
         stage("build") {
             steps {
-                sh 'mamba activate webdev && npm run build:prod'
+                sh 'npm run build:prod'
                 fingerprint "dist/**"
                 archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
             }
         }
         stage("generate docs") {
             steps {
-                sh 'mamba activate webdev && npm run docs'
+                sh 'npm run docs'
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './docs', reportFiles: 'index.html', reportName: 'AudioShowKit Docs', reportTitles: ''])
             }
         }
