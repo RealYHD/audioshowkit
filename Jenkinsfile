@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                sh 'mamba update -y -q --file environment.yml --prune'
+                sh 'mamba env update --file environment.yml --prune'
                 sh 'npm install'
             }
         }
