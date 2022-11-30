@@ -4,6 +4,7 @@ pipeline {
         stage("install") {
             steps {
                 sh 'mamba env update --file environment.yml --prune'
+                sh 'node --version && npm --version'
                 sh 'npm install'
             }
         }
