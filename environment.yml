@@ -11,6 +11,6 @@ dependencies:
   - libstdcxx-ng=12.2.0
   - libuv=1.44.2
   - libzlib=1.2.13
-  - nodejs=18.12.1
+  - nodejs=16.17.1
   - openssl=3.0.7
   - zlib=1.2.13
