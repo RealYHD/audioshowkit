@@ -4,7 +4,7 @@ pipeline {
         stage("install") {
             steps {
                 sh 'mamba env update --file environment.yml'
-                sh 'echo "mamba activate webdev" >> ~/.bashrc'
+                sh 'echo "mamba activate audioshowkit" >> ~/.bashrc'
                 sh 'node --version && npm --version'
                 sh 'npm install'
             }
