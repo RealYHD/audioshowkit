@@ -3,8 +3,8 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                sh 'mamba env update --file environment.yml'
-                sh 'echo "mamba activate webdev" >> ~/.bashrc'
+                sh 'conda env update --file environment.yml'
+                sh 'echo "conda activate audioshowkit" >> ~/.bashrc'
                 sh 'node --version && npm --version'
                 sh 'npm install'
             }
