@@ -4,7 +4,7 @@ pipeline {
         stage("install") {
             steps {
                 sh 'conda env update --file environment.yml'
-                sh 'echo "conda activate webdev" >> ~/.bashrc'
+                sh 'echo "conda activate audioshowkit" >> ~/.bashrc'
                 sh 'node --version && npm --version'
                 sh 'npm install'
             }
