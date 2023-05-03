@@ -14,3 +14,4 @@ dependencies:
   - nodejs=18.12.1
   - openssl=3.0.7
   - zlib=1.2.13
+prefix: ./env
