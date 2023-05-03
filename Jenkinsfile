@@ -29,7 +29,7 @@ pipeline {
                 source ~/.bashrc
                 npm run docs
                 '''
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './docs', reportFiles: 'index.html', reportName: 'AudioShowKit Docs', reportTitles: ''])
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './docs', reportFiles: 'index.html', reportName: 'Documentation', reportTitles: ''])
             }
         }
     }
