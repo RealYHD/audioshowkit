@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage("install") {
             steps {
-                sh 'conda env update --file environment.yml'
-                sh 'echo "conda activate audioshowkit" >> ~/.bashrc'
+                sh 'mamba env update --file environment.yml --prefix ./env || mamba env create --force --file environment.yml --prefix ./env'
                 sh 'node --version && npm --version'
                 sh 'npm install'
             }
@@ -18,8 +17,7 @@ pipeline {
         stage("build") {
             steps {
                 sh 'npm run build:prod'
-                fingerprint "dist/**"
-                archiveArtifacts artifacts: 'dist/audioshowkit.js', followSymlinks: false
+                archiveArtifacts artifacts: 'dist/audioshowkit.js', fingerprint: true, followSymlinks: false, onlyIfSuccessful: true
             }
         }
         stage("generate docs") {
