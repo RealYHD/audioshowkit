@@ -2,16 +2,11 @@ name: audioshowkit
 channels:
   - conda-forge
 dependencies:
-  - _libgcc_mutex=0.1
-  - _openmp_mutex=4.5
-  - ca-certificates=2022.9.24
-  - icu=70.1
-  - libgcc-ng=12.2.0
-  - libgomp=12.2.0
-  - libstdcxx-ng=12.2.0
-  - libuv=1.44.2
-  - libzlib=1.2.13
-  - nodejs=18.12.1
-  - openssl=3.0.7
-  - zlib=1.2.13
+  - ca-certificates
+  - icu
+  - libuv
+  - libzlib
+  - nodejs=20
+  - openssl
+  - zlib
 prefix: ./env
